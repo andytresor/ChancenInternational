@@ -1,9 +1,11 @@
+import Topbar from "../pages/Student/topbar";
+
 const StudentLayout = ({ children }) => {
     return (
         <div>
-            <header>Main Header</header>
+            <header><Topbar/></header>
             <main>{children}</main>
-            <footer>Main Footer</footer>
+            <footer></footer>
         </div>);
 };
 
