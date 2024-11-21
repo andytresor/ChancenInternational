@@ -1,0 +1,57 @@
+.dash {
+  background-color: whitesmoke;
+  height: 100vh;
+}
+
+.head {
+  background-color: #05acee;
+  color: white;
+  height: 30vh;
+}
+
+.head h1 {
+  font-size: xx-large;
+  margin-bottom: 2rem;
+  padding: 2rem 0 0 2rem ;
+  color: whitesmoke;
+}
+
+.all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.all .one,
+.two {
+  margin-top: -12rem;
+  background-color: whitesmoke;
+  color: black;
+  width: 35vw;
+  height: 30vh;
+  font-size: larger;
+}
+
+.all .one h1{
+    font-size: xx-large;
+    text-align: center;
+    
+}
+
+.all .two h1 {
+    font-size: xx-large;
+    text-align: center;
+    
+}
+
+.all .one .break{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.all .one .break p{
+    font-size: x-large;
+
+}
