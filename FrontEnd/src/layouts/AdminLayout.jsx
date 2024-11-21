@@ -2,11 +2,12 @@ import Sidebar from "../re-components/Admin/Sidebar";
 
 const AdminLayout = ({ children }) => {
     return (
-        <div>
-             <Sidebar />
-            <main>{children}</main>
+        <div className="admin-layout">
+        <Sidebar />
+        <div className="main-content">
+            {children}
         </div>
-
+    </div>
     );
 };
 

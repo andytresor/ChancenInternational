@@ -1,6 +1,7 @@
+import "../../style/adminstyles/home.css"
 const Home = () => {
     return (
-        <div>hello</div>
+        <div className="body"></div>
     )
 }
 
