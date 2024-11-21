@@ -1,0 +1,39 @@
+.active {
+  color: rgb(0, 153, 255);
+  text-decoration: underline;
+}
+
+.topbar {
+
+  height: 7vh;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.topbar .links ul {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.5rem 3rem 1rem 0;
+}
+
+.topbar .links ul li {
+  margin: 0 1rem;
+  font-size: x-large;
+  padding: 0.6rem;
+  border-radius: 2rem;
+}
+
+.topbar .links ul img {
+  width: 2.5vw;
+  border-radius: 5rem;
+}
+
+.topbar .links ul li:hover {
+  background-color: rgb(0, 102, 255);
+  color: white;
+  width: 7vw;
+  text-align: center;
+  text-decoration-line: underline;
+}
+
+

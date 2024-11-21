@@ -4,6 +4,10 @@ import AdminLayout from './layouts/AdminLayout';
 import Home from './pages/AdminDashboard/Home';
 import Students from './pages/AdminDashboard/Students';
 import Login from './pages/Auth/Login';
+import Dashboard from './pages/Student/Dashboard';
+import Repayment from  './pages/Student/Repayment'
+import Profile from './pages/Student/Profile'
+
 const Routing = () => {
     return (
         <Router>
@@ -16,8 +20,9 @@ const Routing = () => {
                 <Route path="/students" element={<AdminLayout> <Students /></AdminLayout>} />
                 
                 {/* Janes Routes */}
-                <Route path="/student" element={<StudentLayout> </StudentLayout>} />
-
+                <Route path="/student-dashboard" element={<StudentLayout> <Dashboard/> </StudentLayout>} />
+                <Route path="/student-repayment" element={<StudentLayout> <Repayment/> </StudentLayout>} />
+                <Route path="/student-profile" element={<StudentLayout> <Profile/> </StudentLayout>} />
             </Routes>
         </Router>
     )
