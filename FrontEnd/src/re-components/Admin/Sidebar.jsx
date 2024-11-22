@@ -1,40 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import logo from "../../assets/Images/adminImages/Chance.png";
 import '../../style/adminstyles/sideBar.css'; // Ensure you have the necessary CSS
 
 const Sidebar = () => {
+
+    const [activeLink, setActiveLink] = useState('dashboard'); // Default active link
+
+    const handleLinkClick = (link) => {
+        setActiveLink(link);
+    };
+
     useEffect(() => {
-        const toggleId = 'header-toggle';
-        const sidebarId = 'sidebar';
-        const headerId = 'header';
-        const mainId = 'main';
-
-        const toggle = document.getElementById(toggleId);
-        const sidebar = document.getElementById(sidebarId);
-        const header = document.getElementById(headerId);
-        const main = document.getElementById(mainId);
-
-        const showSidebar = () => {
-            sidebar.classList.toggle('show-sidebar');
-            header.classList.toggle('left-pd');
-            main.classList.toggle('left-pd');
-        };
-
-        if (toggle && sidebar && header && main) {
-            toggle.addEventListener('click', showSidebar);
+        // Set the active link based on the current pathname
+        if (location.pathname === '/students') {
+            setActiveLink('students');
+        } else if (location.pathname === '/') {
+            setActiveLink('home');
+        } else if (location.pathname === '/repayments') {
+            setActiveLink('repayments');
+        } else if (location.pathname === '/statistics') {
+            setActiveLink('statistics');
+        }else if (location.pathname === '/notifications') {
+            setActiveLink('notifications');
+        }else if (location.pathname === '/settings') {
+            setActiveLink('settings');
         }
+    }, [location.pathname]); // Run the effect when the pathname changes
 
-        // Cleanup event listener on component unmount
-        return () => {
-            if (toggle) {
-                toggle.removeEventListener('click', showSidebar);
-            }
-        };
-    }, []);
 
     useEffect(() => {
         const sidebarLinks = document.querySelectorAll('.sidebar__list a');
 
-        const linkColor = function() {
+        const linkColor = function () {
             sidebarLinks.forEach(l => l.classList.remove('active-link'));
             this.classList.add('active-link');
         };
@@ -87,7 +84,7 @@ const Sidebar = () => {
                 <div className="header__container">
                     <a href="#" className="header__logo">
                         <i className="ri-cloud-fill"></i>
-                        <span>Cloud</span>
+                        <span>ChanceInternational</span>
                     </a>
                     <button className="header__toggle" id="header-toggle">
                         <i className="ri-menu-line"></i>
@@ -99,11 +96,11 @@ const Sidebar = () => {
                 <div className="sidebar__container">
                     <div className="sidebar__user">
                         <div className="sidebar__img">
-                            <img src="assets/img/perfil.png" alt="image" />
+                            <img src={logo} alt="image" />
                         </div>
                         <div className="sidebar__info">
-                            <h3>Rix Methil</h3>
-                            <span>rix123@email.com</span>
+                            <h3>Andy Shelby</h3>
+                            <span style={{color: "hsl(228, 12%, 61%)"}}>andyshelby123@email.com</span>
                         </div>
                     </div>
 
@@ -111,43 +108,63 @@ const Sidebar = () => {
                         <div>
                             <h3 className="sidebar__title">MANAGE</h3>
                             <div className="sidebar__list">
-                                <a href="#" className="sidebar__link active-link">
+                                <a
+                                    href="/"
+                                    className={`sidebar__link ${activeLink === 'home' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('dashboard')}
+                                >
                                     <i className="ri-pie-chart-2-fill"></i>
                                     <span>Dashboard</span>
                                 </a>
-                                <a href="#" className="sidebar__link">
-                                    <i className="ri -wallet-3-fill"></i>
-                                    <span>My Wallet</span>
+                                <a
+                                    href="/students"
+                                    className={`sidebar__link ${activeLink === 'students' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('wallet')}
+                                >
+                                    <i className="ri-wallet-3-fill"></i>
+                                    <span>Students</span>
                                 </a>
-                                <a href="#" className="sidebar__link">
-                                    <i className="ri-calendar-fill"></i>
-                                    <span>Calendar</span>
+                                <a
+                                    href="/repayments"
+                                    className={`sidebar__link ${activeLink === 'repayments' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('statistics')}
+                                >
+                                    <i className="ri-bar-chart-box-fill"></i>
+                                    <span>Repayments</span>
                                 </a>
-                                <a href="#" className="sidebar__link">
+                                <a
+                                    href="#"
+                                    className={`sidebar__link ${activeLink === 'transactions' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('transactions')}
+                                >
                                     <i className="ri-arrow-up-down-line"></i>
                                     <span>Recent Transactions</span>
-                                </a>
-                                <a href="#" className="sidebar__link">
-                                    <i className="ri-bar-chart-box-fill"></i>
-                                    <span>Statistics</span>
                                 </a>
                             </div>
                         </div>
 
-                        <div>
+                        <div><i className="ri-settings-3-fill"></i>
                             <h3 className="sidebar__title">SETTINGS</h3>
                             <div className="sidebar__list">
-                                <a href="#" className="sidebar__link">
-                                    <i className="ri-settings-3-fill"></i>
-                                    <span>Settings</span>
+                                <a
+                                    href="/notifications"
+                                    className={`sidebar__link ${activeLink === 'notifications' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('transactions')}
+                                >
+                                    <i className="ri-notification-2-fill"></i>
+                                    <span>Notifications</span>
                                 </a>
                                 <a href="#" className="sidebar__link">
                                     <i className="ri-mail-unread-fill"></i>
                                     <span>My Messages</span>
                                 </a>
-                                <a href="#" className="sidebar__link">
-                                    <i className="ri-notification-2-fill"></i>
-                                    <span>Notifications</span>
+                                <a
+                                    href="/settings"
+                                    className={`sidebar__link ${activeLink === 'settings' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('transactions')}
+                                >
+                                    <i className="ri-arrow-up-down-line"></i>
+                                    <span>Settings</span>
                                 </a>
                             </div>
                         </div>
@@ -167,9 +184,6 @@ const Sidebar = () => {
                 </div>
             </nav>
 
-            <main className="main container" id="main">
-                <h1>Sidebar Menu</h1>
-            </main>
         </div>
     );
 };

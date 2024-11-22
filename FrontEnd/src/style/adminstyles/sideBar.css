@@ -180,8 +180,8 @@ button {
 
 .sidebar__img {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   background-color: var(--first-color);
   border-radius: 50%;
   overflow: hidden;
@@ -191,7 +191,7 @@ button {
 
 .sidebar__img img {
   position: absolute;
-  width: 36px;
+  width: 70px;
   bottom: -1px;
 }
 
@@ -241,6 +241,7 @@ button {
   color: var(--text-color);
   padding-left: 2rem;
   transition: color .4s, opacity .4s;
+  text-decoration: none;
 }
 
 .sidebar__link i {
