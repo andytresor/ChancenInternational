@@ -34,7 +34,7 @@ const Home = () => {
   };
 
   const overduePayments = [
-    { name: "John Doe", institution: "Institution A", amount: "$900", lastPayment: "2024-10-15" },
+    { name: "Jane Doe", institution: "Institution A", amount: "$900", lastPayment: "2024-10-15" },
     { name: "Jane Smith", institution: "Institution B", amount: "$700", lastPayment: "2024-10-10" },
   ];
 
