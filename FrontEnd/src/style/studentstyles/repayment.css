@@ -1,0 +1,65 @@
+#main {
+    padding: 40px;
+  }
+  
+  #main .charts {
+    display: flex;
+    flex-direction: column; /* Stack items on smaller screens */
+    align-items: center; /* Center items */
+    gap: 2rem; /* Add space between items */
+    margin-top: 2rem;
+  }
+  
+  #main .charts .upcoming {
+    line-height: 3rem; /* Adjust line-height */
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 90%; /* Use percentage for responsiveness */
+    max-width: 100vw; /* Set a max-width for larger screens */
+    height: auto; /* Change to auto height */
+    text-align: center;
+  }
+  
+  #main .charts .upcoming h1 {
+    color: #1976d2;
+    font-size: 2rem; /* Use rem for scalability */
+  }
+  
+  #main .charts .upcoming p {
+    font-size: 1.25rem; /* Use rem for scalability */
+  }
+  
+  #main .charts .pie {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 1rem;
+    width: 10rem; /* Use percentage for responsiveness */
+    max-width: 600px; /* Set a max-width for larger screens */
+    height: 100vh;
+  }
+  
+  #main .charts .pie h1 {
+    color: #1976d2;
+    font-size: 2rem; /* Use rem for scalability */
+    font-weight: 300;
+  }
+  
+  /* Media Queries for responsiveness */
+  @media (min-width: 768px) {
+    #main .charts {
+      flex-direction: row; /* Align items in a row on larger screens */
+      justify-content: space-evenly; /* Space items evenly */
+    }
+  
+    #main .charts .upcoming {
+      width: 30%; /* Keep original width for larger screens */
+      height: 35vh; /* Keep original height for larger screens */
+    }
+  
+    #main .charts .pie{
+      width: 50%; /* Keep original width for larger screens */
+      height: 35vh; 
+    }
+  }

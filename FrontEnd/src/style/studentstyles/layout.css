@@ -1,0 +1,19 @@
+/* Sidebar.css */
+.admin-layout {
+    display: flex; /* Use flexbox for layout */
+    
+  }
+
+
+    .main-content {
+      margin-left: 250px; /* Leave space for the sidebar */
+      flex-grow: 1; /* Allow this to grow and take the remaining space */
+      padding: 20px; /* Add some padding */
+      overflow-y: auto; /* Enable scrolling if content overflows */
+      margin-top: 5rem;
+    }
+    
+    /* Adjust for when sidebar is hidden */
+    .show-sidebar .main-content {
+      margin-left: 0; /* Remove margin when sidebar is hidden */
+    }

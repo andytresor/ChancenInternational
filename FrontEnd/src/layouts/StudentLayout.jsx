@@ -1,12 +1,15 @@
-import Topbar from "../pages/Student/topbar";
+import Topbar from "../re-components/Student/topbar";
+import '../style/studentstyles/layout.css'
 
 const StudentLayout = ({ children }) => {
     return (
-        <div>
-            <header><Topbar/></header>
-            <main>{children}</main>
-            <footer></footer>
-        </div>);
+        <div className="admin-layout">
+        <Topbar/>
+        <div className="main-content">
+            {children}
+        </div>
+    </div>
+        );
 };
 
 export default StudentLayout;

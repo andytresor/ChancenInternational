@@ -1,8 +1,8 @@
-import { Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
+import { Card, CardBody } from "@chakra-ui/react";
 
 const CustomCard = ({ className, children }) => {
   return (
-    <Card.Root  className={className}>
+    <Card.Root  className={className} border="none">
       <CardBody>{children}</CardBody>
     </Card.Root >
   );

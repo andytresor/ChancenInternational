@@ -1,0 +1,128 @@
+#main h1 {
+    font-size: 3.5rem; /* Use rem for better scalability */
+    color: black;
+    margin-left: 1rem;
+  }
+  
+  #main .top {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  
+  #main .top .up {
+    background: linear-gradient(to right, #1976d2, #64b5f6);
+    height: 13vh;
+    width: 100%;
+  }
+  
+  #main .top .cont {
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    padding: 0 1rem; /* Add some horizontal padding */
+  }
+  
+  #main .top .cont img {
+    width: 7.5rem;
+    border-radius: 50%;
+    margin-left: 1rem;
+    margin-top: -4rem;
+  }
+  
+  #main .top .cont .info {
+    margin-left: 1rem;
+  }
+  
+  #main .top .cont .info h2 {
+    font-size: 2rem; /* Use rem for better scalability */
+    font-weight: 700;
+  }
+  
+  #main .top .cont .info p {
+    font-size: 1.3rem; /* Use rem for better scalability */
+  }
+  
+  #main .body {
+    margin-top: 1rem;
+    display: flex;
+    gap: 2rem;
+    padding: 0 1rem; /* Add some horizontal padding */
+  }
+  
+  #main .body .info, #main .body .employ {
+    background-color: white;
+    color: black;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 100%;
+  }
+  
+  #main .body .info h2, #main .body .employ h2 {
+    font-size: xx-large; /* Use rem for better scalability */
+    text-align: center;
+    font-weight: 700;
+  }
+  
+  #main .body .info p, #main .body .employ p {
+    font-size: 1.5rem; /* Use rem for better scalability */
+    margin-bottom: 2rem;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    #main h1 {
+      font-size: 2rem;
+    }
+  
+    #main .body{
+      flex-direction: column;
+    }
+  
+    #main .top .cont img {
+      width: 5rem; /* Smaller image on smaller screens */
+    }
+  
+    #main .top .cont .info h2 {
+      font-size: 1.25rem;
+    }
+  
+    #main .top .cont .info p {
+      font-size: 0.875rem;
+    }
+  
+    #main .body .info h2, #main .body .employ h2 {
+      font-size: 1.25rem;
+    }
+  
+    #main .body .info p, #main .body .employ p {
+      font-size: 0.875rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    #main h1 {
+      font-size: 1.5rem;
+    }
+  
+    #main .top .cont img {
+      width: 4rem; /* Even smaller image for very small screens */
+    }
+  
+    #main .top .cont .info h2 {
+      font-size: 1rem;
+    }
+  
+    #main .top .cont .info p {
+      font-size: 0.75rem;
+    }
+  
+    #main .body .info h2, #main .body .employ h2 {
+      font-size: 1rem;
+    }
+  
+    #main .body .info p, #main .body .employ p {
+      font-size: 0.75rem;
+    }
+  }

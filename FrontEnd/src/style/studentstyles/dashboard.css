@@ -1,57 +1,116 @@
-.dash {
-  background-color: whitesmoke;
-  height: 100vh;
-}
-
-.head {
-  background-color: #05acee;
+#main .head {
+  background: linear-gradient(to right, #1976d2, #64b5f6);
   color: white;
-  height: 30vh;
+  height: 20vh;
+  width: 100%;
+  padding: 1rem;
+  margin:0 0 2rem 0;
+  border-radius: 1rem;
 }
 
-.head h1 {
-  font-size: xx-large;
-  margin-bottom: 2rem;
-  padding: 2rem 0 0 2rem ;
+#main .head h1 {
+  font-size: 2.5rem; 
+  margin-bottom: 1rem;
+  padding: 1rem 0; 
   color: whitesmoke;
 }
 
-.all {
+#main .head p {
+  font-size: 1.25rem; 
+  padding: 0 0 0 1rem; /
+}
+
+#main .all {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 5rem;
+  justify-content: space-evenly;
+  gap: 2rem; 
 }
 
-.all .one,
-.two {
-  margin-top: -12rem;
-  background-color: whitesmoke;
+#main .all .one{
+  margin-top: 1rem;
+  background-color: white;
   color: black;
-  width: 35vw;
-  height: 30vh;
-  font-size: larger;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  max-width: 45rem;  
+  font-size: 1.2rem; 
+  height: 100%;
+  padding: 1rem; 
+  box-sizing: border-box;
 }
 
-.all .one h1{
-    font-size: xx-large;
-    text-align: center;
-    
+#main .all .two {
+  margin-top: 1rem;
+  background-color: white;
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  max-width: 45rem;  
+  font-size: 1rem; 
+  padding: 1rem; 
+  box-sizing: border-box;
 }
 
-.all .two h1 {
-    font-size: xx-large;
-    text-align: center;
-    
+#main .all .one h1 {
+  font-size: 2rem; 
+  text-align: center;
 }
 
-.all .one .break{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+#main .all .one .break {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px)); 
+  gap: 1rem; 
 }
 
-.all .one .break p{
-    font-size: x-large;
+#main .all .one .break p {
+ font-size: x-large; 
+ line-height: 4rem;
+}
 
+#main .all .two .content {
+  display: flex;
+  flex-direction: row-reverse; 
+  gap: 2rem; 
+ 
+}
+
+#main .all .two .content h2 {
+  font-size: 1.5rem; 
+  line-height: 4rem; 
+}
+
+#main .all .two .content .text{
+  padding-top: 2rem;
+}
+
+#main .all .two h1 {
+  font-size: 2rem; 
+  text-align: center;
+
+}
+
+#main .line{
+  margin: 3rem auto auto auto;
+  background-color: white;
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  max-width: 70rem;  
+  font-size: 1.2rem; 
+  height: 100%;
+  padding: 1rem; 
+}
+
+@media (min-width: 768px) {
+  #main .all {
+    flex-direction: row; 
+  }
+  
+  #main .all .one,
+  #main .all .two {
+    width: 35vw; 
+    height: 35vh; 
+  }
 }
