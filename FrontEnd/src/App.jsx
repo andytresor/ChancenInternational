@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="*" element={<AdminRoute />} />
         <Route path="/student/*" element={<StudentRoute />} />
-        <Route path="/auth" element={<AuthRoute />} />
+        <Route path="/auth/*" element={<AuthRoute />} />
 
       </Routes>
     </Router>

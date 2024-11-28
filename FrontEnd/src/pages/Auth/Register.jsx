@@ -13,7 +13,7 @@ import {
   SelectValueText,
 } from "../../components/ui/select";
 import styles from "../../style/authstyles/regist.module.css";
-const Regist = () => {
+const Register = () => {
   const [fullName, setfullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,15 +22,6 @@ const Regist = () => {
   const [studyDuration, setstudyDuration] = useState("");
   const [estimatedFunding, setestimatedFunding] = useState("");
 
-  // const formData = {
-  //   fullName: "",
-  //   email: "",
-  //   password: "",
-  //   institution: "",
-  //   program: "",
-  //   studyDuration: "",
-  //   estimatedFunding: "",
-  // };
 
   const [errors, setErrors] = useState({
     fullName: "",
@@ -45,7 +36,7 @@ const Regist = () => {
   const validate = () => {
     const newErrors = {};
 
-    // Validation des champs
+    // Input validations
     if (!fullName) {
       newErrors.fullName = "Le nom complet est requis.";
     }
@@ -99,18 +90,8 @@ const Regist = () => {
     ],
   });
 
-  // Gestion de la soumission du formulaire
+  // Checking errors
   const handleSubmit = () => {
-    // console.log(
-    //   "Données soumises :",
-    //   email,
-    //   password,
-    //   fullName,
-    //   institutions,
-    //   program,
-    //   studyDuration,
-    //   estimatedFunding
-    // );
 
     if (validate()) {
       console.log(
@@ -129,13 +110,8 @@ const Regist = () => {
     }
   };
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-  // console.log(institution);
   return (
-    <Box className={styles.Preg}>
+    <Box className={styles.Preg} >
       <div className={styles.signin}>
         <Box
           className={styles.signinForm}
@@ -143,7 +119,6 @@ const Regist = () => {
           maxW="600px"
           mx="auto"
           mt="100px"
-          borderWidth="1px"
           borderRadius="lg"
           boxShadow="md"
         >
@@ -154,7 +129,7 @@ const Regist = () => {
             textAlign="center"
             className={styles.head}
           >
-            Inscription Étudiant
+           Register
           </Heading>
           <form
             // onSubmit={handleSubmit}
@@ -285,7 +260,7 @@ const Regist = () => {
               </Button>
               <Text className={styles.link}>
                 Already have an account ?{" "}
-                <Link href="/login" color="blue.500">
+                <Link href="/auth/login" color="blue.500">
                   Login
                 </Link>
               </Text>
@@ -297,4 +272,4 @@ const Regist = () => {
   );
 };
 
-export default Regist;
+export default Register;

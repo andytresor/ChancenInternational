@@ -1,7 +1,6 @@
 import { useState } from "react"
-import { Input, Button, Box, Text, Link } from "@chakra-ui/react"
-import { FormLabel , FormControl ,FormErrorMessage } from '@chakra-ui/form-control';
-
+import { Input, Button, Box, Text } from "@chakra-ui/react"
+import { Link } from "react-router-dom"
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -68,7 +67,7 @@ const Login = () => {
                 <Link color="blue.500">Forgot Password?</Link>
             </Text>
             <Text>
-                Don't have an account? <Link href="/register" color="blue.500">Sign Up</Link>
+                Don't have an account? <Link to="/auth/register" color="blue.500">Sign Up</Link> 
             </Text>
         </Box>
     )

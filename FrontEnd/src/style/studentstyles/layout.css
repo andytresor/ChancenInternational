@@ -3,7 +3,17 @@
     display: flex; /* Use flexbox for layout */
     
   }
-
+    .sidebar {
+      width: 250px; /* Set a fixed width for the sidebar */
+      height: 100vh; /* Full height */
+      position: fixed; /* Fix the sidebar to the left */
+      left: 0;
+      top: 0;
+      background-color: #fff; /* Background color of the sidebar */
+      transition: transform 0.3s ease; /* Animation for showing/hiding */
+      z-index: 1000; /* Ensure sidebar is above other content */
+    }
+    
 
     .main-content {
       margin-left: 250px; /* Leave space for the sidebar */

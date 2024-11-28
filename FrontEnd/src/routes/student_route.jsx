@@ -6,13 +6,13 @@ import Profile from '../pages/Student/Profile'
 
 const StudentRoute = () => {
     return (
-     
+        <StudentLayout>
             <Routes>
-                <Route path="/student-dashboard" element={<StudentLayout><Dashboard/></StudentLayout>} />
-                <Route path="/student-repayment" element={<StudentLayout><Repayment/></StudentLayout>} />
-                <Route path="/student-profile" element={<StudentLayout><Profile/></StudentLayout>} />
+                <Route path="/student-dashboard" element={<Dashboard/>} />
+                <Route path="/student-repayment" element={<Repayment/>} />
+                <Route path="/student-profile" element={<Profile/>} />
             </Routes>
-    
+        </StudentLayout> 
     )
 }
 
