@@ -1,6 +1,8 @@
 import { useState } from "react"
-import { Input, Button, Box, Text } from "@chakra-ui/react"
+import { Input, Button, Box,Heading, Stack,Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
+import { Field } from "../../components/ui/field";
+import "../../style/authstyles/login.css"
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -38,12 +40,35 @@ const Login = () => {
         }
     };
 
-    
-
     return (
-        <Box p={4} maxW="400px" mx="auto" mt="100px" borderWidth="1px" borderRadius="lg" boxShadow="md">
-            <div>
+        <Box>
+      <div className="full">
+        <form className="form">
+        <Box 
+        p={10} 
+        mx="auto" 
+        borderRadius="lg" 
+        boxShadow="md"
+         >
+        <Heading
+            as="h1"
+            size="3xl"
+            mb={6}
+            textAlign="center"
+          >
+          Login
+          </Heading>
+          <Stack
+              gap="4"
+              align="flex-start"
+              maxW="600"
+            >
+            <Field 
+            className="field"
+            label="Email"
+            >
             <Input
+                className="input"
                 placeholder="Email"
                 type="email"
                 value={email}
@@ -51,9 +76,14 @@ const Login = () => {
                 mb={4}
             />
             {errors.email && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.email}</p>}
-            </div>
-            <div>
+        
+          </Field>
+          <Field 
+            className="field"
+            label="Password"
+            >
             <Input
+                 className="input"
                 placeholder="Password"
                 type="password"
                 value={password}
@@ -61,14 +91,25 @@ const Login = () => {
                 mb={4}
             />
             {errors.password && <p style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{errors.password}</p>}           
-            </div>
-            <Button onClick={handleLogin} colorScheme="teal" width="full">Login</Button>
-            <Text mt={4}>
-                <Link color="blue.500">Forgot Password?</Link>
+           </Field>
+            <Button onClick={handleLogin} colorScheme="teal" width="full" className="button">
+                Login
+                </Button>
+                <div className="link">
+            <Text style={{color:'blue',textDecoration:'underline',marginRight:'4rem'}}>
+                Forgot Password?
             </Text>
             <Text>
-                Don't have an account? <Link to="/auth/register" color="blue.500">Sign Up</Link> 
+                Don't have an account? 
+                <Link to="/auth/register" style={{color:'blue',textDecoration:'underline'}}>
+                Sign Up
+                </Link> 
             </Text>
+            </div>
+            </Stack>
+        </Box>
+        </form>
+        </div>
         </Box>
     )
 }

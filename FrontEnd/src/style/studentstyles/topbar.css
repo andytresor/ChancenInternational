@@ -43,7 +43,7 @@
   padding: 0;
   margin: 0;
 }
- 
+
 .body {
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
@@ -374,13 +374,13 @@ button {
   }
 
   .main {
-    padding-left: 340px;
-    padding-top: 8rem;
+    padding-left: 340px !important;
+    padding-top: 8rem !important;
     transition: padding .4s;
   }
 
   /* Add padding left */
   .left-pd {
-    padding-left: 114px;
+    padding-left: 114px !important;
   }
 }

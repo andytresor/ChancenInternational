@@ -14,19 +14,19 @@ const useTopbar = () => {
         const header = document.getElementById(headerId);
         const main = document.getElementById(mainId);
 
-        const showTopbar = () => {
+        const showSidebar = () => {
             sidebar.classList.toggle('show-sidebar');
             header.classList.toggle('left-pd');
             main.classList.toggle('left-pd');
         };
 
         if (toggle && sidebar && header && main) {
-            toggle.addEventListener('click', showTopbar);
+            toggle.addEventListener('click', showSidebar);
         }
 
         return () => {
             if (toggle) {
-                toggle.removeEventListener('click', showTopbar );
+                toggle.removeEventListener('click', showSidebar );
             }
         };
     }, []);

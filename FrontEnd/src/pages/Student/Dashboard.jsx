@@ -23,7 +23,7 @@ const Dashboard = () => {
           <h1> Welcome User </h1>
           <p> Total Overview </p>
         </div>
-        <div className="all">
+        <div className="ally">
           <CustomCard className="two">
             <h1>REPAYMENT</h1>
             <div className="content">

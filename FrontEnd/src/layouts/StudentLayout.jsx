@@ -1,5 +1,5 @@
 import Topbar from "../re-components/Student/topbar";
-import '../style/studentstyles/layout.css'
+
 
 const StudentLayout = ({ children }) => {
     return (

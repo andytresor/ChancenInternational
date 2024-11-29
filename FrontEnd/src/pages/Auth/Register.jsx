@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Heading, Link, Text } from "@chakra-ui/react";
 import { Button, Input, Stack } from "@chakra-ui/react";
 import { Field } from "../../components/ui/field";
@@ -12,7 +13,7 @@ import {
   SelectTrigger,
   SelectValueText,
 } from "../../components/ui/select";
-import styles from "../../style/authstyles/regist.module.css";
+import "../../style/authstyles/register.css"
 const Register = () => {
   const [fullName, setfullName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ const Register = () => {
     program: "",
     studyDuration: "",
     estimatedFunding: "",
-  });
+  }); 
 
   const validate = () => {
     const newErrors = {};
@@ -83,12 +84,14 @@ const Register = () => {
 
   const institutions = createListCollection({
     items: [
-      { label: "logbesou", value: "logbesou" },
-      { label: "balli", value: "balli" },
-      { label: "mbouda", value: "mbouda" },
-      { label: "yaounde", value: "yaounde" },
+      { label: "Institution A", value: "Institution A" },
+      { label: "Institution B", value: "Institution B" },
+      { label: "Institution C", value: "Institution C" },
+      { label: "Institution D", value: "Institution D" },
     ],
   });
+
+  const navigate = useNavigate();
 
   // Checking errors
   const handleSubmit = () => {
@@ -104,51 +107,46 @@ const Register = () => {
         studyDuration,
         estimatedFunding
       );
-      alert("Inscription réussie !");
+       navigate('/')
     } else {
       alert("Veuillez corriger les erreurs avant de continuer.");
+      console.log(errors);  
     }
+   
   };
 
   return (
-    <Box className={styles.Preg} >
-      <div className={styles.signin}>
+    <Box >
+      <div className="all">
+        <form className="form" >
         <Box
-          className={styles.signinForm}
-          p={4}
-          maxW="600px"
-          mx="auto"
-          mt="100px"
+          p={10}
           borderRadius="lg"
+          width="100%"
           boxShadow="md"
+          
         >
           <Heading
-            as="h2"
-            size="lg"
+            as="h1"
+            size="2xl"
             mb={6}
             textAlign="center"
-            className={styles.head}
           >
            Register
           </Heading>
-          <form
-            // onSubmit={handleSubmit}
-            className={styles.form}
-          >
             <Stack
               gap="4"
               align="flex-start"
               maxW="600"
-              className={styles.stack}
             >
               <Field
-                className={styles.field}
+                className="field"
                 label="Full Name"
                 invalid={!!errors.fullName}
                 errorText={errors.fullName?.message}
               >
                 <Input
-                  className={styles.input}
+                  className="input"
                   type="text"
                   placeholder="john doe"
                   value={fullName}
@@ -156,13 +154,13 @@ const Register = () => {
                 />
               </Field>
               <Field
-                className={styles.field}
+                className="field"
                 label="Email"
                 invalid={!!errors.email}
                 errorText={errors.email?.message}
               >
                 <Input
-                  className={styles.input}
+                  className="input"
                   type="email"
                   placeholder="john.doe@example.com"
                   value={email}
@@ -170,13 +168,13 @@ const Register = () => {
                 />
               </Field>
               <Field
-                className={styles.field}
+                className="field"
                 label="Password"
                 invalid={!!errors.password}
                 errorText={errors.password?.message}
               >
                 <PasswordInput
-                  className={styles.input}
+                  className="input"
                   type="password"
                   placeholder="********"
                   value={password}
@@ -184,38 +182,39 @@ const Register = () => {
                 />
               </Field>
               <Field
-                className={styles.field}
+                className="field"
                 invalid={errors.institution}
                 errorText={errors.institution?.message}
               >
+               
                 <SelectRoot
                   collection={institutions}
-                  size="sm"
                   width="565px"
+                  size="lg"
                   value={institution}
                   onValueChange={(e) => setinstitution(e.value[0])}
                 >
-                  <SelectLabel>Select institutions</SelectLabel>
+                  <SelectLabel>Select Institution</SelectLabel>
                   <SelectTrigger>
-                    <SelectValueText placeholder="institution" />
-                  </SelectTrigger>
-                  <SelectContent>
+                    <SelectValueText placeholder="institution" width="44.5rem" border="rgb(199, 193, 193) solid 2px" height='2rem' borderRadius="4px"/>
+                      </SelectTrigger>
+                    <SelectContent  width="565px" backgroundColor="white" >
                     {institutions.items.map((inst) => (
                       <SelectItem item={inst} key={inst.value}>
                         {inst.label}
                       </SelectItem>
                     ))}
-                  </SelectContent>
+                    </SelectContent>
                 </SelectRoot>
               </Field>
               <Field
-                className={styles.field}
+                className="field"
                 label="Program"
                 invalid={!!errors.program}
                 errorText={errors.program?.message}
               >
                 <Input
-                  className={styles.input}
+                  className="input"
                   type="text"
                   placeholder="enter your studying program"
                   value={program}
@@ -223,13 +222,13 @@ const Register = () => {
                 />
               </Field>
               <Field
-                className={styles.field}
+                className="field"
                 label="Study Duration in (Months)"
                 invalid={!!errors.studyDuration}
                 errorText={errors.studyDuration?.message}
               >
                 <Input
-                  className={styles.input}
+                  className="input"
                   type="number"
                   placeholder="enter your study duration"
                   value={studyDuration}
@@ -237,13 +236,13 @@ const Register = () => {
                 />
               </Field>
               <Field
-                className={styles.field}
-                label="Estimated Funding in dolars"
+                className="field"
+                label="Estimated Funding($)"
                 invalid={!!errors.estimatedFunding}
                 errorText={errors.estimatedFunding?.message}
               >
                 <Input
-                  className={styles.input}
+                  className="input"
                   type="number"
                   placeholder="enter your estimated funding"
                   value={estimatedFunding}
@@ -251,6 +250,7 @@ const Register = () => {
                 />
               </Field>
               <Button
+              className="button"
                 // type="submit"
                 colorScheme="blue"
                 width="full"
@@ -258,15 +258,15 @@ const Register = () => {
               >
                 Register
               </Button>
-              <Text className={styles.link}>
+              <Text className='link'>
                 Already have an account ?{" "}
                 <Link href="/auth/login" color="blue.500">
                   Login
                 </Link>
               </Text>
             </Stack>
-          </form>
         </Box>
+          </form>
       </div>
     </Box>
   );
