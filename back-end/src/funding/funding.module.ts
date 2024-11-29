@@ -1,9 +1,16 @@
 import { Module } from '@nestjs/common';
-import { FundingService } from './funding.service';
-import { FundingController } from './funding.controller';
+import { FundingsService } from './funding.service';
+import { FundingsController } from './funding.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { StudentsModule } from 'src/students/students.module';
+import { Funding } from './funding.entity';
 
 @Module({
-  providers: [FundingService],
-  controllers: [FundingController]
+  imports: [
+    TypeOrmModule.forFeature([Funding]),
+    StudentsModule, // For linking students to funding
+  ],
+  providers: [FundingsService],
+  controllers: [FundingsController]
 })
 export class FundingModule {}

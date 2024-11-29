@@ -1,13 +1,10 @@
-import { Student } from "src/students/student.entity";
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Funding } from '../funding/funding.entity';
 
 @Entity()
 export class Repayment {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne(() => Student, (student) => student.repayments)
-  student: Student;
 
   @Column('decimal')
   amount: number;
@@ -17,4 +14,10 @@ export class Repayment {
 
   @Column('boolean', { default: false })
   isPaid: boolean;
+
+  @Column('date', { nullable: true })
+  paymentDate: Date;
+
+  @ManyToOne(() => Funding, (funding) => funding.id, { eager: true })
+  funding: Funding;
 }
