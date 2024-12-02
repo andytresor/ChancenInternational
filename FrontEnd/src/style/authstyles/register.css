@@ -1,6 +1,6 @@
 .all{
     background: linear-gradient(rgba(255,0,0,0),#64b5f6, #3295f8 );
-	min-height: 100vh;
+	height: 100vh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -13,6 +13,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%; 
     max-width: 400px; 
+    margin: 1rem;
 }
 
 .all .form .field{
@@ -42,12 +43,12 @@ margin-bottom: 0.5rem;
 	width: 95%;
     background: linear-gradient(#64b5f6, #3295f8 );
 	cursor: pointer;
-	color: white;
     font-weight: bold;
 }
 
 .all .form .button:hover{
 	background: linear-gradient(#3295f8, #64b5f6);
+    color: white;
 }
 
 .all .form .link {

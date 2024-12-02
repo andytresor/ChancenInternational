@@ -10,7 +10,7 @@
 .full .form{
 	background: whitesmoke;
 	border-radius: 1rem;
-    width: 30%;
+	margin: 1rem;
 }
 
 .full .form .field{
@@ -23,8 +23,11 @@ height: 5%;
 }
 
 .full .form .field input{
-	height: 3rem;
-	border:rgb(199, 193, 193) solid 2px;
+	height: 2.5rem;
+	border: 2px solid rgb(199, 193, 193);
+	font-size: 1rem;
+	padding: 0 0.5rem;
+	width: 100%;
 }
 
 .full .form .button{
@@ -39,6 +42,7 @@ height: 5%;
 }
 
 .full .form .button:hover{
+	background: linear-gradient(#3295f8, #64b5f6);
 	color: white;
 }
 

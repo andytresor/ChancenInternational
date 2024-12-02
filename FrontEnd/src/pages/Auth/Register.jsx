@@ -196,7 +196,7 @@ const Register = () => {
                 >
                   <SelectLabel>Select Institution</SelectLabel>
                   <SelectTrigger>
-                    <SelectValueText placeholder="institution" width="44.5rem" border="rgb(199, 193, 193) solid 2px" height='2rem' borderRadius="4px"/>
+                    <SelectValueText placeholder="institution"  width="44.5rem" border="rgb(199, 193, 193) solid 2px" height='2rem' borderRadius="4px"/>
                       </SelectTrigger>
                     <SelectContent  width="565px" backgroundColor="white" >
                     {institutions.items.map((inst) => (
