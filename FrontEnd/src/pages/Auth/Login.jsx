@@ -100,10 +100,7 @@ const Login = () => {
                 Forgot Password?
             </Text>
             <Text>
-                Don't have an account? 
-                <Link to="/" style={{color:'blue',textDecoration:'underline'}}>
-                Sign Up
-                </Link> 
+                Don't have an account? <Link href="/auth/register" color="blue.500">Sign Up</Link>
             </Text>
             </div>
             </Stack>

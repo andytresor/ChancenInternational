@@ -23,7 +23,6 @@ const Register = () => {
   const [studyDuration, setstudyDuration] = useState("");
   const [estimatedFunding, setestimatedFunding] = useState("");
 
-
   const [errors, setErrors] = useState({
     fullName: "",
     email: "",
@@ -260,7 +259,7 @@ const Register = () => {
               </Button>
               <Text className='link'>
                 Already have an account ?{" "}
-                <Link href="/login" color="blue.500">
+                <Link href="/auth/login" color="blue.500">
                   Login
                 </Link>
               </Text>
