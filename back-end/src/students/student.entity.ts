@@ -17,8 +17,7 @@ export class Student {
   @ManyToOne(() => Institution, (institution) => institution.students)
   institution: Institution;
 
-  @Column('decimal')
-  salary: number;
+  @Column('decimal') 
 
   @Column({ default: true })
   isRepaymentActive: boolean;

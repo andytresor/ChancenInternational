@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Funding } from '../funding/funding.entity';
+import { Student } from 'src/students/student.entity';
 
 @Entity()
 export class Repayment {
@@ -20,4 +21,7 @@ export class Repayment {
 
   @ManyToOne(() => Funding, (funding) => funding.id, { eager: true })
   funding: Funding;
+
+  @ManyToOne(() => Student, (student) => student.id, { eager: true })
+  student: Student;
 }
