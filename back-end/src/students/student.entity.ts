@@ -14,10 +14,11 @@ export class Student {
   @Column()
   email: string;
 
+  @Column('decimal', { nullable: true })
+  salary: number
+
   @ManyToOne(() => Institution, (institution) => institution.students)
   institution: Institution;
-
-  @Column('decimal') 
 
   @Column({ default: true })
   isRepaymentActive: boolean;
