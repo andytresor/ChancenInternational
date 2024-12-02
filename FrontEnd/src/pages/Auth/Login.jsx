@@ -23,9 +23,9 @@ const Login = () => {
 
       // Navigate based on user role
       if (role === 'student') {
-        navigate('/student'); // Navigate to student page
+        navigate('/student/student-dashboard'); // Navigate to student page
       } else if (role === 'admin') {
-        navigate('/admin'); // Navigate to admin page
+        navigate('/admin/admin-dashboard'); // Navigate to admin page
       }
 
       // Optionally, you might want to store the token in local storage or context
@@ -36,7 +36,7 @@ const Login = () => {
   };
 
   return (
-    <div className="register">
+    <div className="login">
       <div className="form-box">
         <form className="form" onSubmit={handleSubmit}>
           <span className="title">Sign in</span>
@@ -61,7 +61,7 @@ const Login = () => {
           <button type="submit">Sign in</button>
         </form>
         <div className="form-section">
-          <p>Don't have an account? <NavLink to="/">Sign up</NavLink></p>
+          <p>Don't have an account? <NavLink to="/auth/register">Sign up</NavLink></p>
         </div>
       </div>
     </div>
