@@ -1,0 +1,16 @@
+.content .top{
+    display: flex;
+    justify-content: space-between;
+}
+
+.content .top .logo{
+    display: flex;
+}
+
+.content .top .logo img{
+    width: 10rem;
+}
+
+.content .top .links ul{
+    display: flex;
+}

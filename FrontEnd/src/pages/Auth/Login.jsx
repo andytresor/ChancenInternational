@@ -101,7 +101,7 @@ const Login = () => {
             </Text>
             <Text>
                 Don't have an account? 
-                <Link to="/" style={{color:'blue',textDecoration:'underline'}}>
+                <Link to="/auth/register" style={{color:'blue',textDecoration:'underline'}}>
                 Sign Up
                 </Link> 
             </Text>
