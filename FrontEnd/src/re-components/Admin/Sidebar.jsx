@@ -101,7 +101,7 @@ const Sidebar = () => {
               <h3 className="sidebar__title">MANAGE</h3>
               <div className="sidebar__list">
                 <NavLink
-                  to="/"
+                  to="/admin/admin"
                   className={`sidebar__link ${activeLink === "Dashboard" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Dashboard")}
                 >
@@ -109,7 +109,7 @@ const Sidebar = () => {
                   <span> Dashboard</span>
                 </NavLink>
                 <NavLink
-                  to="/students"
+                  to="/admin/students"
                   className={`sidebar__link ${activeLink === "Students" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Students")}
                 >
@@ -117,7 +117,7 @@ const Sidebar = () => {
                   <span>Students</span>
                 </NavLink>
                 <NavLink
-                  to="/repayments"
+                  to="/admin/repayments"
                   className={`sidebar__link ${activeLink === "Repayments" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Repayments")}
                 >
@@ -140,7 +140,7 @@ const Sidebar = () => {
               <h3 className="sidebar__title">SETTINGS</h3>
               <div className="sidebar__list">
                 <NavLink
-                  to="/notifications"
+                  to="/admin/notifications"
                   className={`sidebar__link ${activeLink === "Notifications" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Notifications")}
                 >
@@ -153,7 +153,7 @@ const Sidebar = () => {
                   <span>My Messages</span>
                 </NavLink>
                 <NavLink
-                  to="/settings"
+                  to="/admin/settings"
                   className={`sidebar__link ${activeLink === "Settings" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Settings")}
                 >
