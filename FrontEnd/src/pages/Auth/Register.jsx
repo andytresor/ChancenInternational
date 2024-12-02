@@ -260,7 +260,7 @@ const Register = () => {
               </Button>
               <Text className='link'>
                 Already have an account ?{" "}
-                <Link href="/auth/login" color="blue.500">
+                <Link href="/login" color="blue.500">
                   Login
                 </Link>
               </Text>

@@ -9,9 +9,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<AdminRoute />} />
+        <Route path="*" element={<AuthRoute />} />
+        <Route path="/admin/*" element={<AdminRoute />} />
         <Route path="/student/*" element={<StudentRoute />} />
-        <Route path="/auth/*" element={<AuthRoute />} />
 
       </Routes>
     </Router>
