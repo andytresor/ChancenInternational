@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@700&family=Italianno&display=swap');
+
 .content .top{
     display: flex;
     justify-content: space-between;
@@ -11,6 +13,114 @@
     width: 10rem;
 }
 
+.content .top .logo p{
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1976d2;
+}
+
 .content .top .links ul{
     display: flex;
+   
+}
+
+.content .top .links ul li{
+    margin-right: 3rem;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.content .top .links ul button{
+    margin-right: 3rem;
+    margin-top: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 1rem;
+    text-align: center;
+    background-color: rgb(0, 195, 255);
+    border-radius: 15px;
+}
+
+.content .top .links ul button:hover{
+    cursor: pointer;
+  background-color: #1976d2;
+  color: white;
+}
+
+.content .welcome{
+    background-image: url("../assets/Images/pexels.jpg");
+    height: 60rem;
+    width: 100%;
+    background-size: 100% 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+}
+
+.content .welcome .text{
+    padding: 15rem;
+    color: white;
+}
+
+.content .welcome .text h1{
+    font-size: 5rem;
+    margin-bottom: 5rem;
+}
+
+.content .welcome .text p{
+    font-size: 2rem;
+}
+
+.content .about-us{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.content .about-us img{
+    width: 50%;
+}
+
+.content .about-us .part {
+    font-size: 1.8rem;
+}
+
+.content .about-us .part h1{
+    text-align: center;
+    font-size: 8rem;
+    font-family:Italianno;
+    color: #1976d2;
+}
+
+.content .working{
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.content .working img{
+    width: 40%;
+}
+
+.content .working .part2 p {
+    font-size: 1.3em;
+    margin-bottom: 1rem;
+}
+
+.content .working .part2 h1{
+    text-align: center;
+    font-size: 8rem;
+    font-family:Italianno;
+    color: #1976d2;
+}
+
+
+.content .footer footer{
+    height: 10rem;
+  /* background: linear-gradient(to right, #1976d2, #64b5f6); */
+    background-color: rgb(156, 153, 153);
+    color: white;
 }
