@@ -61,7 +61,7 @@ const Login = () => {
           <button type="submit">Sign in</button>
         </form>
         <div className="form-section">
-          <p>Don't have an account? <NavLink to="/">Sign up</NavLink></p>
+          <p>Don't have an account? <NavLink to="/auth/register">Sign up</NavLink></p>
         </div>
       </div>
     </div>

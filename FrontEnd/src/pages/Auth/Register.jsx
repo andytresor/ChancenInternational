@@ -59,7 +59,7 @@ const Register = () => {
           <button type="submit">Sign up</button>
         </form>
         <div className="form-section">
-          <p>Have an account? <NavLink to="/login">Log in</NavLink></p>
+          <p>Have an account? <NavLink to="/auth/login">Log in</NavLink></p>
         </div>
       </div>
     </div>
