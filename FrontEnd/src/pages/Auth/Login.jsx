@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Input, Button, Box,Heading, Stack,Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
 import { Field } from "../../components/ui/field";
+import  axios from "axios";
 import "../../style/authstyles/login.css"
 
 const Login = () => {
@@ -30,8 +31,16 @@ const Login = () => {
         return Object.keys(newErrors).length === 0; // Retourne true si aucune erreur
     };
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (validate()) {
+            try{
+                const response = await axios.post('http://localhost:3000/auth/login' , {email , password});
+                console.log('Réponse de l\'API :', response.data); 
+                alert("Connexion réussie !");
+            }catch(error) {
+                console.error('Erreur lors de la connexion :', error); 
+                alert("Erreur lors de la connexion. Veuillez vérifier vos informations et réessayer."); 
+            }
             // Soumission des données après validation réussie
             console.log({ email, password });
             alert("Connexion réussie !");

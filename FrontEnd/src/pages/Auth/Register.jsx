@@ -4,40 +4,41 @@ import { Box, Heading, Link, Text } from "@chakra-ui/react";
 import { Button, Input, Stack } from "@chakra-ui/react";
 import { Field } from "../../components/ui/field";
 import { PasswordInput } from "../../components/ui/password-input";
-import { createListCollection } from "@chakra-ui/react";
-import {
-  SelectContent,
-  SelectItem,
-  SelectLabel,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from "../../components/ui/select";
+import  axios from "axios";
+// import { createListCollection } from "@chakra-ui/react";
+// import {
+//   SelectContent,
+//   SelectItem,
+//   SelectLabel,
+//   SelectRoot,
+//   SelectTrigger,
+//   SelectValueText,
+// } from "../../components/ui/select";
 import "../../style/authstyles/register.css"
 const Register = () => {
-  const [fullName, setfullName] = useState("");
+  const [name, setfullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [institution, setinstitution] = useState("");
-  const [program, setprogram] = useState("");
-  const [studyDuration, setstudyDuration] = useState("");
-  const [estimatedFunding, setestimatedFunding] = useState("");
+  // const [program, setprogram] = useState("");
+  // const [studyDuration, setstudyDuration] = useState("");
+  // const [estimatedFunding, setestimatedFunding] = useState("");
 
   const [errors, setErrors] = useState({
-    fullName: "",
+    name: "",
     email: "",
     password: "",
-    institution: "",
-    program: "",
-    studyDuration: "",
-    estimatedFunding: "",
+    // institution: "",
+    // program: "",
+    // studyDuration: "",
+    // estimatedFunding: "",
   }); 
 
   const validate = () => {
     const newErrors = {};
 
     // Input validations
-    if (!fullName) {
+    if (!name) {
       newErrors.fullName = "Le nom complet est requis.";
     }
 
@@ -54,60 +55,68 @@ const Register = () => {
         "Le mot de passe doit comporter au moins 6 caractères.";
     }
 
-    if (!institution) {
-      newErrors.institution =
-        "Veuillez sélectionner une institution partenaire.";
-    }
+    // if (!institution) {
+    //   newErrors.institution =
+    //     "Veuillez sélectionner une institution partenaire.";
+    // }
 
-    if (!program) {
-      newErrors.program = "Le programme d'études est requis.";
-    }
+    // if (!program) {
+    //   newErrors.program = "Le programme d'études est requis.";
+    // }
 
-    if (!studyDuration) {
-      newErrors.studyDuration = "La durée des études est requise.";
-    } else if (isNaN(studyDuration) || studyDuration <= 0) {
-      newErrors.studyDuration =
-        "La durée des études doit être un nombre valide.";
-    }
+    // if (!studyDuration) {
+    //   newErrors.studyDuration = "La durée des études est requise.";
+    // } else if (isNaN(studyDuration) || studyDuration <= 0) {
+    //   newErrors.studyDuration =
+    //     "La durée des études doit être un nombre valide.";
+    // }
 
-    if (!estimatedFunding) {
-      newErrors.estimatedFunding =
-        "Le montant estimé du financement est requis.";
-    } else if (isNaN(estimatedFunding) || estimatedFunding <= 0) {
-      newErrors.estimatedFunding = "Le montant doit être un nombre valide.";
-    }
+    // if (!estimatedFunding) {
+    //   newErrors.estimatedFunding =
+    //     "Le montant estimé du financement est requis.";
+    // } else if (isNaN(estimatedFunding) || estimatedFunding <= 0) {
+    //   newErrors.estimatedFunding = "Le montant doit être un nombre valide.";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const institutions = createListCollection({
-    items: [
-      { label: "Institution A", value: "Institution A" },
-      { label: "Institution B", value: "Institution B" },
-      { label: "Institution C", value: "Institution C" },
-      { label: "Institution D", value: "Institution D" },
-    ],
-  });
+  // const institutions = createListCollection({
+  //   items: [
+  //     { label: "Institution A", value: "Institution A" },
+  //     { label: "Institution B", value: "Institution B" },
+  //     { label: "Institution C", value: "Institution C" },
+  //     { label: "Institution D", value: "Institution D" },
+  //   ],
+  // });
 
   const navigate = useNavigate();
 
   // Checking errors
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
     if (validate()) {
+      try{
+        const response = await axios.post('http://localhost:3000/auth/register' , {
+          name,
+          email,
+          password,
+          // institution,
+          // program,
+          // studyDuration,
+          // estimatedFunding
+        });
       console.log(
-        "Données soumises :",
-        fullName,
-        email,
-        password,
-        institution,
-        program,
-        studyDuration,
-        estimatedFunding
-      );
-       navigate('/')
-    } else {
+        "Reponse de l'api :", response.data);
+        alert("inscription reussie");
+       navigate('/');
+    }catch(error){
+      console.error('Erreur lors de l\'inscription :', error); 
+      alert("Erreur lors de l'inscription. Veuillez vérifier vos informations et réessayer."); 
+    }
+  }
+     else {
       alert("Veuillez corriger les erreurs avant de continuer.");
       console.log(errors);  
     }
@@ -141,14 +150,14 @@ const Register = () => {
               <Field
                 className="field"
                 label="Full Name"
-                invalid={!!errors.fullName}
-                errorText={errors.fullName?.message}
+                invalid={!!errors.name}
+                errorText={errors.name?.message}
               >
                 <Input
                   className="input"
                   type="text"
                   placeholder="john doe"
-                  value={fullName}
+                  value={name}
                   onChange={(e) => setfullName(e.target.value)}
                 />
               </Field>
@@ -180,7 +189,7 @@ const Register = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Field>
-              <Field
+              {/* <Field
                 className="field"
                 invalid={errors.institution}
                 errorText={errors.institution?.message}
@@ -247,7 +256,7 @@ const Register = () => {
                   value={estimatedFunding}
                   onChange={(e) => setestimatedFunding(e.target.value)}
                 />
-              </Field>
+              </Field> */}
               <Button
               className="button"
                 // type="submit"

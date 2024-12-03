@@ -22,6 +22,9 @@ export class Student {
   @Column({ default: true })
   isRepaymentActive: boolean;
 
+  @Column('decimal' , {nullable:true})
+  salary:number;
+
   @OneToMany(() => Funding, (funding) => funding.student)
   funding: Funding[];
 

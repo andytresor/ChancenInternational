@@ -11,6 +11,7 @@ import { FundingModule } from 'src/funding/funding.module';
     FundingModule, // Link repayments to funding
   ],
   providers: [RepaymentsService],
-  controllers: [RepaymentsController]
+  controllers: [RepaymentsController],
+  exports:[TypeOrmModule]
 })
 export class RepaymentsModule {}

@@ -11,6 +11,8 @@ import { Funding } from './funding.entity';
     StudentsModule, // For linking students to funding
   ],
   providers: [FundingsService],
-  controllers: [FundingsController]
+  controllers: [FundingsController],
+  exports:[TypeOrmModule]
+
 })
 export class FundingModule {}
