@@ -23,8 +23,8 @@ export class Student {
   @Column({ default: false })
   isRepaymentActive: boolean;
 
-  @OneToMany(() => Funding, (funding) => funding.student)
-  funding: Funding[];
+  @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
+    funding: Funding[];
 
   @OneToMany(() => Repayment, (repayment) => repayment.student)
   repayments: Repayment[];
