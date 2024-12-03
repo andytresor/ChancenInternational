@@ -58,7 +58,7 @@ const CreateRepaymentSchedule = () => {
                 startDate: startDate ? startDate.toISOString() : null,
             };
 
-            await axios.post("/repayments/schedule", payload);
+            await axios.post("http://localhost:3000/repayments/schedule", payload);
             setSuccessMessage("Repayment schedule created successfully!");
             setSelectedFunding("");
             setSalary("");

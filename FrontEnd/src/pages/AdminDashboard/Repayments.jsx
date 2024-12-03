@@ -37,16 +37,21 @@ const RepaymentsPage = () => {
 
   const fetchRepayments = async () => {
     try {
-      const response = await axios.get("/repayments");
-      setRepayments(response.data);
+      const response = await axios.get("http://localhost:3000/repayments");
+      // console.log(response.data); // Log to inspect the response
+      // Ensure response.data is an array
+      setRepayments(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching repayments:", error);
+      setRepayments([]); // Fallback to empty array on error
     }
   };
 
   const fetchRepaymentDetails = async (id) => {
     try {
-      const response = await axios.get(`/repayments/${id}`);
+      const response = await axios.get(`http://localhost:3000/repayments/${id}`);
+      console.log(response.data);
+      
       setSelectedRecord(response.data);
     } catch (error) {
       console.error("Error fetching repayment details:", error);
@@ -58,12 +63,14 @@ const RepaymentsPage = () => {
     setHistoryModalOpen(true);
   };
 
-  const filteredRepayments = repayments.filter((record) => {
-    return (
-      (filterStatus === "All" || record.status === filterStatus) &&
-      record.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  const filteredRepayments = Array.isArray(repayments)
+  ? repayments.filter((record) => {
+      return (
+        (filterStatus === "All" || record.status === filterStatus) &&
+        (record.name && record.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    })
+  : [];
 
   return (
     <div className="main" id="main">
@@ -73,9 +80,18 @@ const RepaymentsPage = () => {
           <Grid container spacing={3}>
             {/* Replace static values with dynamic metrics fetched via API */}
             {[
-              { title: "Total Monthly Repayments Collected", value: "$10,000" },
-              { title: "Number of Overdue Payments", value: 5 },
-              { title: "Number of Suspended Payments", value: 3 },
+              {
+                title: "Total Monthly Repayments Collected",
+                value: "$10,000", // Replace with dynamic value from API
+              },
+              {
+                title: "Number of Overdue Payments",
+                value: repayments.filter(r => r.status === 'Overdue').length, // Calculate dynamically
+              },
+              {
+                title: "Number of Suspended Payments",
+                value: repayments.filter(r => r.status === 'Suspended').length, // Calculate dynamically
+              },
             ].map((metric, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card>

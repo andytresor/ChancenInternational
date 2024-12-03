@@ -43,6 +43,8 @@ const Students = () => {
         try {
             const response = await axios.get("http://localhost:3000/students");
             setStudents(response.data);
+            console.log(response.data);
+            
         } catch (error) {
             console.error("Error fetching students:", error);
         }
