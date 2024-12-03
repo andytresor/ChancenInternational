@@ -140,6 +140,14 @@ const Sidebar = () => {
                   <i className="ri-arrow-up-down-line"></i>
                   <span>New Student</span>
                 </NavLink>
+                <NavLink
+                  to="/admin/repayment-form"
+                  className={`sidebar__link ${activeLink === "Repayment" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Repayment")}
+                >
+                  <i className="ri-bar-chart-box-fill"></i>
+                  <span>Repayment-Form</span>
+                </NavLink>
               </div>
             </div>
 
