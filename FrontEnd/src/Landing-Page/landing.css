@@ -3,6 +3,7 @@
 .content .top{
     display: flex;
     justify-content: space-between;
+
 }
 
 .content .top .logo{
@@ -30,6 +31,10 @@
     margin-top: 2rem;
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+.content .top .links ul li:hover{
+    color: #1976d2;
 }
 
 .content .top .links ul button{
@@ -65,17 +70,31 @@
 .content .welcome .text h1{
     font-size: 5rem;
     margin-bottom: 5rem;
+    color: #83f5ef;
 }
 
 .content .welcome .text p{
     font-size: 2rem;
 }
 
+.content .welcome .text button {
+    border: 2px solid #83f5ef;
+    border-radius: 3rem;
+    padding: 1rem;
+    font-size: larger;
+    margin-top: 4rem;
+}
+
+.content .welcome .text button:hover{
+    cursor: pointer;
+    background-color: #47c7c1;
+}
+
 .content .about-us{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2rem;
+    background-color: whitesmoke;
 }
 
 .content .about-us img{
@@ -83,7 +102,7 @@
 }
 
 .content .about-us .part {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
 }
 
 .content .about-us .part h1{
@@ -94,11 +113,10 @@
 }
 
 .content .working{
-    background-color: whitesmoke;
+    background-color: rgb(243, 238, 238);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2rem;
 }
 
 .content .working img{
@@ -106,7 +124,7 @@
 }
 
 .content .working .part2 p {
-    font-size: 1.3em;
+    font-size: 1.5em;
     margin-bottom: 1rem;
 }
 
@@ -117,10 +135,95 @@
     color: #1976d2;
 }
 
+.content .footer{
+background-color: rgb(172, 170, 170);
+padding: 1rem;
+}
+
+.content .footer h1{
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: center;
+}
 
 .content .footer footer{
-    height: 10rem;
-  /* background: linear-gradient(to right, #1976d2, #64b5f6); */
-    background-color: rgb(156, 153, 153);
+    display: flex;
+ justify-content: space-around;
+    align-items: center;
     color: white;
+    font-size: 1.5rem;
+    margin-right: 3rem;
+}
+
+.content .footer footer .links{
+margin-right: 3rem;
+line-height: 2rem;
+cursor: pointer;
+}
+
+
+.content .footer footer .contact{
+    line-height: 2rem;
+    cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+    .content .about-us {
+        flex-direction: column;
+        margin: 1rem;
+    }
+
+    .content .top .links ul li {
+        margin-right: 1.5rem; 
+    }
+    
+    .content .top .links ul button {
+        margin-right: 1.5rem; 
+    }
+
+    .content .welcome .text {
+        padding: 10rem; 
+    }
+
+    .content .welcome .text h1 {
+        font-size: 4rem;
+    }
+
+    .content .welcome .text p {
+        font-size: 1.5rem; 
+    }
+
+    .content .working{
+        flex-direction:column-reverse;
+    }
+
+    .content .about-us img,
+    .content .working img {
+        width: 90%; 
+    }
+
+    .content .about-us .part h1,
+    .content .working .part2 h1 {
+        font-size: 6rem; 
+    }
+
+    .content .footer footer{
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .content .footer footer h1{
+        text-align: left;
+        padding-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .content .top {
+        align-items: center; 
+    }
+
+    .content .top .links ul {
+        justify-content: center;
+    }
 }

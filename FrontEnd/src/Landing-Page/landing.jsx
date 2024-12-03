@@ -5,6 +5,17 @@ import { Link } from "react-router-dom";
 import "./landing.css";
 
 const LandingPage = () => {
+
+
+    // Function to handle scrolling
+    const handleScroll = (id) => {
+      const element = document.getElementById(id); // Find the target element by ID
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" }); // Smooth scrolling
+      }
+    }
+
+
   return (
     <>
       <div className="content">
@@ -18,8 +29,10 @@ const LandingPage = () => {
           </div>
           <div className="links">
             <ul>
-              <li>About Us</li>
-              <li>Services</li>
+              <li onClick={() => handleScroll('about')}>
+            About Us
+              </li>
+              <li onClick={() => handleScroll('work')}>How It Works</li>
               <Link to="/auth/register">
                 <button>Register</button>
               </Link>
@@ -32,10 +45,11 @@ const LandingPage = () => {
             <p>
               We fund your education so you can pay it forward when you succeed.
             </p>
+            <button  onClick={() => handleScroll('about')}>Learn more</button>
           </div>
         </div>
 
-        <div className="about-us">
+        <div className="about-us" id="about">
           <img src={AboutUs} alt="about us" />
           <div className="part">
             <h1>  About Us</h1>
@@ -55,7 +69,7 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="working">
+        <div className="working" id="work">
           <div className="part2">
             <h1>How It Works</h1>
             <p>- Apply for Funding: Submit your application.</p>
@@ -76,13 +90,23 @@ const LandingPage = () => {
 
         <div className="footer">
           <footer>
+            <div className="links">
+              <h1>Links</h1>
             <ul>
-              <li>About Us</li>
-              <li>Services</li>
+              <li onClick={() => handleScroll('about')}>- About Us</li>
+              <li onClick={() => handleScroll('work')}>- How It Works</li>
             </ul>
-            <hr />
-            <p>Copyright © 2024 Chancen Cameroon International.</p>
+            </div>
+            <div className="contact">
+              <h1>Contact Us</h1>
+              <p> - <i class="ri-map-pin-2-line"></i> Douala, Cameroon</p>
+              <p> - <i class="ri-mail-line"></i> info@chanceninternational.com</p>
+              <p> - <i class="ri-phone-line"></i>Phone: +237 6 75 45 67 89</p>
+
+            </div>
           </footer>
+            <hr />
+            <p style={{color:'white',textAlign:'center',fontSize:'1.4rem',padding:'1rem'}}>Copyright © 2024 Chancen Cameroon International.</p>
         </div>
       </div>
     </>
