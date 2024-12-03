@@ -101,7 +101,7 @@ const Sidebar = () => {
               <h3 className="sidebar__title">MANAGE</h3>
               <div className="sidebar__list">
                 <NavLink
-                  to="/admin/admin"
+                  to="/admin/admin-dashboard"
                   className={`sidebar__link ${activeLink === "Dashboard" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Dashboard")}
                 >
@@ -125,12 +125,20 @@ const Sidebar = () => {
                   <span>Repayments</span>
                 </NavLink>
                 <NavLink
-                  to="#"
+                  to="/admin/funding-form"
                   className={`sidebar__link ${activeLink === "Transactions" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Transactions")}
                 >
                   <i className="ri-arrow-up-down-line"></i>
-                  <span>Transactions</span>
+                  <span>Funding Form</span>
+                </NavLink>
+                <NavLink
+                  to="/admin/students-form"
+                  className={`sidebar__link ${activeLink === "Student" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Student")}
+                >
+                  <i className="ri-arrow-up-down-line"></i>
+                  <span>New Student</span>
                 </NavLink>
               </div>
             </div>

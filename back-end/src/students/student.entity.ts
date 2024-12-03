@@ -17,10 +17,10 @@ export class Student {
   @Column('decimal', { nullable: true })
   salary: number
 
-  @ManyToOne(() => Institution, (institution) => institution.students)
+  @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
   institution: Institution;
 
-  @Column({ default: true })
+  @Column({ default: false })
   isRepaymentActive: boolean;
 
   @OneToMany(() => Funding, (funding) => funding.student)
