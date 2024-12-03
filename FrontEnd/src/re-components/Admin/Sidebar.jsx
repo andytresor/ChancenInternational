@@ -182,8 +182,11 @@ const Sidebar = () => {
               </i>
             </button>
             <button className="sidebar__link">
-              <i className="ri-logout-box-r-fill"></i>
-              <span>Log Out</span>
+            <NavLink
+                  to="/auth/login" >
+                  <i className="ri-logout-box-r-fill"></i>
+                  <span>Log Out</span>
+                </NavLink>
             </button>
           </div>
         </div>
