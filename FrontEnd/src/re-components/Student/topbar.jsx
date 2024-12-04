@@ -9,19 +9,20 @@ const Topbar = () => {
 
     const [user, setUser] = useState("");
 
-useEffect(() => {
-  const fetchUser = async () => {
-    const id = localStorage.getItem('userId')
-    if (!id) return; 
-      try {
-        const response = await axios.get(`http://localhost:3000/auth/one/${id}`);
-        setUser(response.data)
-      } catch (error) {
-        console.log(error); 
-      }
-  }
-  fetchUser();
-}, []);
+    useEffect(() => {
+        const fetchUser = async () => { 
+        const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
+        if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+        try { 
+            const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
+            setUser(response.data);} 
+        catch (error) { 
+            console.log(error);
+              
+        } 
+    }; 
+    fetchUser(); 
+}, []); 
 
     const [activeLink, setActiveLink] = useState('Student-Dashboard'); // Default active link
 
@@ -142,7 +143,7 @@ useEffect(() => {
                         </button>
                         <button className="sidebar__link">
                             <i className="ri-logout-box-r-fill"></i>
-                            <span>Log Out</span>
+                            < NavLink to="/auth/register">Log Out</NavLink>
                         </button>
                     </div>
                 </div>
