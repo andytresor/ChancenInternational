@@ -2,8 +2,25 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/Images/adminImages/Chance.png";
 import "../../style/adminstyles/sideBar.css"; // Ensure you have the necessary CSS
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 
 const Sidebar = () => {
+ const [user, setUser] = useState("");
+
+useEffect(() => {
+  const fetchUser = async () => {
+    const id = localStorage.getItem('userId')
+    if (!id) return; 
+      try {
+        const response = await axios.get(`http://localhost:3000/auth/one/${id}`);
+        setUser(response.data)
+      } catch (error) {
+        console.log(error); 
+      }
+  }
+  fetchUser();
+}, []);
+  
   const [activeLink, setActiveLink] = useState("Dashboard"); // Default active link
 
   const handleLinkClick = (link) => {
@@ -89,9 +106,9 @@ const Sidebar = () => {
               <img src={logo} alt="image" />
             </div>
             <div className="sidebar__info">
-              <h3>Andy Shelby</h3>
+              <h3>{user.name}</h3>
               <span style={{ color: "hsl(228, 12%, 61%)" }}>
-                andyshelby123@email.com
+                {user.email}
               </span>
             </div>
           </div>
@@ -140,14 +157,6 @@ const Sidebar = () => {
                   <i class="ri-user-fill"></i>
                   <span>New Student</span>
                 </NavLink>
-                <NavLink
-                  to="/admin/repayment-form"
-                  className={`sidebar__link ${activeLink === "Repayment" ? "active-link" : ""}`}
-                  onClick={() => handleLinkClick("Repayment")}
-                >
-                  <i className="ri-bar-chart-box-fill"></i>
-                  <span>Repayment-Form</span>
-                </NavLink>
               </div>
             </div>
 
@@ -183,15 +192,18 @@ const Sidebar = () => {
           <div className="sidebar__actions">
             <button>
               <i
-                className="ri-moon-clear-fill sidebar__link sidebar__theme"
+                className="ri-moon-clear-fill sidebar_link sidebar_theme"
                 id="theme-button"
               >
                 <span>Theme</span>
               </i>
             </button>
             <button className="sidebar__link">
-              <i className="ri-logout-box-r-fill"></i>
-              <span>Log Out</span>
+            <NavLink
+                  to="/auth/login" >
+                  <i className="ri-logout-box-r-fill"></i>
+                  <span>Log Out</span>
+                </NavLink>
             </button>
           </div>
         </div>

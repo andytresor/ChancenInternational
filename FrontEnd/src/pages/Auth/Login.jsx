@@ -19,7 +19,20 @@ const Login = () => {
         password,
       });
 
-      const { role } = response.data;
+      const { role, user, accessToken } = response.data;
+      console.log(role);
+
+      if (user && user.id) {
+        localStorage.setItem('token', accessToken);
+        console.log(accessToken);
+
+        localStorage.setItem('userId', user.id);
+        console.log(user.id);
+        
+      }
+      else{throw new Error("User data is invalid");
+      }
+      
 
       // Navigate based on user role
       if (role === 'student') {
@@ -57,7 +70,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {error && <p className="error">** {error} **</p>}
+          {error && <p className="error">* {error} *</p>}
           <button type="submit">Sign in</button>
         </form>
         <div className="form-section">

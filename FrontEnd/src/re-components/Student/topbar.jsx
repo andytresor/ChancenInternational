@@ -2,9 +2,26 @@ import React, { useEffect, useState } from 'react';
 import logo from "../../assets/Images/adminImages/Chance.png";
 import '../../style/studentstyles/topbar.css'; // Ensure you have the necessary CSS
 import { NavLink } from 'react-router-dom';
+import axios from "axios";
 
 
 const Topbar = () => {
+
+    const [user, setUser] = useState("");
+
+useEffect(() => {
+  const fetchUser = async () => {
+    const id = localStorage.getItem('userId')
+    if (!id) return; 
+      try {
+        const response = await axios.get(`http://localhost:3000/auth/one/${id}`);
+        setUser(response.data)
+      } catch (error) {
+        console.log(error); 
+      }
+  }
+  fetchUser();
+}, []);
 
     const [activeLink, setActiveLink] = useState('Student-Dashboard'); // Default active link
 
@@ -83,8 +100,8 @@ const Topbar = () => {
                         <img src={logo} alt="image" />
                         </div>
                         <div className="sidebar__info">
-                            <h3>User Name</h3>
-                            <span style={{color: "hsl(228, 12%, 61%)"}}>user@email.com</span>
+                            <h3>{user.name}</h3>
+                            <span style={{color: "hsl(228, 12%, 61%)"}}>{user.email}</span>
                         </div>
                     </div>
 
