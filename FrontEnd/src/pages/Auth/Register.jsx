@@ -56,7 +56,7 @@ const Register = () => {
             />
           </div>
           {error && <p className="error">** {error} **</p>}
-          <button type="submit">Sign up</button>
+          <button type="submit"><NavLink to="/student/student-dashboard">Sign Up</NavLink></button>
         </form>
         <div className="form-section">
           <p>Have an account? <NavLink to="/auth/login">Log in</NavLink></p>

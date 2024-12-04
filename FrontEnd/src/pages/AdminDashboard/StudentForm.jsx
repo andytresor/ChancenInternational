@@ -20,12 +20,16 @@ const StudentForm = ({ studentId, onSave }) => {
         if (studentId) {
             try {
                 const response = await axios.get(`http://localhost:3000/students/${studentId}`);
-                setStudentData({
+                const studentDetails = {
                     name: response.data.name,
                     email: response.data.email,
                     salary: response.data.salary || '',
                     institutionId: response.data.institution?.id || '',
-                });
+                };
+    
+                setStudentData(studentDetails);
+     
+                localStorage.setItem('studentDetails', JSON.stringify(studentDetails));
             } catch (error) {
                 console.error('Error fetching student details:', error);
             }
@@ -59,6 +63,9 @@ const StudentForm = ({ studentId, onSave }) => {
                 await axios.patch(`http://localhost:3000/students/${studentId}`, studentData);
             } else {
                 await axios.post('http://localhost:3000/students', studentData);
+                console.log();
+                
+                localStorage.setItem('studentData',JSON.stringify(studentData));
             }
             alert('Student saved successfully!');
             onSave(); // Callback to parent for refreshing data or closing the form

@@ -146,7 +146,7 @@ const Students = () => {
                                             return (
                                                 <TableRow key={student.id}>
                                                     <TableCell>{student.name}</TableCell>
-                                                    <TableCell>{student.institution}</TableCell>
+                                                    <TableCell>{student.institution.name}</TableCell>
                                                     <TableCell>${totalDebt.toFixed(2)}</TableCell>
                                                     <TableCell>{repaymentPercentage}%</TableCell>
                                                     <TableCell>{funding.isActive ? "In Progress" : "Suspended"}</TableCell>
