@@ -7,9 +7,8 @@ import { Institution } from './institution.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Institution])],
   providers: [InstitutionsService],
-  controllers: [InstitutionsController],
-  exports:[TypeOrmModule]
-
+  exports: [TypeOrmModule],
+  controllers: [InstitutionsController]
 })
 
 export class InstitutionsModule {}

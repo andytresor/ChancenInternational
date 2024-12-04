@@ -9,10 +9,15 @@ import {
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { Student } from './student.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Controller('students')
 export class StudentsController {
-  constructor(private readonly studentsService: StudentsService) {}
+  constructor(private readonly studentsService: StudentsService,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>
+  ) {}
 
   @Get()
   async findAll(): Promise<Student[]> {
@@ -64,4 +69,12 @@ export class StudentsController {
   ): Promise<Student[]> {
     return this.studentsService.findByInstitution(+institutionId);
   }
+
+  @Get('/students-with-funding')
+async getStudentsWithFunding(): Promise<any[]> {
+  return this.studentRepository.find({
+    relations: ['funding'],
+  });
+}
+
 }
