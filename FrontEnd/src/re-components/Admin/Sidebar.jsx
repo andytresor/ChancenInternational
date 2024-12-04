@@ -2,8 +2,25 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/Images/adminImages/Chance.png";
 import "../../style/adminstyles/sideBar.css"; // Ensure you have the necessary CSS
 import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Sidebar = () => {
+  const [user, setUser] = useState("");
+  useEffect(() => {
+      const fetchUser = async () => { 
+      const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
+      if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+      try { 
+          const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
+          setUser(response.data);} 
+      catch (error) { 
+          console.log(error);
+            
+      } 
+  }; 
+  fetchUser(); 
+}, []); 
   const [activeLink, setActiveLink] = useState("Dashboard"); // Default active link
 
   const handleLinkClick = (link) => {
@@ -89,9 +106,9 @@ const Sidebar = () => {
               <img src={logo} alt="image" />
             </div>
             <div className="sidebar__info">
-              <h3>Andy Shelby</h3>
+              <h3>{user.name}</h3>
               <span style={{ color: "hsl(228, 12%, 61%)" }}>
-                andyshelby123@email.com
+                {user.email}
               </span>
             </div>
           </div>
@@ -101,7 +118,7 @@ const Sidebar = () => {
               <h3 className="sidebar__title">MANAGE</h3>
               <div className="sidebar__list">
                 <NavLink
-                  to="/"
+                  to="/admin/admin-dashboard"
                   className={`sidebar__link ${activeLink === "Dashboard" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Dashboard")}
                 >
@@ -109,7 +126,7 @@ const Sidebar = () => {
                   <span> Dashboard</span>
                 </NavLink>
                 <NavLink
-                  to="/students"
+                  to="/admin/students"
                   className={`sidebar__link ${activeLink === "Students" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Students")}
                 >
@@ -117,7 +134,7 @@ const Sidebar = () => {
                   <span>Students</span>
                 </NavLink>
                 <NavLink
-                  to="/repayments"
+                  to="/admin/repayments"
                   className={`sidebar__link ${activeLink === "Repayments" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Repayments")}
                 >
@@ -125,12 +142,20 @@ const Sidebar = () => {
                   <span>Repayments</span>
                 </NavLink>
                 <NavLink
-                  to="#"
+                  to="/admin/funding-form"
                   className={`sidebar__link ${activeLink === "Transactions" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Transactions")}
                 >
                   <i className="ri-arrow-up-down-line"></i>
-                  <span>Transactions</span>
+                  <span>Funding Form</span>
+                </NavLink>
+                <NavLink
+                  to="/admin/students-form"
+                  className={`sidebar__link ${activeLink === "Student" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Student")}
+                >
+                  <i className="ri-arrow-up-down-line"></i>
+                  <span>New Student</span>
                 </NavLink>
               </div>
             </div>
@@ -140,7 +165,7 @@ const Sidebar = () => {
               <h3 className="sidebar__title">SETTINGS</h3>
               <div className="sidebar__list">
                 <NavLink
-                  to="/notifications"
+                  to="/admin/notifications"
                   className={`sidebar__link ${activeLink === "Notifications" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Notifications")}
                 >
@@ -153,7 +178,7 @@ const Sidebar = () => {
                   <span>My Messages</span>
                 </NavLink>
                 <NavLink
-                  to="/settings"
+                  to="/admin/settings"
                   className={`sidebar__link ${activeLink === "Settings" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Settings")}
                 >
