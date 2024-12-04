@@ -2,9 +2,26 @@ import React, { useEffect, useState } from 'react';
 import logo from "../../assets/Images/adminImages/Chance.png";
 import '../../style/studentstyles/topbar.css'; // Ensure you have the necessary CSS
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 
 const Topbar = () => {
+
+    const [user, setUser] = useState("");
+    useEffect(() => {
+        const fetchUser = async () => { 
+        const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
+        if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+        try { 
+            const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
+            setUser(response.data);} 
+        catch (error) { 
+            console.log(error);
+              
+        } 
+    }; 
+    fetchUser(); 
+}, []); 
 
     const [activeLink, setActiveLink] = useState('Student-Dashboard'); // Default active link
 
@@ -83,8 +100,8 @@ const Topbar = () => {
                         <img src={logo} alt="image" />
                         </div>
                         <div className="sidebar__info">
-                            <h3>User Name</h3>
-                            <span style={{color: "hsl(228, 12%, 61%)"}}>user@email.com</span>
+                            <h3>{user.name}</h3>
+                            <span style={{color: "hsl(228, 12%, 61%)"}}>{user.email}</span>
                         </div>
                     </div>
 
@@ -124,11 +141,8 @@ const Topbar = () => {
                             </i>
                         </button>
                         <button className="sidebar__link">
-                        <NavLink
-                  to="/auth/login" >
-                  <i className="ri-logout-box-r-fill"></i>
-                  <span>Log Out</span>
-                </NavLink>
+                            <i className="ri-logout-box-r-fill"></i>
+                            < NavLink to="/auth/register">Log Out</NavLink>
                         </button>
                     </div>
                 </div>

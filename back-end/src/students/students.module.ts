@@ -11,8 +11,9 @@ import { Student } from './student.entity';
     InstitutionsModule, // Import InstitutionsModule for linking
   ],
   providers: [StudentsService],
-  exports: [TypeOrmModule],
-  controllers: [StudentsController]
+  controllers: [StudentsController],
+  exports:[TypeOrmModule]
+
 })
 
 export class StudentsModule {}

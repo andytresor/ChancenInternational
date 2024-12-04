@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../style/authstyles/register.css';
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Register = () => {
@@ -8,6 +9,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission
@@ -18,8 +20,20 @@ const Register = () => {
         email,
         password,
       });
+      
       console.log('Registration successful:', response.data);
       // Optionally redirect or show a success message
+      if(response.data){
+        navigate("/student/student-dashboard");
+      }
+
+      // Optionally, you might want to store the token in local storage or context
+      const  user  = response.data; // Supposons que l'API renvoie l'objet utilisateur complet 
+      if (user.id) { // Vérifie que l'utilisateur et son ID existent // Stocker le token et l'ID utilisateur dans le local storage 
+        // localStorage.setItem('token', token); 
+        localStorage.setItem('userId', user.id); // Stocker l'ID utilisateur
+
+    }
     } catch (err) {
       setError('Registration failed. Please try again.');
       console.error(err);

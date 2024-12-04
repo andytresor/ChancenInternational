@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import React from "react";
 import useTopbar from "../../re-components/Student/useTopbar";
 import CustomCard from "../../re-components/Student/card";
@@ -5,9 +6,11 @@ import "../../style/studentstyles/dashboard.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { LineChart } from "@mui/x-charts/LineChart";
-import axios from "axios";
+import axios from 'axios';
+
 
 const Dashboard = () => {
+  
   useTopbar();
 
   const dataset = [
@@ -17,11 +20,36 @@ const Dashboard = () => {
     { x: 3, y: 0},
   ];
 
+  // async function DisplayUser(){
+  //   try {
+  //     const res = await fetch
+  //   } catch (error) {
+  //     console.log(error);
+      
+  //   }
+  // }
+
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    const fetchUser = async () => { 
+    const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
+    if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+    try { 
+        const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
+        setUser(response.data);} 
+    catch (error) { 
+        console.log(error);
+          
+    } 
+}; 
+fetchUser(); 
+}, []);
+
   return (
     
       <div className="main" id="main">
         <div className="head">
-          <h1> Welcome User </h1>
+          <h6> Welcome {user.name} </h6>
           <p> Total Overview </p>
         </div>
         <div className="ally">

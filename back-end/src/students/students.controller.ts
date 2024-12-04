@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { Student } from './student.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,10 +40,22 @@ export class StudentsController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateDto: { name?: string; email?: string; salary?: number; isRepaymentActive?: boolean },
+    @Body()
+    updateDto: {
+      name?: string;
+      email?: string;
+      salary?: number;
+      isRepaymentActive?: boolean;
+    },
   ): Promise<Student> {
     const { name, email, salary, isRepaymentActive } = updateDto;
-    return this.studentsService.update(+id, name, email, salary, isRepaymentActive);
+    return this.studentsService.update(
+      +id,
+      name,
+      email,
+      salary,
+      isRepaymentActive,
+    );
   }
 
   @Delete(':id')
@@ -44,7 +64,9 @@ export class StudentsController {
   }
 
   @Get('institution/:institutionId')
-  async findByInstitution(@Param('institutionId') institutionId: string): Promise<Student[]> {
+  async findByInstitution(
+    @Param('institutionId') institutionId: string,
+  ): Promise<Student[]> {
     return this.studentsService.findByInstitution(+institutionId);
   }
 

@@ -179,7 +179,7 @@ const Students = () => {
                         {selectedStudent && (
                             <>
                                 <Typography variant="subtitle1">Name: {selectedStudent.name}</Typography>
-                                <Typography variant="subtitle1">Institution: {selectedStudent.institution}</Typography>
+                                <Typography variant="subtitle1">Institution: {selectedStudent.institution.name}</Typography>
                                 {selectedStudent.funding ? (
                                     <>
                                         <Typography variant="subtitle1">Total Debt: ${selectedStudent.funding.totalDebt.toFixed(2)}</Typography>
