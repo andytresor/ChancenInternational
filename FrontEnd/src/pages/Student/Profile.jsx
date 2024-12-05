@@ -1,9 +1,25 @@
-import React from "react";
+import {React , useState , useEffect} from "react";
 import useTopbar from "../../re-components/Student/useTopbar";
 import "../../style/studentstyles/profile.css";
 import logo from "../../assets/Images/adminImages/Chance.png"
-
+import axios from "axios";
 const Profile = () => {
+
+  const [user, setUser] = useState("");
+  useEffect(() => {
+      const fetchUser = async () => { 
+      const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
+      if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+      try { 
+          const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
+          setUser(response.data);} 
+      catch (error) { 
+          console.log(error);
+            
+      } 
+  }; 
+  fetchUser(); 
+}, []); 
   useTopbar()
   return (
     <>
@@ -17,22 +33,22 @@ const Profile = () => {
               alt="image"
             />
             <div className="info">
-              <h2>User Name</h2>
-              <p>Student</p>
+              <h6>{user.name}</h6>
+              <p>{user.role}</p>
             </div>
           </div>
         </div>
 
         <div className="body">
           <div className="info">
-            <h2>User Info</h2>
+            <h2>{user.name} details</h2>
             <p>
-              Hi, I'm Alec, Decisions: If you can't decide, the answer is no. If
+              Hi, I'm {user.name}, Decisions: If you can't decide, the answer is no. If
               two equally difficult paths, choose the one more painful in the
               short term (pain avoidance is creating an illusion of equality).
             </p>
-            <p>Name : User</p>
-            <p>Email : user@gmail.com</p>
+            <p>Name : {user.name}</p>
+            <p>Email : {user.email}</p>
             <p>Tel : +237 123 456 789</p>
             <p>Institution : Institution A </p>
           </div>

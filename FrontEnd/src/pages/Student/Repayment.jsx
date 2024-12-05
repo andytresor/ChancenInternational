@@ -1,12 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useTopbar from "../../re-components/Student/useTopbar";
 import { PieChart } from "@mui/x-charts/PieChart";
 import "../../style/studentstyles/repayment.css";
-import {Grid,Card, CardContent,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,} from "@mui/material";
-
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import axios from "axios";
 const Repayment = () => {
+  const [repayment, setRepayment] = useState([]);
+  useEffect(() => {
+    const fetchRepayment = async () => {
+      const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local
+      if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+      try {
+        const response = await axios.get(`http://localhost:3000/fundings?userId=${userId}`);
+        setRepayment(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRepayment();
+  }, []);
   useTopbar();
-
 
   const payments = [
     {
@@ -53,11 +77,23 @@ const Repayment = () => {
     <div className="main" id="main">
       <Grid container spacing={4} style={{ padding: "20px" }}>
         {/* Page Title */}
-        <Grid item xs={12} style={{   background: 'linear-gradient(to right, #1976d2, #64b5f6)',color:'white',height:'25vh',borderRadius:'1rem',padding:'3rem' }}>
-  <Typography variant="h3" width="100%" gutterBottom >
+        <Grid
+          item
+          xs={12}
+          style={{
+            background: "linear-gradient(to right, #1976d2, #64b5f6)",
+            color: "white",
+            height: "25vh",
+            borderRadius: "1rem",
+            padding: "3rem",
+          }}
+        >
+          <Typography variant="h3" width="100%" gutterBottom>
             Repayments
           </Typography>
-          <Typography variant="h5">Summary Of Total Dept Of 600,000 XAF</Typography>
+          <Typography variant="h5">
+            Summary Of Total Dept Of 600,000 XAF
+          </Typography>
         </Grid>
 
         {/* Students Table */}
@@ -66,25 +102,39 @@ const Repayment = () => {
             <CardContent>
               <TableContainer>
                 <Table>
-                  <TableHead >
-                    <TableRow > 
-                      <TableCell style={{ fontWeight:'bold'}}>Installment</TableCell>
-                      <TableCell style={{ fontWeight:'bold'}}> Amount</TableCell>
-                      <TableCell style={{ fontWeight:'bold'}}>Status</TableCell>
-                      <TableCell style={{ fontWeight:'bold'}}>Due Date</TableCell>
-                      <TableCell style={{ fontWeight:'bold'}}>Paid On</TableCell>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Installment
+                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Amount
+                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Status
+                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Due Date
+                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Paid On
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {payments.map((payment, index) => (
                       <TableRow key={index}>
-                        <TableCell>{payment.installment}</TableCell>
-                        <TableCell>{payment.amount}</TableCell>
-                        <TableCell style={{ color: getStatusColor(payment.status) }}>
-                          {payment.status}
+                        <TableCell>{repayment.id}</TableCell>
+                        <TableCell>{repayment.tuitionFees}</TableCell>
+                        <TableCell
+                          style={{ color: getStatusColor(payment.status) }}
+                        >
+                          {repayment.totalDebt}
                         </TableCell>
-                        <TableCell>{payment.dueDate}</TableCell>
-                        <TableCell>{payment.paidOn}</TableCell>
+                        <TableCell>{repayment.amountRepaid}</TableCell>
+                        <TableCell>{repayment.isActive}</TableCell>
+                        <TableCell>{repayment.studentId}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -93,7 +143,6 @@ const Repayment = () => {
             </CardContent>
           </Card>
         </Grid>
-
       </Grid>
       <div className="charts">
         <div className="upcoming">

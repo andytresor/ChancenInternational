@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Student } from 'src/students/student.entity';
 
 @Entity()
 export class User {
@@ -18,4 +19,7 @@ export class User {
 
   @Column({ default: 'student' })
   role: 'admin' | 'student';
+
+  @OneToMany(() => Student, (student) => student.user) 
+  students: Student[];
 }

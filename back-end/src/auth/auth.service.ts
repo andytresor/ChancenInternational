@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { Student } from 'src/students/student.entity';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +23,11 @@ export class AuthService {
     return this.userRepository.save(user);
   }
 
-  async login(email: string, password: string): Promise<{ accessToken: string; role: string ; user: { id: number; name: string; email: string; role: string }}> {
-  const user = await this.userRepository.findOne({ where: { email } });
+  async login(email: string, password: string): Promise<{ accessToken: string; role: string ; user: { id: number; name: string; email: string; role: string; students:Student[] }}> {
+  const user = await this.userRepository.findOne({
+     where: { email } ,
+     relations:['students']
+    });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new UnauthorizedException('Invalid credentials');
   }
@@ -34,7 +38,7 @@ export class AuthService {
   return {
     accessToken,
     role: user.role, // Include role in response
-     user: { id: user.id, name: user.name, email: user.email, role: user.role, }
+     user: { id: user.id, name: user.name, email: user.email, role: user.role,students: user.students}
   };
 }
 
