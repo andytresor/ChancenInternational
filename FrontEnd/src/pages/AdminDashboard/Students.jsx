@@ -42,8 +42,9 @@ const Students = () => {
     const fetchStudents = async () => {
         try {
             const response = await axios.get("http://localhost:3000/students");
-            console.log(response.data);
             setStudents(response.data);
+            console.log(response.data);
+            
         } catch (error) {
             console.error("Error fetching students:", error);
         }
@@ -58,12 +59,10 @@ const Students = () => {
         }
     };
 
-
-
     // Handlers
     const handleViewDetails = async (studentId) => {
         try {
-            const response = await axios.get(`/students/${studentId}`);
+            const response = await axios.get(`http://localhost:3000/students/${studentId}`);
             setSelectedStudent(response.data);
             setDetailModalOpen(true);
         } catch (error) {
@@ -83,7 +82,6 @@ const Students = () => {
             return matchesInstitution && matchesSearch;
         })
         : [];
-
 
     return (
         <div className="main" id="main">
@@ -128,43 +126,57 @@ const Students = () => {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Student Name</TableCell>
+                                            <TableCell>Name</TableCell>
                                             <TableCell>Institution</TableCell>
                                             <TableCell>Total Debt</TableCell>
-                                            <TableCell>Repayments Completed (%)</TableCell>
+                                            <TableCell>Repayment %</TableCell>
                                             <TableCell>Status</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {students.map((student) => {
-                                            const funding = student.funding || {}; // Fallback to an empty object if funding is undefined
-                                            const totalDebt = funding.totalDebt || 0;
-                                            const amountRepaid = funding.amountRepaid || 0;
-                                            const repaymentPercentage = totalDebt > 0 ? ((amountRepaid / totalDebt) * 100).toFixed(2) : "0.00";
-
+                                        {filteredStudents.map((student) => {
+                                            const fundings = student.funding || []; // Ensure it's an array
                                             return (
-                                                <TableRow key={student.id}>
-                                                    <TableCell>{student.name}</TableCell>
-                                                    <TableCell>{student.institution.name}</TableCell>
-                                                    <TableCell>${totalDebt.toFixed(2)}</TableCell>
-                                                    <TableCell>{repaymentPercentage}%</TableCell>
-                                                    <TableCell>{funding.isActive ? "In Progress" : "Suspended"}</TableCell>
-                                                    <TableCell>
-                                                        <Button
-                                                            size="small"
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={() => handleViewDetails(student.id)}
-                                                        >
-                                                            View Details
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
+                                                <React.Fragment key={student.id}>
+                                                    {fundings.length > 0 ? (
+                                                        fundings.map((funding, index) => {
+                                                            const totalDebt = parseFloat(funding.totalDebt) || 0;
+                                                            const amountRepaid = parseFloat(funding.amountRepaid) || 0;
+                                                            const repaymentPercentage =
+                                                                totalDebt > 0 ? ((amountRepaid / totalDebt) * 100).toFixed(2) : "0.00";
+
+                                                            return (
+                                                                <TableRow key={`${student.id}-${index}`}>
+                                                                    <TableCell>{student.name || "N/A"}</TableCell>
+                                                                    <TableCell>{student.institution?.name || "N/A"}</TableCell>
+                                                                    <TableCell>{totalDebt.toFixed(2)} FCFA</TableCell>
+                                                                    <TableCell>{repaymentPercentage}%</TableCell>
+                                                                    <TableCell>{funding.isActive ? "In Progress" : "Suspended"}</TableCell>
+                                                                    <TableCell>
+                                                                        <Button
+                                                                            size="small"
+                                                                            variant="contained"
+                                                                            color="primary"
+                                                                            onClick={() => handleViewDetails(student.id)}
+                                                                        >
+                                                                            View Details
+                                                                        </Button>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            );
+                                                        })
+                                                    ) : (
+                                                        <TableRow key={student.id}>
+                                                            <TableCell>{student.name || "N/A"}</TableCell>
+                                                            <TableCell>{student.institution?.name || "N/A"}</TableCell>
+                                                            <TableCell colSpan={4}>No funding information available</TableCell>
+                                                        </TableRow>
+                                                    )}
+                                                </React.Fragment>
                                             );
                                         })}
                                     </TableBody>
-
 
                                 </Table>
                             </TableContainer>
@@ -179,29 +191,42 @@ const Students = () => {
                         {selectedStudent && (
                             <>
                                 <Typography variant="subtitle1">Name: {selectedStudent.name}</Typography>
-                                <Typography variant="subtitle1">Institution: {selectedStudent.institution.name}</Typography>
-                                {selectedStudent.funding ? (
-                                    <>
-                                        <Typography variant="subtitle1">Total Debt: ${selectedStudent.funding.totalDebt.toFixed(2)}</Typography>
-                                        <Typography variant="subtitle1">Amount Repaid: ${selectedStudent.funding.amountRepaid.toFixed(2)}</Typography>
-                                        <Typography variant="subtitle1">
-                                            Repayment Progress: {((selectedStudent.funding.amountRepaid / selectedStudent.funding.totalDebt) * 100).toFixed(2)}%
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            Status: {selectedStudent.funding.isActive ? "In Progress" : "Suspended"}
-                                        </Typography>
-                                    </>
+                                <Typography variant="subtitle1">
+                                    Institution: {selectedStudent.institution?.name || "N/A"}
+                                </Typography>
+                                {selectedStudent.funding?.length > 0 ? (
+                                    selectedStudent.funding.map((funding, index) => (
+                                        <React.Fragment key={index}>
+                                            <Typography variant="subtitle1">
+                                                Total Debt: {parseFloat(funding.totalDebt).toFixed(2)} FCFA
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                Amount Repaid: {parseFloat(funding.amountRepaid).toFixed(2)} FCFA
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                Repayment Progress:{" "}
+                                                {(
+                                                    (parseFloat(funding.amountRepaid) / parseFloat(funding.totalDebt)) *
+                                                    100
+                                                ).toFixed(2)}
+                                                %
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                Status: {funding.isActive ? "In Progress" : "Suspended"}
+                                            </Typography>
+                                        </React.Fragment>
+                                    ))
                                 ) : (
                                     <Typography variant="subtitle1">No funding information available.</Typography>
                                 )}
                             </>
                         )}
+
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setDetailModalOpen(false)}>Close</Button>
                     </DialogActions>
                 </Dialog>
-
             </Grid>
         </div>
     );

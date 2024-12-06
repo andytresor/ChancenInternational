@@ -18,7 +18,7 @@ export class Funding {
   @Column('decimal', { nullable: true })
   amountRepaid: number;
 
-  @ManyToOne(() => Student, (student) => student.funding)
+  @ManyToOne(() => Student, (student) => student.funding,)
   student: Student;
 
 

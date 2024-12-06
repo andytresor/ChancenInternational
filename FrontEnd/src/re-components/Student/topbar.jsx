@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import logo from "../../assets/Images/adminImages/Chance.png";
 import '../../style/studentstyles/topbar.css'; // Ensure you have the necessary CSS
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
+import axios from "axios";
 
 
 const Topbar = () => {
 
     const [user, setUser] = useState("");
+
     useEffect(() => {
         const fetchUser = async () => { 
         const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 

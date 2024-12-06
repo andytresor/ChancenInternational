@@ -2,25 +2,25 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/Images/adminImages/Chance.png";
 import "../../style/adminstyles/sideBar.css"; // Ensure you have the necessary CSS
 import { NavLink } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from "axios";
 
 const Sidebar = () => {
-  const [user, setUser] = useState("");
-  useEffect(() => {
-      const fetchUser = async () => { 
-      const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
-      if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
-      try { 
-          const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
-          setUser(response.data);} 
-      catch (error) { 
-          console.log(error);
-            
-      } 
-  }; 
-  fetchUser(); 
-}, []); 
+ const [user, setUser] = useState("");
+
+useEffect(() => {
+  const fetchUser = async () => {
+    const id = localStorage.getItem('userId')
+    if (!id) return; 
+      try {
+        const response = await axios.get(`http://localhost:3000/auth/one/${id}`);
+        setUser(response.data)
+      } catch (error) {
+        console.log(error); 
+      }
+  }
+  fetchUser();
+}, []);
+  
   const [activeLink, setActiveLink] = useState("Dashboard"); // Default active link
 
   const handleLinkClick = (link) => {
@@ -146,7 +146,7 @@ const Sidebar = () => {
                   className={`sidebar__link ${activeLink === "Transactions" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Transactions")}
                 >
-                  <i class="ri-profile-line"></i>
+                 <i class="ri-profile-line"></i>
                   <span>Funding Form</span>
                 </NavLink>
                 <NavLink
@@ -192,7 +192,7 @@ const Sidebar = () => {
           <div className="sidebar__actions">
             <button>
               <i
-                className="ri-moon-clear-fill sidebar__link sidebar__theme"
+                className="ri-moon-clear-fill sidebar_link sidebar_theme"
                 id="theme-button"
               >
                 <span>Theme</span>
