@@ -1,9 +1,8 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import useTopbar from "../../re-components/Student/useTopbar";
 import { PieChart } from "@mui/x-charts/PieChart";
 import "../../style/studentstyles/repayment.css";
 import {Grid,Card, CardContent,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,} from "@mui/material";
-import axios from "axios";
 
 const Repayment = () => {
   useTopbar();
@@ -35,9 +34,9 @@ const Repayment = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "true":
+      case "Paid":
         return "green"; // Color for paid status
-      case "false":
+      case "Overdue":
         return "red"; // Color for overdue status
       default:
         return "black"; // Default color for other statuses
@@ -49,40 +48,6 @@ const Repayment = () => {
     setSelectedStudent(payment);
     setDetailModalOpen(true);
   };
-
- // Fetch data on component load
- useEffect(() => {
-  fetchStudents();
-}, []);
-
-const [students, setStudents] = useState([]);
-const [loading, setLoading] = useState(true);
-
-const fetchStudents = async () => {
-// Parse the student data object from local storage
-const studentData = JSON.parse(localStorage.getItem('studentData'));
-
-console.log(studentData);
-
-
-// Ensure student data and ID exist
-if (!studentData) {
-  console.error("Student ID is not available");
-  return;
-}
-
-const name = studentData.name; // Extract the ID
-console.log('Stored Student Name:', name);
-
-try {
-  const response = await axios.get(`http://localhost:3000/repayments/${id}`);
-  setStudents(response.data);
-} catch (error) {
-  console.error("Error fetching student data:", error);
-} finally {
-  setLoading(false);
-}
-};
 
   return (
     <div className="main" id="main">
@@ -111,15 +76,15 @@ try {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {students.map((student, index) => (
+                    {payments.map((payment, index) => (
                       <TableRow key={index}>
-                        <TableCell>{student.id}</TableCell>
-                        <TableCell>{student.amount}</TableCell>
-                        <TableCell style={{ color: getStatusColor(student.status) }}>
-                          {student.isPaid}
+                        <TableCell>{payment.installment}</TableCell>
+                        <TableCell>{payment.amount}</TableCell>
+                        <TableCell style={{ color: getStatusColor(payment.status) }}>
+                          {payment.status}
                         </TableCell>
-                        <TableCell>{student.dueDate}</TableCell>
-                        <TableCell>{student.paymentDate}</TableCell>
+                        <TableCell>{payment.dueDate}</TableCell>
+                        <TableCell>{payment.paidOn}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

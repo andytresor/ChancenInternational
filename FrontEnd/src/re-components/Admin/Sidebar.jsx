@@ -146,7 +146,7 @@ const Sidebar = () => {
                   className={`sidebar__link ${activeLink === "Transactions" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Transactions")}
                 >
-                  <i className="ri-arrow-up-down-line"></i>
+                  <i class="ri-profile-line"></i>
                   <span>Funding Form</span>
                 </NavLink>
                 <NavLink
@@ -154,7 +154,7 @@ const Sidebar = () => {
                   className={`sidebar__link ${activeLink === "Student" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Student")}
                 >
-                  <i className="ri-arrow-up-down-line"></i>
+                  <i class="ri-user-fill"></i>
                   <span>New Student</span>
                 </NavLink>
               </div>
