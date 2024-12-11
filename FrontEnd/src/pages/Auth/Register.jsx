@@ -24,7 +24,7 @@ const Register = () => {
       console.log('Registration successful:', response.data);
       // Optionally redirect or show a success message
       if(response.data){
-        navigate("/student/student-dashboard");
+        navigate("/auth/login");
       }
 
       // Optionally, you might want to store the token in local storage or context

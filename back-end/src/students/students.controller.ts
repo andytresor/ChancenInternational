@@ -30,45 +30,26 @@ export class StudentsController {
   }
 
   @Post()
-  async create(
-    @Body() createDto: { name: string; email: string; institutionId: number },
-  ): Promise<Student> {
-    const { name, email, institutionId } = createDto;
-    return this.studentsService.create(name, email, institutionId);
+  createStudent(@Body() data: any) {
+      return this.studentsService.createStudent(data);
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body()
-    updateDto: {
-      name?: string;
-      email?: string;
-      salary?: number;
-      isRepaymentActive?: boolean;
-    },
-  ): Promise<Student> {
-    const { name, email, salary, isRepaymentActive } = updateDto;
-    return this.studentsService.update(
-      +id,
-      name,
-      email,
-      salary,
-      isRepaymentActive,
-    );
-  }
+    updateStudent(@Param('id') id: number, @Body() data: any) {
+        return this.studentsService.updateStudent(id, data);
+    }
 
-  @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    return this.studentsService.delete(+id);
-  }
+  // @Delete(':id')
+  // async delete(@Param('id') id: string): Promise<void> {
+  //   return this.studentsService.delete(+id);
+  // }
 
-  @Get('institution/:institutionId')
-  async findByInstitution(
-    @Param('institutionId') institutionId: string,
-  ): Promise<Student[]> {
-    return this.studentsService.findByInstitution(+institutionId);
-  }
+  // @Get('institution/:institutionId')
+  // async findByInstitution(
+  //   @Param('institutionId') institutionId: string,
+  // ): Promise<Student[]> {
+  //   return this.studentsService.findByInstitution(+institutionId);
+  // }
 
   @Get('/students-with-funding')
 async getStudentsWithFunding(): Promise<any[]> {

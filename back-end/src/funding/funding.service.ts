@@ -35,7 +35,7 @@ export class FundingsService {
       throw new NotFoundException(`Student with ID ${studentId} not found`);
     }
 
-    const totalDebt = tuitionFees + financialAid + (tuitionFees + financialAid) * 0.2;
+    const totalDebt = tuitionFees + financialAid + ( (tuitionFees + financialAid) * 0.2);
 
     const funding = this.fundingRepository.create({
       student,
