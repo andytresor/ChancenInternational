@@ -29,6 +29,7 @@ export class Student {
     isRepaymentActive: boolean;
 
     @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
+
     funding: Funding[];
 
     @OneToMany(() => Repayment, (repayment) => repayment.student)

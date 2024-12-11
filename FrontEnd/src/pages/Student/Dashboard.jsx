@@ -49,7 +49,7 @@ fetchUser();
     
       <div className="main" id="main">
         <div className="head">
-          <h6> Welcome {user.name} </h6>
+          <h1> Welcome {user.name} </h1>
           <p> Total Overview </p>
         </div>
         <div className="ally">

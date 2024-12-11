@@ -120,8 +120,10 @@ const Topbar = () => {
                             <img src={logo} alt="image" />
                         </div>
                         <div className="sidebar__info">
+
                             <h3>{user.name}</h3>
                             <span style={{ color: "hsl(228, 12%, 61%)" }}>{user.email}</span>
+
                         </div>
                     </div>
 
