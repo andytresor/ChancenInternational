@@ -13,16 +13,17 @@ import { RepaymentsModule } from './repayments/repayments.module';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'Feyem111',
+      password: 'pamelajo25',
       database: 'chancen_finances',
       autoLoadEntities: true, // Automatically load entities
       synchronize: true, // Only for development; disable in production
     }),
     AuthModule,
-    InstitutionsModule, // Import AuthModule
+    InstitutionsModule,
     StudentsModule,
     FundingModule,
     RepaymentsModule,
   ],
+  
 })
 export class AppModule {}

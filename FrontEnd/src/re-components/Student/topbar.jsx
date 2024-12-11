@@ -1,34 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import logo from "../../assets/Images/adminImages/Chance.png";
 import '../../style/studentstyles/topbar.css'; // Ensure you have the necessary CSS
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 
 const Topbar = () => {
+    const navigate = useNavigate();
 
     const [user, setUser] = useState("");
 
     useEffect(() => {
-        const fetchUser = async () => { 
-        const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
-        if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
-        try { 
-            const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
-            setUser(response.data);} 
-        catch (error) { 
-            console.log(error);
-              
-        } 
-    }; 
-    fetchUser(); 
-}, []); 
+        const fetchUserDetails = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    navigate("/auth/login"); // Redirect to login if no token
+                    return;
+                }
+                const response = await axios.get("http://localhost:3000/auth/me", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setUser(response.data);
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+                navigate("/auth/login"); // Redirect on error
+            }
+        };
+
+        fetchUserDetails();
+    }, [navigate]);
+
+    const handleLogout = async () => {
+        try {
+            const refreshToken = localStorage.getItem('refreshToken'); // If applicable
+            await axios.post('http://localhost:3000/auth/logout', { refreshToken });
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken'); // Clear refresh token if stored
+            navigate('/auth/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
 
     const [activeLink, setActiveLink] = useState('Student-Dashboard'); // Default active link
 
     const handleLinkClick = (link) => {
         setActiveLink(link);
-    }; 
+    };
 
     useEffect(() => {
         const sidebarLinks = document.querySelectorAll('.sidebar__list a');
@@ -98,11 +117,11 @@ const Topbar = () => {
                 <div className="sidebar__container">
                     <div className="sidebar__user">
                         <div className="sidebar__img">
-                        <img src={logo} alt="image" />
+                            <img src={logo} alt="image" />
                         </div>
                         <div className="sidebar__info">
                             <h3>{user.name}</h3>
-                            <span style={{color: "hsl(228, 12%, 61%)"}}>{user.email}</span>
+                            <span style={{ color: "hsl(228, 12%, 61%)" }}>{user.email}</span>
                         </div>
                     </div>
 
@@ -110,25 +129,25 @@ const Topbar = () => {
                         <div>
                             <h3 className="sidebar__title">MANAGE</h3>
                             <div className="sidebar__list">
-                                
+
                                 <NavLink to="/student/student-dashboard"
-                                className={`sidebar__link ${activeLink === 'Student-Dashboard' ? 'active-link' : ''}`}
-                                onClick={() => handleLinkClick('Student-Dashboard')}  >
+                                    className={`sidebar__link ${activeLink === 'Student-Dashboard' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('Student-Dashboard')}  >
                                     <i className="ri-pie-chart-2-fill"></i>
-                                  <span> Student-Dashboard</span>
-                                    </NavLink>
-                                  <NavLink to="/student/student-repayment"
-                                className={`sidebar__link ${activeLink === 'Repayment' ? 'active-link' : ''}`}
-                                onClick={() => handleLinkClick('Repayment')}>
-                                  <i className="ri-bar-chart-box-fill"></i>
-                               <span> Repayment</span>
-                                    </NavLink>
-                                 <NavLink to="/student/student-profile"
-                               className={`sidebar__link ${activeLink === 'Profile' ? 'active-link' : ''}`}
-                               onClick={() => handleLinkClick('Profile')}>
-                                 <i className="ri-arrow-up-down-line"></i>
-                                  <span>Profile</span>
-                                    </NavLink>
+                                    <span> Student-Dashboard</span>
+                                </NavLink>
+                                <NavLink to="/student/student-repayment"
+                                    className={`sidebar__link ${activeLink === 'Repayment' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('Repayment')}>
+                                    <i className="ri-bar-chart-box-fill"></i>
+                                    <span> Repayment</span>
+                                </NavLink>
+                                <NavLink to="/student/student-profile"
+                                    className={`sidebar__link ${activeLink === 'Profile' ? 'active-link' : ''}`}
+                                    onClick={() => handleLinkClick('Profile')}>
+                                    <i className="ri-arrow-up-down-line"></i>
+                                    <span>Profile</span>
+                                </NavLink>
 
                             </div>
                         </div>
@@ -141,9 +160,9 @@ const Topbar = () => {
                                 <span>Theme</span>
                             </i>
                         </button>
-                        <button className="sidebar__link">
+                        <button className="sidebar__link" onClick={handleLogout}>
                             <i className="ri-logout-box-r-fill"></i>
-                            < NavLink to="/auth/register">Log Out</NavLink>
+                            <span>Log Out</span>
                         </button>
                     </div>
                 </div>
