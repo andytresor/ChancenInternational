@@ -14,11 +14,21 @@ const FundingForm = ({ students }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const parsedTuitionFees = parseFloat(tuitionFees);
+    const parsedFinancialAid = parseFloat(financialAid);
+  
+    // Check if the parsed values are valid numbers
+    if (isNaN(parsedTuitionFees) || isNaN(parsedFinancialAid)) {
+      setError('Tuition Fees and Financial Aid must be valid numbers.');
+      return;
+    } 
+  
     try {
       const response = await axios.post('http://localhost:3000/fundings', {
         studentId,
-        tuitionFees: parseFloat(tuitionFees),
-        financialAid: parseFloat(financialAid),
+        tuitionFees: parsedTuitionFees,
+        financialAid: parsedFinancialAid,
       });
       console.log('Funding Created:', response.data);
       setSuccess(true);

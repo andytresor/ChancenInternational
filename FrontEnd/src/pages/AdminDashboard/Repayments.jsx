@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const RepaymentsPage = () => {
   useSideBar();
@@ -30,28 +31,116 @@ const RepaymentsPage = () => {
   const [repayments, setRepayments] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [isHistoryModalOpen, setHistoryModalOpen] = useState(false);
+  const [students, setStudents] = useState({});
+  const [repaidAmount, setRepaidAmount] = useState([])
+  const [institutions,setInstituton] = useState({})
 
   useEffect(() => {
     fetchRepayments();
   }, []);
-
+ 
   const fetchRepayments = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/repayments");
-      // console.log(response.data); // Log to inspect the response
-      // Ensure response.data is an array
-      setRepayments(Array.isArray(response.data) ? response.data : []);
-    } catch (error) {
-      console.error("Error fetching repayments:", error);
-      setRepayments([]); // Fallback to empty array on error
-    }
+      const response = await axios.get("http://localhost:3000/fundings");
+      const fundingData = Array.isArray(response.data) ? response.data : [];
+      setRepayments(fundingData);
+      console.log("Fundings are", fundingData);
+      
+      const studentInstitutionPromises = fundingData.map(async (funding) => {
+        try {
+          
+            if (!funding.studentId) {
+              console.log(`Funding ${funding.id} has no studentId.`);
+              return null; // Skip if studentId is missing
+            }
+          // Fetch student details
+          const studentResponse = await axios.get(
+            `http://localhost:3000/students/${funding.studentId}`
+          );
+          const student = studentResponse.data;
+          console.log("Students are", student);
+          
+  
+          // Fetch institution details
+          if (student.institutionId) {
+            const institutionResponse = await axios.get(
+              `http://localhost:3000/institutions/${student.institutionId}`
+            );
+            const institution = institutionResponse.data;
+  
+            return {
+              studentId: funding.studentId,
+              studentName: student.name,
+              institutionName: institution.name,
+            };
+          }
+          return {
+            studentId: funding.studentId,
+            studentName: student.name,
+            institutionName: "Not Available",
+          };
+        } catch (error) {
+          console.error(
+            `Error fetching details for funding ${funding.id}:`,
+            error
+          );
+          return null;
+        }
+      });
+  
+      const studentInstitutionDetails = await Promise.all(studentInstitutionPromises);
+  
+      // Create mappings for student names and institutions
+      const studentMap = {};
+      const institutionMap = {};
+      studentInstitutionDetails.forEach((detail) => {
+        if (detail) {
+          studentMap[detail.studentId] = detail.studentName;
+          institutionMap[detail.studentId] = detail.institutionName;
+        }
+      });
+  
+      setStudents(studentMap);
+      setInstituton(institutionMap);
+     
+         //Repaid Amount
+    const amountRepaid = response.data.map(repayment =>
+     fetchRepaidAmount(repayment.id)
+    );
+     const repaidAmount = await Promise.all(amountRepaid)
+     console.log('repaid amount', repaidAmount);
+     setRepaidAmount(repaidAmount)
+     
+  } catch (error) {
+    console.error("Error fetching repayments:", error);
+    setRepayments([]); // Fallback to empty array on error
+  }
   };
+  
+
+  // const fetchStudentDetails = async (id) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:3000/students/${id}`);
+  //     return response.data; // This will return the student object
+  //   } catch (error) {
+  //     console.error("Error fetching student details:", error);
+  //     return null; // Return null in case of error
+  //   }
+  // };
+  const fetchRepaidAmount = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/fundings/${id}/remaining-debt`)
+      const repaid = response.data
+     return repaid
+    } catch (error) {
+      console.error("Error fetching remaining amount", error)
+    }
+  }
 
   const fetchRepaymentDetails = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3000/repayments/${id}`);
-      console.log(response.data);
-      
+      const response = await axios.get(`http://localhost:3000/fundings/${id}`);
+
       setSelectedRecord(response.data);
     } catch (error) {
       console.error("Error fetching repayment details:", error);
@@ -64,13 +153,25 @@ const RepaymentsPage = () => {
   };
 
   const filteredRepayments = Array.isArray(repayments)
-  ? repayments.filter((record) => {
-      return (
-        (filterStatus === "All" || record.status === filterStatus) &&
-        (record.name && record.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-    })
-  : [];
+    ? repayments.filter((record) => {
+        return (
+          (filterStatus === "All" || record.status === filterStatus) &&
+          record.name &&
+          record.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      })
+    : [];
+
+  const navigate = useNavigate();
+
+  const handleClick = (id) => {
+    if (id) {
+      console.log(id);
+    } else {
+      console.log("id not found");
+    }
+    navigate(`/admin/details/${id}`);
+  };
 
   return (
     <div className="main" id="main">
@@ -86,11 +187,12 @@ const RepaymentsPage = () => {
               },
               {
                 title: "Number of Overdue Payments",
-                value: repayments.filter(r => r.status === 'Overdue').length, // Calculate dynamically
+                value: repayments.filter((r) => r.status === "Overdue").length, // Calculate dynamically
               },
               {
                 title: "Number of Suspended Payments",
-                value: repayments.filter(r => r.status === 'Suspended').length, // Calculate dynamically
+                value: repayments.filter((r) => r.status === "Suspended")
+                  .length, // Calculate dynamically
               },
             ].map((metric, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
@@ -124,11 +226,13 @@ const RepaymentsPage = () => {
             onChange={(e) => setFilterStatus(e.target.value)}
             displayEmpty
           >
-            {["All", "In Progress", "Suspended", "Overdue"].map((status, index) => (
-              <MenuItem key={index} value={status}>
-                {status}
-              </MenuItem>
-            ))}
+            {["All", "In Progress", "Suspended", "Overdue"].map(
+              (status, index) => (
+                <MenuItem key={index} value={status}>
+                  {status}
+                </MenuItem>
+              )
+            )}
           </Select>
         </Grid>
 
@@ -142,28 +246,28 @@ const RepaymentsPage = () => {
                     <TableRow>
                       <TableCell>Student Name</TableCell>
                       <TableCell>Institution</TableCell>
-                      <TableCell>Monthly Salary</TableCell>
-                      <TableCell>Installments Paid</TableCell>
+                      <TableCell>Total Debt</TableCell>
+                      <TableCell>Amount Repaid</TableCell>
                       <TableCell>Remaining Debt</TableCell>
                       <TableCell>Status</TableCell>
                       <TableCell>Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {filteredRepayments.map((record, index) => (
+                    {repayments.map((record, index) => (
                       <TableRow key={index}>
-                        <TableCell>{record.name}</TableCell>
-                        <TableCell>{record.institution}</TableCell>
-                        <TableCell>{record.salary}</TableCell>
-                        <TableCell>{record.installmentsPaid}</TableCell>
-                        <TableCell>{record.remainingDebt}</TableCell>
-                        <TableCell>{record.status}</TableCell>
+                         <TableCell>{students[record.studentId] || "Loading..."}</TableCell>
+                         <TableCell>{institutions[record.studentId] || "Loading..."}</TableCell>
+                        <TableCell>{record.totalDebt}</TableCell>
+                        <TableCell>{record.amountRepaid}</TableCell> 
+                        <TableCell>{repaidAmount[index] !== undefined ? repaidAmount[index] : "Loading..."}</TableCell>
+                        <TableCell>{record.isActive ? "In Progress" : "Inactive"}</TableCell>
                         <TableCell>
                           <Button
                             size="small"
                             variant="contained"
                             color="primary"
-                            onClick={() => handleViewHistory(record)}
+                            onClick={() => handleClick(record.id)}
                           >
                             View History
                           </Button>
@@ -176,25 +280,6 @@ const RepaymentsPage = () => {
             </CardContent>
           </Card>
         </Grid>
-
-        {/* View History Modal */}
-        <Dialog open={isHistoryModalOpen} onClose={() => setHistoryModalOpen(false)}>
-          <DialogTitle>Repayment History</DialogTitle>
-          <DialogContent>
-            {selectedRecord && (
-              <>
-                <Typography variant="subtitle1">Name: {selectedRecord.name}</Typography>
-                <Typography variant="subtitle1">Institution: {selectedRecord.institution}</Typography>
-                <Typography variant="subtitle1">Amount: {selectedRecord.amount}</Typography>
-                <Typography variant="subtitle1">Due Date: {selectedRecord.dueDate}</Typography>
-                <Typography variant="subtitle1">Status: {selectedRecord.isPaid ? "Paid" : "Unpaid"}</Typography>
-              </>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setHistoryModalOpen(false)}>Close</Button>
-          </DialogActions>
-        </Dialog>
       </Grid>
     </div>
   );

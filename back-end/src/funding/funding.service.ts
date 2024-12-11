@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Funding } from './funding.entity';
 import { Student } from '../students/student.entity';
+import { log } from 'console';
 
 @Injectable()
 export class FundingsService {
@@ -35,7 +36,7 @@ export class FundingsService {
       throw new NotFoundException(`Student with ID ${studentId} not found`);
     }
 
-    const totalDebt = tuitionFees + financialAid + (tuitionFees + financialAid) * 0.2;
+    const totalDebt = tuitionFees + financialAid + ((tuitionFees + financialAid) * 0.2);
 
     const funding = this.fundingRepository.create({
       student,

@@ -8,6 +8,7 @@ import RepaymentForm from '../pages/AdminDashboard/RepaymentForm';
 import Notifications from '../pages/AdminDashboard/Notifications';
 import Settings from '../pages/AdminDashboard/Settings';
 import FundingForm from '../pages/AdminDashboard/FundingForm';
+import Details from '../pages/AdminDashboard/Details';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -53,6 +54,7 @@ const AdminRoute = () => {
                 <Route path="/repayment-form" element={<RepaymentForm />} />
 
                 <Route path="/funding-form" element={<FundingForm students={students} />} />
+                <Route path="/details/:id" element={<Details />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/settings" element={<Settings />} />
             </Routes>
