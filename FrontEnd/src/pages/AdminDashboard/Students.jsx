@@ -136,7 +136,7 @@ const Students = () => {
                                     </TableHead>
                                     <TableBody>
                                         {filteredStudents.map((student) => {
-                                            const fundings = student.funding || []; // Ensure it's an array
+                                            const fundings = student.funding || []; 
                                             return (
                                                 <React.Fragment key={student.id}>
                                                     {fundings.length > 0 ? (

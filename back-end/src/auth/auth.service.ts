@@ -4,10 +4,14 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { Token } from './token.entity';
+
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(Token)
+    private readonly tokenRepository: Repository<Token>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
@@ -36,7 +40,13 @@ export class AuthService {
 
 
   async validateUser(userId: number): Promise<User> {
+    console.log(await this.userRepository.findOneBy({ id: userId }));
     return this.userRepository.findOneBy({ id: userId });
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    console.log(await this.userRepository.find());
+    return this.userRepository.find(); // Fetch all users
   }
 
   async getUserInfo(userId: number): Promise<Partial<User>> {
@@ -46,6 +56,11 @@ export class AuthService {
     }
     const { password, ...userInfo } = user;
     return userInfo;
+  }
+
+  async revokeRefreshToken(refreshToken: string) {
+    // Example: Update the refresh token record in your database
+    await this.tokenRepository.update({ token: refreshToken }, { isRevoked: true });
   }
 }
 

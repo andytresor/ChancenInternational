@@ -38,6 +38,8 @@ const Login = () => {
         navigate('/student/student-dashboard'); // Navigate to student page
       } else if (role === 'admin') {
         navigate('/admin/admin-dashboard'); // Navigate to admin page
+      }else {
+        setError('Invalid role.'); // Handle unknown roles
       }
 
       // Optionally, you might want to store the token in local storage or context
