@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Funding } from './funding.entity';
 import { Student } from '../students/student.entity';
-import { log } from 'console';
 
 @Injectable()
 export class FundingsService {
@@ -14,9 +13,14 @@ export class FundingsService {
     private readonly studentRepository: Repository<Student>,
   ) {}
 
-  async findAll(): Promise<Funding[]> {
-    return this.fundingRepository.find();
-  }
+  async findAll(): Promise<any[]> {
+    const fundings = await this.fundingRepository.find({ relations: ['student', 'student.institution'] });
+    return fundings.map(funding => ({
+        ...funding,
+        studentId: funding.student?.id || null, // Extract the student ID
+        institutionName: funding.student?.institution?.name || "Not Available", // Extract the institution name
+      }));
+}
 
   async findOne(id: number): Promise<Funding> {
     const funding = await this.fundingRepository.findOne({ where: { id } });

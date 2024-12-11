@@ -67,7 +67,8 @@ const RepaymentsPage = () => {
               `http://localhost:3000/institutions/${student.institutionId}`
             );
             const institution = institutionResponse.data;
-  
+            console.log("Institutions for each student is",institution);
+            
             return {
               studentId: funding.studentId,
               studentName: student.name,
@@ -117,16 +118,6 @@ const RepaymentsPage = () => {
   }
   };
   
-
-  // const fetchStudentDetails = async (id) => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:3000/students/${id}`);
-  //     return response.data; // This will return the student object
-  //   } catch (error) {
-  //     console.error("Error fetching student details:", error);
-  //     return null; // Return null in case of error
-  //   }
-  // };
   const fetchRepaidAmount = async (id) => {
     try {
       const response = await axios.get(`http://localhost:3000/fundings/${id}/remaining-debt`)
@@ -257,11 +248,11 @@ const RepaymentsPage = () => {
                     {repayments.map((record, index) => (
                       <TableRow key={index}>
                          <TableCell>{students[record.studentId] || "Loading..."}</TableCell>
-                         <TableCell>{institutions[record.studentId] || "Loading..."}</TableCell>
+                         <TableCell>{record.institutionName || "Loading..."}</TableCell>
                         <TableCell>{record.totalDebt}</TableCell>
                         <TableCell>{record.amountRepaid}</TableCell> 
                         <TableCell>{repaidAmount[index] !== undefined ? repaidAmount[index] : "Loading..."}</TableCell>
-                        <TableCell>{record.isActive ? "In Progress" : "Inactive"}</TableCell>
+                        <TableCell>{record.isActive ? "In Progress" : "Suspended"}</TableCell>
                         <TableCell>
                           <Button
                             size="small"
