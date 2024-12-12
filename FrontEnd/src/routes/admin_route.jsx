@@ -3,7 +3,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import Home from '../pages/AdminDashboard/Home';
 import Students from '../pages/AdminDashboard/Students';
 import StudentForm from '../pages/AdminDashboard/StudentForm';
-import Repayments from '../pages/AdminDashboard/Repayments';
+import FundingsPage from '../pages/AdminDashboard/Funding';
 import RepaymentForm from '../pages/AdminDashboard/RepaymentForm';
 import Notifications from '../pages/AdminDashboard/Notifications';
 import Settings from '../pages/AdminDashboard/Settings';
@@ -50,7 +50,7 @@ const AdminRoute = () => {
                 <Route path="/students-form" element={<StudentForm onSave={() => navigate('/admin/students')} />} />
                 <Route path="/students/:id/edit" element={<StudentForm onSave={() => navigate('/admin/students')} />} />
 
-                <Route path="/repayments" element={<Repayments />} />
+                <Route path="/funding" element={<FundingsPage />} />
                 <Route path="/repayment-form" element={<RepaymentForm />} />
 
                 <Route path="/funding-form" element={<FundingForm students={students} />} />

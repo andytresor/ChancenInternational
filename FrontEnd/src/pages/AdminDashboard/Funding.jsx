@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const RepaymentsPage = () => {
+const FundingsPage = () => {
   useSideBar();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -237,6 +237,8 @@ const RepaymentsPage = () => {
                     <TableRow>
                       <TableCell>Student Name</TableCell>
                       <TableCell>Institution</TableCell>
+                      <TableCell>Tuition Fees</TableCell>
+                      <TableCell>Financial Aid</TableCell>
                       <TableCell>Total Debt</TableCell>
                       <TableCell>Amount Repaid</TableCell>
                       <TableCell>Remaining Debt</TableCell>
@@ -249,6 +251,8 @@ const RepaymentsPage = () => {
                       <TableRow key={index}>
                          <TableCell>{students[record.studentId] || "Loading..."}</TableCell>
                          <TableCell>{record.institutionName || "Loading..."}</TableCell>
+                         <TableCell>{record.tuitionFees}</TableCell>
+                         <TableCell>{record.financialAid}</TableCell>
                         <TableCell>{record.totalDebt}</TableCell>
                         <TableCell>{record.amountRepaid}</TableCell> 
                         <TableCell>{repaidAmount[index] !== undefined ? repaidAmount[index] : "Loading..."}</TableCell>
@@ -276,4 +280,4 @@ const RepaymentsPage = () => {
   );
 };
 
-export default RepaymentsPage;
+export default FundingsPage;
