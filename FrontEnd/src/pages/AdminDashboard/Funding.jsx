@@ -15,11 +15,7 @@ import {
   Button,
   TextField,
   Select,
-  MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  MenuItem
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -28,22 +24,20 @@ const FundingsPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [repayments, setRepayments] = useState([]);
-  const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isHistoryModalOpen, setHistoryModalOpen] = useState(false);
+  const [fundings, setFunding] = useState([]);
   const [students, setStudents] = useState({});
   const [repaidAmount, setRepaidAmount] = useState([])
   const [institutions,setInstituton] = useState({})
 
   useEffect(() => {
-    fetchRepayments();
+    fetchfundings();
   }, []);
  
-  const fetchRepayments = async () => {
+  const fetchfundings = async () => {
     try {
       const response = await axios.get("http://localhost:3000/fundings");
       const fundingData = Array.isArray(response.data) ? response.data : [];
-      setRepayments(fundingData);
+      setFunding(fundingData);
       console.log("Fundings are", fundingData);
       
       const studentInstitutionPromises = fundingData.map(async (funding) => {
@@ -113,8 +107,8 @@ const FundingsPage = () => {
      setRepaidAmount(repaidAmount)
      
   } catch (error) {
-    console.error("Error fetching repayments:", error);
-    setRepayments([]); // Fallback to empty array on error
+    console.error("Error fetching funding:", error);
+    setFunding([]); // Fallback to empty array on error
   }
   };
   
@@ -143,8 +137,8 @@ const FundingsPage = () => {
     setHistoryModalOpen(true);
   };
 
-  const filteredRepayments = Array.isArray(repayments)
-    ? repayments.filter((record) => {
+  const filteredfunding = Array.isArray(fundings)
+    ? fundings.filter((record) => {
         return (
           (filterStatus === "All" || record.status === filterStatus) &&
           record.name &&
@@ -173,16 +167,16 @@ const FundingsPage = () => {
             {/* Replace static values with dynamic metrics fetched via API */}
             {[
               {
-                title: "Total Monthly Repayments Collected",
+                title: "Total Monthly funding Collected",
                 value: "$10,000", // Replace with dynamic value from API
               },
               {
                 title: "Number of Overdue Payments",
-                value: repayments.filter((r) => r.status === "Overdue").length, // Calculate dynamically
+                value: fundings.filter((r) => r.status === "Overdue").length, // Calculate dynamically
               },
               {
                 title: "Number of Suspended Payments",
-                value: repayments.filter((r) => r.status === "Suspended")
+                value: fundings.filter((r) => r.status === "Suspended")
                   .length, // Calculate dynamically
               },
             ].map((metric, index) => (
@@ -247,7 +241,7 @@ const FundingsPage = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {repayments.map((record, index) => (
+                    {fundings.map((record, index) => (
                       <TableRow key={index}>
                          <TableCell>{students[record.studentId] || "Loading..."}</TableCell>
                          <TableCell>{record.institutionName || "Loading..."}</TableCell>
