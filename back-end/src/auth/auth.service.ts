@@ -4,12 +4,9 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-<<<<<<< HEAD
-import { Student } from 'src/students/student.entity';
-=======
 import { Token } from './token.entity';
+import { Student } from 'src/students/student.entity';
 
->>>>>>> origin/main
 
 @Injectable()
 export class AuthService {
@@ -45,7 +42,7 @@ export class AuthService {
   return {
     accessToken,
     role: user.role, // Include role in response
-     user: { id: user.id, name: user.name, email: user.email, role: user.role,students: user.students}
+     user: { id: user.id, name: user.name, email: user.email, role: user.role,students: user.student}
   };
 }
 
@@ -55,44 +52,9 @@ export class AuthService {
     return this.userRepository.findOneBy({ id: userId });
   }
 
-<<<<<<< HEAD
-  async refreshToken(userId: number): Promise<{ accessToken: string }> {
-    const user = await this.validateUser(userId);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const payload = { userId: user.id, role: user.role };
-    const accessToken = this.jwtService.sign(payload);
-    return { accessToken };
-  }
-
-  async changePassword(
-    userId: number,
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<boolean> {
-    const user = await this.validateUser(userId);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid old password');
-    }
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedNewPassword;
-    await this.userRepository.save(user);
-    return true;
-  }
-
-  async isEmailTaken(email: string): Promise<boolean> {
-    const user = await this.userRepository.findOneBy({ email });
-    return !!user;
-=======
   async getAllUsers(): Promise<User[]> {
     console.log(await this.userRepository.find());
     return this.userRepository.find(); // Fetch all users
->>>>>>> origin/main
   }
 
   async getUserInfo(userId: number): Promise<Partial<User>> {

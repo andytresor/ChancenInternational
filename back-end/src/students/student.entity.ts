@@ -25,19 +25,6 @@ export class Student {
     @JoinColumn() // Add this decorator
     user: User;
 
-<<<<<<< HEAD
-  @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
-    funding: Funding[];
-
-  @OneToMany(() => Repayment, (repayment) => repayment.student)
-  repayments: Repayment[];
-
-  @ManyToOne(() => User, (user) => user.students, { eager: true }) @JoinColumn({ name: 'userId' }) // Clé étrangère pour la relation utilisateur 
-  user: User; 
-  @Column() 
-  userId: number; // Colonne pour la clé étrangère
-}
-=======
     @Column({ default: false })
     isRepaymentActive: boolean;
 
@@ -48,4 +35,3 @@ export class Student {
     @OneToMany(() => Repayment, (repayment) => repayment.student)
     repayments: Repayment[];
 }
->>>>>>> origin/main
