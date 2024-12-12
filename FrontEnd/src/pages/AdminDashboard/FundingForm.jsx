@@ -38,7 +38,7 @@ const FundingForm = ({ students }) => {
       setFinancialAid('');
     } catch (err) {
       console.error(err);
-      setError('Failed to create funding. Please try again.');
+      setError('Student has already been funded');
     }
   };
 
