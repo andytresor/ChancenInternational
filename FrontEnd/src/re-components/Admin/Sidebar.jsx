@@ -165,8 +165,8 @@ const handleLogout = async () => {
                 </NavLink>
                 <NavLink
                   to="/admin/repayment-form"
-                  className={`sidebar__link ${activeLink === "Repayments" ? "active-link" : ""}`}
-                  onClick={() => handleLinkClick("Repayments")}
+                  className={`sidebar__link ${activeLink === "Repayment-form" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Repayment-form")}
                 >
                   <i className="ri-bar-chart-box-fill"></i>
                   <span>Repayments Form</span>
