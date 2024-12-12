@@ -22,7 +22,7 @@ const Repayment = () => {
       const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local
       if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
       try {
-        const response = await axios.get(`http://localhost:3000/fundings?userId=${userId}`);
+        const response = await axios.get(`http://localhost:3000/fundings?userId=${id}`);
         setRepayment(response.data);
       } catch (error) {
         console.log(error);

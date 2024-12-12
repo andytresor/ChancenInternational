@@ -32,5 +32,6 @@ export class Student {
 
   @ManyToOne(() => User, (user) => user.students, { eager: true }) @JoinColumn({ name: 'userId' }) // Clé étrangère pour la relation utilisateur 
   user: User; 
-  @Column() userId: number; // Colonne pour la clé étrangère
+  @Column() 
+  userId: number; // Colonne pour la clé étrangère
 }
