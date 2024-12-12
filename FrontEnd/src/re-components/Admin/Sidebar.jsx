@@ -1,25 +1,47 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/Images/adminImages/Chance.png";
 import "../../style/adminstyles/sideBar.css"; // Ensure you have the necessary CSS
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
  const [user, setUser] = useState("");
 
-useEffect(() => {
-  const fetchUser = async () => {
-    const id = localStorage.getItem('userId')
-    if (!id) return; 
-      try {
-        const response = await axios.get(`http://localhost:3000/auth/one/${id}`);
-        setUser(response.data)
-      } catch (error) {
-        console.log(error); 
+ useEffect(() => {
+  const fetchUserDetails = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/auth/login"); // Redirect to login if no token
+        return;
       }
+      const response = await axios.get("http://localhost:3000/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      navigate("/auth/login"); // Redirect on error
+    }
+  };
+
+  fetchUserDetails();
+}, [navigate]);
+
+const handleLogout = async () => {
+  try {
+    const refreshToken = localStorage.getItem('refreshToken'); // If applicable
+    await axios.post('http://localhost:3000/auth/logout', { refreshToken });
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken'); // Clear refresh token if stored
+    navigate('/auth/login');
+  } catch (error) {
+    console.error('Logout failed:', error);
   }
-  fetchUser();
-}, []);
+};
+
   
   const [activeLink, setActiveLink] = useState("Dashboard"); // Default active link
 
@@ -134,19 +156,27 @@ useEffect(() => {
                   <span>Students</span>
                 </NavLink>
                 <NavLink
-                  to="/admin/repayments"
-                  className={`sidebar__link ${activeLink === "Repayments" ? "active-link" : ""}`}
-                  onClick={() => handleLinkClick("Repayments")}
+                  to="/admin/funding"
+                  className={`sidebar__link ${activeLink === "Funding" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Funding")}
+                >
+                  <i class="ri-funds-fill"></i>
+                  <span>Funding</span>
+                </NavLink>
+                <NavLink
+                  to="/admin/repayment-form"
+                  className={`sidebar__link ${activeLink === "Repayment-form" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Repayment-form")}
                 >
                   <i className="ri-bar-chart-box-fill"></i>
-                  <span>Repayments</span>
+                  <span>Repayments Form</span>
                 </NavLink>
                 <NavLink
                   to="/admin/funding-form"
                   className={`sidebar__link ${activeLink === "Transactions" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Transactions")}
                 >
-                 <i class="ri-profile-line"></i>
+                 <i class="ri-profile-fill"></i>
                   <span>Funding Form</span>
                 </NavLink>
                 <NavLink
@@ -198,12 +228,9 @@ useEffect(() => {
                 <span>Theme</span>
               </i>
             </button>
-            <button className="sidebar__link">
-            <NavLink
-                  to="/auth/login" >
+            <button className="sidebar__link" onClick={handleLogout}>
                   <i className="ri-logout-box-r-fill"></i>
                   <span>Log Out</span>
-                </NavLink>
             </button>
           </div>
         </div>

@@ -6,24 +6,26 @@ import { User } from 'src/auth/user.entity';
 
 @Entity()
 export class Student {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  name: string;
+    @Column({ nullable: false })
+    name: string;
 
-  @Column()
-  email: string;
+    @Column()
+    email: string;
 
-  @Column('decimal', { nullable: true })
-  salary: number
+    @Column('decimal', { nullable: true })
+    salary: number;
 
-  @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
-  institution: Institution;
+    @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
+    institution: Institution;
 
-  @Column({ default: false })
-  isRepaymentActive: boolean;
+    @OneToOne(() => User, (user) => user.student, { eager: true })
+    @JoinColumn() // Add this decorator
+    user: User;
 
+<<<<<<< HEAD
   @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
     funding: Funding[];
 
@@ -35,3 +37,15 @@ export class Student {
   @Column() 
   userId: number; // Colonne pour la clé étrangère
 }
+=======
+    @Column({ default: false })
+    isRepaymentActive: boolean;
+
+    @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
+
+    funding: Funding[];
+
+    @OneToMany(() => Repayment, (repayment) => repayment.student)
+    repayments: Repayment[];
+}
+>>>>>>> origin/main

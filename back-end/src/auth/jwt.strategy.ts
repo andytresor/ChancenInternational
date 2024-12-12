@@ -12,7 +12,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { userId: number }) {
-    return this.authService.validateUser(payload.userId);
-  }
+ async validate(payload: { email: string; role: string; name: string }) {
+  // No database lookup needed if details are in the payload.
+  return { email: payload.email, name: payload.name, role: payload.role };
+}
+
 }

@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Student } from './student.entity';
 import { Institution } from '../institutions/institution.entity';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     @InjectRepository(Institution)
     private readonly institutionRepository: Repository<Institution>,
   ) {}
@@ -25,40 +28,45 @@ export class StudentsService {
     return student;
   }
 
-  async create(name: string, email: string, institutionId: number): Promise<Student> {
-    const institution = await this.institutionRepository.findOne({ where: { id: institutionId } });
-    if (!institution) {
-      throw new NotFoundException(`Institution with ID ${institutionId} not found`);
+  async createStudent(data: any): Promise<Student> {
+    const student = new Student();
+    student.name = data.name;
+    student.email = data.email;
+    student.salary = data.salary;
+    student.institution = await this.institutionRepository.findOne({ where: { id: data.institutionId } });
+
+    if (data.userId) {
+        student.user = await this.userRepository.findOne({ where: { id: data.userId } });
     }
-    const student = this.studentRepository.create({ name, email, institution });
+
     return this.studentRepository.save(student);
+}
+
+async updateStudent(id: number, data: any): Promise<Student> {
+  const student = await this.studentRepository.findOne({ where: { id } });
+
+  student.name = data.name;
+  student.email = data.email;
+  student.salary = data.salary;
+  student.institution = await this.institutionRepository.findOne({ where: { id: data.institutionId } });
+
+  if (data.userId) {
+      student.user = await this.userRepository.findOne({ where: { id: data.userId } });
   }
 
-  async update(
-    id: number,
-    name?: string,
-    email?: string,
-    salary?: number,
-    isRepaymentActive?: boolean,
-  ): Promise<Student> {
-    const student = await this.findOne(id);
-    if (name) student.name = name;
-    if (email) student.email = email;
-    if (salary !== undefined) student.salary = salary;
-    if (isRepaymentActive !== undefined) student.isRepaymentActive = isRepaymentActive;
-    return this.studentRepository.save(student);
-  }
+  return this.studentRepository.save(student);
+}
 
-  async delete(id: number): Promise<void> {
-    const result = await this.studentRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Student with ID ${id} not found`);
-    }
-  }
+  // async delete(id: number): Promise<void> {
+  //   const result = await this.studentRepository.delete(id);
+  //   if (result.affected === 0) {
+  //     throw new NotFoundException(`Student with ID ${id} not found`);
+  //   }
+  // }
 
-  async findByInstitution(institutionId: number): Promise<Student[]> {
-    return this.studentRepository.find({
-      where: { institution: { id: institutionId } },
-    });
-  }
+  // async findByInstitution(institutionId: number): Promise<Student[]> {
+  //   return this.studentRepository.find({
+  //     where: { institution: { id: institutionId } },
+  //   });
+  // }
 }

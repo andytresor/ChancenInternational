@@ -24,7 +24,7 @@ const Register = () => {
       console.log('Registration successful:', response.data);
       // Optionally redirect or show a success message
       if(response.data){
-        navigate("/student/student-dashboard");
+        navigate("/auth/login");
       }
 
       // Optionally, you might want to store the token in local storage or context
@@ -70,7 +70,7 @@ const Register = () => {
             />
           </div>
           {error && <p className="error">** {error} **</p>}
-          <button type="submit">Sign up</button>
+          <button type="submit"><NavLink>Sign Up</NavLink></button>
         </form>
         <div className="form-section">
           <p>Have an account? <NavLink to="/auth/login">Log in</NavLink></p>
