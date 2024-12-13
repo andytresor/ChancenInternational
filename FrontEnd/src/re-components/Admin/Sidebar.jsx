@@ -156,17 +156,17 @@ const handleLogout = async () => {
                   <span>Students</span>
                 </NavLink>
                 <NavLink
-                  to="/admin/repayments"
-                  className={`sidebar__link ${activeLink === "Repayments" ? "active-link" : ""}`}
-                  onClick={() => handleLinkClick("Repayments")}
+                  to="/admin/funding"
+                  className={`sidebar__link ${activeLink === "Funding" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Funding")}
                 >
-                  <i className="ri-bar-chart-box-fill"></i>
-                  <span>Repayments</span>
+                  <i class="ri-funds-fill"></i>
+                  <span>Funding</span>
                 </NavLink>
                 <NavLink
                   to="/admin/repayment-form"
-                  className={`sidebar__link ${activeLink === "Repayments" ? "active-link" : ""}`}
-                  onClick={() => handleLinkClick("Repayments")}
+                  className={`sidebar__link ${activeLink === "Repayment-form" ? "active-link" : ""}`}
+                  onClick={() => handleLinkClick("Repayment-form")}
                 >
                   <i className="ri-bar-chart-box-fill"></i>
                   <span>Repayments Form</span>
@@ -176,7 +176,7 @@ const handleLogout = async () => {
                   className={`sidebar__link ${activeLink === "Transactions" ? "active-link" : ""}`}
                   onClick={() => handleLinkClick("Transactions")}
                 >
-                 <i class="ri-profile-line"></i>
+                 <i class="ri-profile-fill"></i>
                   <span>Funding Form</span>
                 </NavLink>
                 <NavLink

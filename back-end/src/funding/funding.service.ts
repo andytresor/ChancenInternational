@@ -13,9 +13,14 @@ export class FundingsService {
     private readonly studentRepository: Repository<Student>,
   ) {}
 
-  async findAll(): Promise<Funding[]> {
-    return this.fundingRepository.find();
-  }
+  async findAll(): Promise<any[]> {
+    const fundings = await this.fundingRepository.find({ relations: ['student', 'student.institution'] });
+    return fundings.map(funding => ({
+        ...funding,
+        studentId: funding.student?.id || null, // Extract the student ID
+        institutionName: funding.student?.institution?.name || "Not Available", // Extract the institution name
+      }));
+}
 
   async findOne(id: number): Promise<Funding> {
     const funding = await this.fundingRepository.findOne({ where: { id } });
@@ -30,13 +35,19 @@ export class FundingsService {
     tuitionFees: number,
     financialAid: number,
   ): Promise<Funding> {
+    // Check if the student has already been funded
+    const existingFunding = await this.checkIfStudentAlreadyFunded(studentId);
+    if (existingFunding) {
+      throw new Error(`Student with ID ${studentId} has already been funded.`);
+    }
+  
     const student = await this.studentRepository.findOne({ where: { id: studentId } });
     if (!student) {
       throw new NotFoundException(`Student with ID ${studentId} not found`);
     }
-
+  
     const totalDebt = tuitionFees + financialAid + ( (tuitionFees + financialAid) * 0.2);
-
+  
     const funding = this.fundingRepository.create({
       student,
       tuitionFees,
@@ -45,8 +56,15 @@ export class FundingsService {
       amountRepaid: 0,
       isActive: true,
     });
-
+  
     return this.fundingRepository.save(funding);
+  }
+  
+  async checkIfStudentAlreadyFunded(studentId: number): Promise<Funding | null> {
+    return this.fundingRepository.findOne({
+      where: { student: { id: studentId }, isActive: true },
+      relations: ['student'],
+    });
   }
 
   async updateRepayment(id: number, amountRepaid: number): Promise<Funding> {
