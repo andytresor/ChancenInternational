@@ -23,6 +23,7 @@ const StudentForm = ({ studentId, onSave }) => {
         if (studentId) {
             try {
                 const response = await axios.get(`http://localhost:3000/students/${studentId}`);
+
                 const { user, email, salary, institution } = response.data;
                 setStudentData({
                     name: user?.name || '',
@@ -89,6 +90,7 @@ const StudentForm = ({ studentId, onSave }) => {
             if (studentId) {
                 await axios.patch(`http://localhost:3000/students/${studentId}`, payload);
             } else {
+
                 await axios.post('http://localhost:3000/students', payload);
             }
             alert('Student saved successfully!');
