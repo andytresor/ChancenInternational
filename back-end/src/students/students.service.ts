@@ -45,17 +45,26 @@ export class StudentsService {
 async updateStudent(id: number, data: any): Promise<Student> {
   const student = await this.studentRepository.findOne({ where: { id } });
 
-  student.name = data.name;
-  student.email = data.email;
-  student.salary = data.salary;
-  student.institution = await this.institutionRepository.findOne({ where: { id: data.institutionId } });
-
-  if (data.userId) {
-      student.user = await this.userRepository.findOne({ where: { id: data.userId } });
+  if (!student) {
+      throw new NotFoundException(`Student with ID ${id} not found`);
   }
+
+  student.name = data.name || student.name;
+  student.email = data.email || student.email;
+  student.salary = data.salary !== undefined ? data.salary : student.salary;
+
+  // Activate repayment if salary is set
+  if (data.salary !== undefined) {
+      student.isRepaymentActive = true;
+  }
+
+  student.institution = data.institutionId
+      ? await this.institutionRepository.findOne({ where: { id: data.institutionId } })
+      : student.institution;
 
   return this.studentRepository.save(student);
 }
+
 
   // async delete(id: number): Promise<void> {
   //   const result = await this.studentRepository.delete(id);

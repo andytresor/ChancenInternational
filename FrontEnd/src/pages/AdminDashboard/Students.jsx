@@ -129,8 +129,8 @@ const Students = () => {
                     <TableRow>
                       <TableCell>Name</TableCell>
                       <TableCell>Institution</TableCell>
-                      <TableCell>Total Debt</TableCell>
-                      <TableCell>Repayment %</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Salary</TableCell>
                       <TableCell>Status</TableCell>
                       <TableCell>Actions</TableCell>
                     </TableRow>
@@ -140,16 +140,8 @@ const Students = () => {
                       <TableRow key={student.id}>
                         <TableCell>{student.name || "N/A"}</TableCell>
                         <TableCell>{student.institution?.name || "N/A"}</TableCell>
-                        <TableCell>{student.funding?.totalDebt || "N/A"} FCFA</TableCell>
-                        <TableCell>
-                          {student.funding?.totalDebt > 0
-                            ? ((
-                                (student.funding.amountRepaid || 0) /
-                                student.funding.totalDebt
-                              ) * 100).toFixed(2)
-                            : "0.00"}
-                          %
-                        </TableCell>
+                        <TableCell>{student.email|| "N/A"}</TableCell>
+                        <TableCell>{student.salary || "N/A"}</TableCell>
                         <TableCell>{student.isRepaymentActive ? "Active" : "Inactive"}</TableCell>
                         <TableCell>
                           <Button

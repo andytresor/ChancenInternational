@@ -30,7 +30,7 @@ export class AuthService {
   async login(email: string, password: string): Promise<{ accessToken: string; role: string ; user: { id: number; name: string; email: string; role: string; students:Student[] }}> {
   const user = await this.userRepository.findOne({
      where: { email } ,
-     relations:['students']
+     relations:['student']
     });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new UnauthorizedException('Invalid credentials');

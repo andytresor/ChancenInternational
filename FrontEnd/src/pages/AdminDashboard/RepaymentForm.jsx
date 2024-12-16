@@ -20,10 +20,10 @@ import { DatePicker } from "@mui/lab";
 const CreateRepaymentSchedule = () => {
     useSideBar();
 
-    const [errors, setErrors] = useState({}); // To store validation errors
-    const [fundings, setFundings] = useState([]); // To store funding options
-    const [loadingFundings, setLoadingFundings] = useState(true); // Loading state
-    const [selectedFunding, setSelectedFunding] = useState(""); // Selected funding ID
+    const [errors, setErrors] = useState({});
+    const [fundings, setFundings] = useState([]);
+    const [loadingFundings, setLoadingFundings] = useState(true);
+    const [selectedFunding, setSelectedFunding] = useState("");
     const [salary, setSalary] = useState("");
     const [startDate, setStartDate] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
@@ -33,10 +33,8 @@ const CreateRepaymentSchedule = () => {
     useEffect(() => {
         const fetchFundings = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/fundings"); // Fetch funding data
-                console.log(response.data);
+                const response = await axios.get("http://localhost:3000/fundings");
                 setFundings(response.data);
-                // Update this based on the API structure
                 setLoadingFundings(false);
             } catch (error) {
                 console.error("Error fetching fundings:", error);
@@ -47,6 +45,21 @@ const CreateRepaymentSchedule = () => {
         fetchFundings();
     }, []);
 
+    // Handle funding selection
+    const handleFundingChange = (e) => {
+        const selectedFundingId = e.target.value;
+        setSelectedFunding(selectedFundingId);
+
+        // Find the selected funding and extract salary
+        const selectedFunding = fundings.find(
+            (funding) => funding.id === parseInt(selectedFundingId, 10)
+        );
+        if (selectedFunding && selectedFunding.student) {
+            setSalary(selectedFunding.student.salary || "");
+        } else {
+            setSalary("");
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -87,7 +100,7 @@ const CreateRepaymentSchedule = () => {
                                             <Select
                                                 fullWidth
                                                 value={selectedFunding}
-                                                onChange={(e) => setSelectedFunding(e.target.value)}
+                                                onChange={handleFundingChange}
                                                 displayEmpty
                                                 required
                                             >
@@ -98,7 +111,7 @@ const CreateRepaymentSchedule = () => {
                                                     <MenuItem key={funding.id} value={funding.id}>
                                                         {funding.id} -{" "}
                                                         {funding.student && funding.student.name
-                                                            ? `${funding.student.name} (${funding.student.id})`
+                                                            ? `${funding.student.name} (With Id: ${funding.student.id})`
                                                             : "No student info"}
                                                     </MenuItem>
                                                 ))}
@@ -106,8 +119,6 @@ const CreateRepaymentSchedule = () => {
                                         ) : (
                                             <Typography>No fundings available</Typography>
                                         )}
-
-
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
@@ -118,6 +129,9 @@ const CreateRepaymentSchedule = () => {
                                             onChange={(e) => setSalary(e.target.value)}
                                             required
                                             type="number"
+                                            InputProps={{
+                                                readOnly: true, // Make salary field read-only
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -144,7 +158,6 @@ const CreateRepaymentSchedule = () => {
                     </Card>
                 </Grid>
             </Grid>
-            {/* Success Snackbar */}
             <Snackbar
                 open={!!successMessage}
                 autoHideDuration={4000}
@@ -155,7 +168,6 @@ const CreateRepaymentSchedule = () => {
                 </Alert>
             </Snackbar>
 
-            {/* Error Snackbar */}
             <Snackbar
                 open={!!errorMessage}
                 autoHideDuration={4000}
