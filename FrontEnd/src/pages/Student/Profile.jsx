@@ -3,8 +3,23 @@ import useTopbar from "../../re-components/Student/useTopbar";
 import "../../style/studentstyles/profile.css";
 import logo from "../../assets/Images/adminImages/Chance.png"
 import axios from "axios";
-
 const Profile = () => {
+
+//   const [user, setUser] = useState("");
+//   useEffect(() => {
+//       const fetchUser = async () => { 
+//       const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local 
+//       if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+//       try { 
+//           const response = await axios.get(`http://localhost:3000/auth/one/${id}`); 
+//           setUser(response.data);} 
+//       catch (error) { 
+//           console.log(error);
+            
+//       } 
+//   }; 
+//   fetchUser(); 
+// }, []); 
   useTopbar()
 
 
