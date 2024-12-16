@@ -14,7 +14,11 @@ export class RepaymentsService {
   ) {}
 
   async findAll(): Promise<Repayment[]> {
-    return this.repaymentRepository.find();
+    const repayments = await this.repaymentRepository.find({ relations: ["funding"] })
+    return repayments.map(repay => ({
+      ...repay,
+      fundingId: repay.funding?.id || null,
+    }))
   }
 
   async findOne(id: number): Promise<Repayment> {
