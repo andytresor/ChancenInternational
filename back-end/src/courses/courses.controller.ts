@@ -17,7 +17,7 @@ export class CourseController {
     
   }
 
-  @Get('all')
+  @Get('')
   async findAll(): Promise<courses[]> {
     return await this.courseService.findAll();
   }

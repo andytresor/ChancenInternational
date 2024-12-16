@@ -27,25 +27,49 @@ export class AuthService {
     return this.userRepository.save(user);
   }
 
-  async login(email: string, password: string): Promise<{ accessToken: string; role: string ; user: { id: number; name: string; email: string; role: string; students:Student[] }}> {
-  const user = await this.userRepository.findOne({
-     where: { email } ,
-     relations:['student']
+ async login(
+    email: string,
+    password: string,
+  ): Promise<{
+    accessToken: string;
+    role: string;
+    user: { id: number; name: string; email: string; role: string; students: any[] };
+  }> {
+    // Find the user by email
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: ['student'], // Include related entities
     });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new UnauthorizedException('Invalid credentials');
+
+    // Check if user exists
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Compare the provided password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Prepare the JWT payload
+    const payload = { email: user.email, role: user.role };
+
+    // Sign and return the JWT
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      accessToken,
+      role: user.role,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        students: user.student,
+      },
+    };
   }
-
-  const payload = { email: user.email, role: user.role }; // Include role in JWT payload
-  const accessToken = this.jwtService.sign(payload);
-
-  return {
-    accessToken,
-    role: user.role, // Include role in response
-     user: { id: user.id, name: user.name, email: user.email, role: user.role,students: user.student}
-  };
-}
-
 
   async validateUser(userId: number): Promise<User> {
     console.log(await this.userRepository.findOneBy({ id: userId }));

@@ -22,7 +22,6 @@ export class Institution {
   // student_id: number;
 
   @OneToMany(() => courses, (courses) => courses.institutions)
-  // @JoinTable({ name: 'courses' })
   courses: courses
 
   // @Column()
