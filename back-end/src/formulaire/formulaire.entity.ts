@@ -17,17 +17,17 @@ export class Formulaire {
     contact: string;
 
     @Column()
-    raison_de_la_demande: string;
+    reason: string;
 
-    @Column() 
-    course_id: number;
+    @Column({ nullable: true })
+    generatedPassword: string;
+
+    @ManyToOne(() => courses, (course) => course.id, { eager: true })
+    course: courses;
 
     // @OneToOne(() => courses, (course) => course.formulaire)
     // courses: courses;
 
-    @Column() 
-    institution_id: number;
-
-    @ManyToOne(() => Institution, institution => institution.formulaires) 
+    @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
     institution: Institution;
 }

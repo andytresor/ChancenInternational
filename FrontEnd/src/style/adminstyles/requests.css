@@ -1,0 +1,94 @@
+.admin-requests {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .requests-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .request-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+    flex: 1 1 calc(33.333% - 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .request-card h2 {
+    font-size: 1.5rem;
+    color: #555;
+  }
+  
+  .request-card p {
+    font-size: 0.9rem;
+    margin: 10px 0;
+    color: #666;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn.accept {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .btn.accept:hover {
+    background-color: #45a049;
+  }
+  
+  .btn.dismiss {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .btn.dismiss:hover {
+    background-color: #e53935;
+  }
+  
+  @media (max-width: 768px) {
+    .request-card {
+      flex: 1 1 calc(50% - 20px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .request-card {
+      flex: 1 1 100%;
+    }
+  }
+  

@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Patch,
+  Put,
   Delete,
   Param,
   Body,
@@ -34,7 +35,7 @@ export class StudentsController {
       return this.studentsService.createStudent(data);
   }
 
-  @Patch(':id')
+  @Put(':id')
     updateStudent(@Param('id') id: number, @Body() data: any) {
         return this.studentsService.updateStudent(id, data);
     }

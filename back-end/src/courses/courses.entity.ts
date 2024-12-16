@@ -1,6 +1,6 @@
 import { Formulaire } from "src/formulaire/formulaire.entity";
 import { Institution } from "src/institutions/institution.entity";
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class courses {
@@ -14,18 +14,14 @@ export class courses {
     description:string;
 
     @Column()
-    amount:number;
+    amount:number; 
 
-    @Column() 
-    institution_id: number;  
-
-    // @ManyToOne(() => Formulaire, Formulaire => Formulaire.courses , {nullable:true})
-    // @ManyToOne(() => Formulaire, Formulaire => Formulaire.courses) 
-    // formulaire: Formulaire;
+    @OneToMany(() => Formulaire, Formulaire => Formulaire.course) 
+    formulaire: Formulaire;
 
     // @Column()
     // formulaire_id: number;
 
-    @ManyToOne(() => Institution, (institution) => institution.courses, {nullable:true})
+    @ManyToOne(() => Institution, (institution) => institution.courses)
     institutions: Institution;
 }

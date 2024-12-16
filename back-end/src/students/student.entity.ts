@@ -30,7 +30,7 @@ export class Student {
 
     @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
 
-    funding: Funding[];
+    funding: Funding;
 
     @OneToMany(() => Repayment, (repayment) => repayment.student)
     repayments: Repayment[];
