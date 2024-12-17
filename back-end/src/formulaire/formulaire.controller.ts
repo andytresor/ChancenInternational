@@ -5,7 +5,7 @@ import { Formulaire } from './formulaire.entity';
 import { UpdateFormulaireDto } from 'src/dto/update-formulaire.dto';
 
 @Controller('formulaire')
-export class FormulaireController {
+export class FormulaireController { 
     constructor(private readonly formulaireService:FormulaireService){}
 
     @Post('create')
@@ -35,4 +35,4 @@ export class FormulaireController {
     async remove(@Param('id') id: number): Promise<void> {
         return this.formulaireService.remove(id);
     }
-}
+} 

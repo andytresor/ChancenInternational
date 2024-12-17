@@ -22,9 +22,8 @@ export class FormulaireService {
   async create(createFormulaireDto: CreateFormulaireDto): Promise<Formulaire> {
     const course = await this.courseRepository.findOne({ where: { id: createFormulaireDto.course_id } });
     const institution = await this.institutionRepository.findOne({ where: { id: createFormulaireDto.institution_id } });
-    // const formulaire = this.formulaireRepository.create({ ...createFormulaireDto, courses: course ?[course] :[], institution });
-    const {name,email,contact,raison_de_la_demande,course_id,institution_id}=createFormulaireDto
-    const formulaire = this.formulaireRepository.create({name,email,contact,raison_de_la_demande,course_id,institution_id , institution})
+    const {name,email,contact,raison_de_la_demande}=createFormulaireDto
+    const formulaire = this.formulaireRepository.create({name,email,contact,raison_de_la_demande, institution , courses:course})
     return await this.formulaireRepository.save(formulaire);
   }
 

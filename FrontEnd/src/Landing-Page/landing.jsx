@@ -45,7 +45,7 @@ const LandingPage = () => {
             <p>
               We fund your education so you can pay it forward when you succeed.
             </p>
-            <button  onClick={() => handleScroll('about')}>Learn more</button>
+            <button  onClick={() => handleScroll('about')}> <Link to="/auth/request">Learn more</Link> </button>
           </div>
         </div>
 

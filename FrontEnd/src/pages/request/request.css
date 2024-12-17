@@ -1,0 +1,16 @@
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background: #f1f7fe;
+    border: 1px solid #f1f7fe;
+    border-radius: 9px;
+    margin-bottom: 11px;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#textarea{
+    height: 75px;
+    background: #ffffff;
+    color: black;
+}

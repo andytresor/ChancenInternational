@@ -19,14 +19,11 @@ export class Formulaire {
     @Column()
     raison_de_la_demande: string;
 
-    @Column() 
-    course_id: number;
+  
 
-    // @OneToOne(() => courses, (course) => course.formulaire)
-    // courses: courses;
+    @ManyToOne(() => courses, (course) => course.formulaire)
+    courses: courses;
 
-    @Column() 
-    institution_id: number;
 
     @ManyToOne(() => Institution, institution => institution.formulaires) 
     institution: Institution;

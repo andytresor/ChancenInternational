@@ -22,4 +22,8 @@ export class User {
 
     @OneToOne(() => Student, (student) => student.user)
     student: Student[];
+    
+     // Ajouter la propriété admin si elle n'existe pas 
+    @Column({ default: false }) 
+    admin: boolean;
 }

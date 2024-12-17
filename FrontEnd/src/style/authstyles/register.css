@@ -1,5 +1,5 @@
 /* From Uiverse.io by alexruix */ 
-.register, .login {
+.register, .login , .request{
   height: 100vh;
   display: flex;
   justify-content: center;

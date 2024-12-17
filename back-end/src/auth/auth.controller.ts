@@ -16,7 +16,7 @@ export class AuthController {
   async login(@Body() loginDto: { email: string; password: string }) {
     return this.authService.login(loginDto.email, loginDto.password);
   }
-
+ 
   @Get('one/:id')
   async getUserByID(@Param('id', ParseIntPipe) userId: number): Promise<Partial<User>> {
     return this.authService.getUserInfo(userId);
