@@ -11,7 +11,17 @@ export class FormulaireController {
     private readonly formulaireService: FormulaireService,
     private readonly mailerService: MailerService
   ) { }
+  
+  @Get('tuition-fee/:studentId')
+  async getTuitionFee(@Param('studentId') studentId: number) {
+    const tuitionFee = await this.formulaireService.findTuitionFeeByStudentId(studentId);
+    if (!tuitionFee) {
+      throw new NotFoundException('Tuition fee not found for the student.');
+    }
+    return { tuitionFees: tuitionFee };
+  }
 
+  
   @Post('create')
   async create(@Body() CreateFormulaireDto: CreateFormulaireDto): Promise<Formulaire> {
     return this.formulaireService.create(CreateFormulaireDto);

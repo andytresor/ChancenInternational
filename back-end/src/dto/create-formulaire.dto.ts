@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty, IsInt } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, IsInt, IsOptional } from 'class-validator';
 
 export class CreateFormulaireDto {
   @IsString()
@@ -10,6 +10,10 @@ export class CreateFormulaireDto {
 
   @IsString()
   readonly contact: string;
+
+  @IsOptional() // Make it optional if it can be null
+  @IsString()
+  studentId?: number; // Add this line
 
   @IsString()
   readonly reason: string;  // Ajout de raison_de_la_demande

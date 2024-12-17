@@ -3,6 +3,7 @@ import { Institution } from '../institutions/institution.entity'; // Adjust the 
 import { Funding } from '../funding/funding.entity'; // Adjust the path as necessary
 import { Repayment } from '../repayments/repayment.entity'; // Adjust the path as necessary
 import { User } from 'src/auth/user.entity';
+import { Formulaire } from 'src/formulaire/formulaire.entity';
 
 @Entity()
 export class Student {
@@ -21,9 +22,12 @@ export class Student {
     @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
     institution: Institution;
 
-    @OneToOne(() => User, (user) => user.student, { eager: true })
-    @JoinColumn() // Add this decorator
+    @ManyToOne(() => User, (user) => user.student, { onDelete: 'CASCADE' })
     user: User;
+
+    // @OneToOne(() => User, (user) => user.student, { eager: true })
+    // @JoinColumn() // Add this decorator
+    // user: User;
 
     @Column({ default: false })
     isRepaymentActive: boolean;
@@ -34,4 +38,8 @@ export class Student {
 
     @OneToMany(() => Repayment, (repayment) => repayment.student)
     repayments: Repayment[];
+    requests: any;
+
+    @OneToMany(() => Formulaire, (formulaire) => formulaire.student)
+    formulaire: Formulaire[];
 }

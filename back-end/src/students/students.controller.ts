@@ -7,11 +7,14 @@ import {
   Delete,
   Param,
   Body,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { Student } from './student.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Response } from 'express'; 
 
 @Controller('students')
 export class StudentsController {
@@ -31,10 +34,15 @@ export class StudentsController {
   }
 
   @Post()
-  createStudent(@Body() data: any) {
-      return this.studentsService.createStudent(data);
-  }
-
+    async createStudent(@Body() data: any, @Res() res: Response) {
+        try {
+            const student = await this.studentsService.createStudent(data);
+            return res.status(HttpStatus.CREATED).json(student);
+        } catch (error) {
+            console.error('Error:', error.message);
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: error.message });
+        }
+    }
   @Put(':id')
     updateStudent(@Param('id') id: number, @Body() data: any) {
         return this.studentsService.updateStudent(id, data);

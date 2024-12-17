@@ -17,7 +17,7 @@ export class courses {
     amount:number; 
 
     @OneToMany(() => Formulaire, Formulaire => Formulaire.course) 
-    formulaire: Formulaire;
+    formulaire: Formulaire[];
 
     // @Column()
     // formulaire_id: number;
