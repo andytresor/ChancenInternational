@@ -1,39 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../style/authstyles/register.css';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Register = () => {
+const Request = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [contact, setContact] = useState('');
+  const [reason, setDescription] = useState('');
+  const [courses, setCourses] = useState([]);
+  const [institutions, setInstitutions] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedInstitution, setSelectedInstitution] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const coursesResponse = await axios.get('http://localhost:3000/course/');
+        const institutionsResponse = await axios.get('http://localhost:3000/institutions');
+        setCourses(coursesResponse.data);
+        setInstitutions(institutionsResponse.data);
+      } catch (err) {
+        console.error('Failed to fetch data:', err);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/auth/register', {
+      const response = await axios.post('http://localhost:3000/request/create', {
         name,
         email,
-        password,
+        contact,
+        reason,
+      course_id: selectedCourse,
+        institutionId: selectedInstitution,
       });
-      
+
       console.log('Registration successful:', response.data);
-      // Optionally redirect or show a success message
-      if(response.data){
-        navigate("/auth/login");
+
+      if (response.data) {
+        navigate('/');
       }
 
-      // Optionally, you might want to store the token in local storage or context
-      const  user  = response.data; // Supposons que l'API renvoie l'objet utilisateur complet 
-      if (user.id) { // Vérifie que l'utilisateur et son ID existent // Stocker le token et l'ID utilisateur dans le local storage 
-        // localStorage.setItem('token', token); 
-        localStorage.setItem('userId', user.id); // Stocker l'ID utilisateur
-
-    }
+      const user = response.data;
+      if (user.id) {
+        localStorage.setItem('userId', user.id);
+      }
     } catch (err) {
       setError('Registration failed. Please try again.');
       console.error(err);
@@ -44,8 +63,8 @@ const Register = () => {
     <div className="register">
       <div className="form-box">
         <form className="form" onSubmit={handleSubmit}>
-          <span className="title">Sign up</span>
-          <span className="subtitle">Create a free account with your email.</span>
+          <span className="title">Request</span>
+          <span className="subtitle">Send a Request and wait for a response</span>
           <div className="form-container">
             <input
               type="text"
@@ -62,15 +81,41 @@ const Register = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
-              type="password"
+              type="text"
               className="input"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Tel Number"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
             />
+            <textarea
+              className="input"
+              placeholder="Description"
+              value={reason}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+            <select
+              className="input"
+              value={selectedCourse}
+              onChange={(e) => setSelectedCourse(e.target.value)}
+            >
+              <option value="">Select Course</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.id}>{course.title}</option>
+              ))}
+            </select>
+            <select
+              className="input"
+              value={selectedInstitution}
+              onChange={(e) => setSelectedInstitution(e.target.value)}
+            >
+              <option value="">Select Institution</option>
+              {institutions.map((institution) => (
+                <option key={institution.id} value={institution.id}>{institution.name}</option>
+              ))}
+            </select>
           </div>
           {error && <p className="error">** {error} **</p>}
-          <button type="submit"><NavLink>Sign Up</NavLink></button>
+          <button type="submit">Send Request</button>
         </form>
         <div className="form-section">
           <p>Have an account? <NavLink to="/auth/login">Log in</NavLink></p>
@@ -80,4 +125,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Request;

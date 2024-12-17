@@ -22,7 +22,7 @@ export class CourseService {
 
   console.log(createCourseDto);
   
-    const institution = await this.institutionRepository.findOne({ where: { id: createCourseDto.institution_id } });
+    const institution = await this.institutionRepository.findOne({ where: { id: createCourseDto.institution } });
 
     console.log(institution);
     const{title , description,amount} = createCourseDto

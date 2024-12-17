@@ -14,13 +14,13 @@ export class courses {
     description:string;
 
     @Column()
-    amount:number;
+    amount:number; 
 
 
     @OneToMany(() => Formulaire, Formulaire => Formulaire.courses)
     formulaire: Formulaire;
 
 
-    @ManyToOne(() => Institution, (institution) => institution.courses, {nullable:true})
+    @ManyToOne(() => Institution, (institution) => institution.courses)
     institutions: Institution;
 }

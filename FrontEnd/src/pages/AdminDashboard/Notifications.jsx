@@ -1,199 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../../style/adminstyles/requests.css';
 import useSideBar from "../../re-components/Admin/UseSidebar";
-import {
-    Grid,
-    Card,
-    CardContent,
-    Typography,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Button,
-    Checkbox,
-    IconButton,
-    Toolbar,
-    Tooltip,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-} from "@mui/material";
-import { Delete, Replay } from "@mui/icons-material";
-
 
 const Notifications = () => {
-    useSideBar();
+  useSideBar(); // Hook for sidebar handling (if applicable)
 
-    const [selectedNotifications, setSelectedNotifications] = useState([]);
-    const [isBulkActionModalOpen, setBulkActionModalOpen] = useState(false);
-    const [bulkActionType, setBulkActionType] = useState("");
+  const [requests, setRequests] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    // Dummy data for notifications
-    const notifications = [
-        {
-            id: 1,
-            name: "John Doe",
-            institution: "Institution A",
-            date: "2024-11-20",
-            message: "Your repayment for October is overdue.",
-            status: "Unread",
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            institution: "Institution B",
-            date: "2024-11-19",
-            message: "Your repayment for October is overdue.",
-            status: "Read",
-        },
-        {
-            id: 3,
-            name: "Alice Johnson",
-            institution: "Institution A",
-            date: "2024-11-18",
-            message: "Your repayment for October is overdue.",
-            status: "Unread",
-        },
-    ];
-
-    // Handlers for bulk actions
-    const handleSelectNotification = (id) => {
-        setSelectedNotifications((prev) =>
-            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-        );
+  // Fetch requests from the backend
+  useEffect(() => {
+    const fetchRequests = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:3000/request');
+        setRequests(response.data);
+        setError('');
+      } catch (err) {
+        console.error('Error fetching requests:', err);
+        setError('Failed to fetch requests. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handleSelectAll = () => {
-        if (selectedNotifications.length === notifications.length) {
-            setSelectedNotifications([]);
-        } else {
-            setSelectedNotifications(notifications.map((notification) => notification.id));
-        }
-    };
+    fetchRequests();
+  }, []);
 
-    const handleBulkAction = (actionType) => {
-        setBulkActionType(actionType);
-        setBulkActionModalOpen(true);
-    };
+  // Handle Accept Request
+  const handleAccept = async (id) => {
+    try {
+      await axios.post(`http://localhost:3000/request/accept/${id}`);
+      alert('Request accepted, and an email has been sent to the user.');
+      setRequests((prevRequests) => prevRequests.filter((req) => req.id !== id));
+    } catch (err) {
+      console.error('Error accepting request:', err.response || err);
+      alert('Failed to accept the request. Please try again.');
+    }
+  };
+  
 
-    return (
-        <div className="main" id="main">
-            <Grid container spacing={4} style={{ padding: "20px" }}>
-                {/* Page Title */}
-                <Grid item xs={12}>
-                    <Typography variant="h4" gutterBottom>
-                        Notifications
-                    </Typography>
-                </Grid>
+  // Handle Dismiss Request
+  const handleDismiss = async (id) => {
+    try {
+      await axios.post(`http://localhost:3000/request/dismiss/${id}`);
+      alert('Request dismissed, and an email has been sent to the user.');
+      setRequests((prevRequests) => prevRequests.filter((req) => req.id !== id));
+    } catch (err) {
+      console.error('Error dismissing request:', err);
+      alert('Failed to dismiss the request. Please try again.');
+    }
+  };
 
-                {/* Bulk Actions Toolbar */}
-                <Grid item xs={12}>
-                    <Toolbar>
-                        <Checkbox
-                            indeterminate={
-                                selectedNotifications.length > 0 &&
-                                selectedNotifications.length < notifications.length
-                            }
-                            checked={selectedNotifications.length === notifications.length}
-                            onChange={handleSelectAll}
-                        />
-                        <Tooltip title="Resend">
-                            <IconButton
-                                color="primary"
-                                onClick={() => handleBulkAction("Resend")}
-                                disabled={selectedNotifications.length === 0}
-                            >
-                                <Replay />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Clear">
-                            <IconButton
-                                color="secondary"
-                                onClick={() => handleBulkAction("Clear")}
-                                disabled={selectedNotifications.length === 0}
-                            >
-                                <Delete />
-                            </IconButton>
-                        </Tooltip>
-                        <Typography variant="body1" style={{ marginLeft: "auto" }}>
-                            {selectedNotifications.length} selected
-                        </Typography>
-                    </Toolbar>
-                </Grid>
-
-                {/* Notifications Table */}
-                <Grid item xs={12}>
-                    <Card>
-                        <CardContent>
-                            <TableContainer>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell></TableCell>
-                                            <TableCell>Student Name</TableCell>
-                                            <TableCell>Institution</TableCell>
-                                            <TableCell>Notification Date</TableCell>
-                                            <TableCell>Message</TableCell>
-                                            <TableCell>Status</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {notifications.map((notification) => (
-                                            <TableRow key={notification.id}>
-                                                <TableCell>
-                                                    <Checkbox
-                                                        checked={selectedNotifications.includes(notification.id)}
-                                                        onChange={() => handleSelectNotification(notification.id)}
-                                                    />
-                                                </TableCell>
-                                                <TableCell>{notification.name}</TableCell>
-                                                <TableCell>{notification.institution}</TableCell>
-                                                <TableCell>{notification.date}</TableCell>
-                                                <TableCell>{notification.message}</TableCell>
-                                                <TableCell>{notification.status}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Bulk Action Modal */}
-                <Dialog
-                    open={isBulkActionModalOpen}
-                    onClose={() => setBulkActionModalOpen(false)}
-                >
-                    <DialogTitle>
-                        {bulkActionType === "Resend" ? "Resend Notifications" : "Clear Notifications"}
-                    </DialogTitle>
-                    <DialogContent>
-                        <Typography>
-                            Are you sure you want to {bulkActionType.toLowerCase()} the selected notifications?
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setBulkActionModalOpen(false)}>Cancel</Button>
-                        <Button
-                            variant="contained"
-                            color={bulkActionType === "Resend" ? "primary" : "secondary"}
-                            onClick={() => {
-                                // Perform the bulk action here
-                                setBulkActionModalOpen(false);
-                                setSelectedNotifications([]);
-                            }}
-                        >
-                            Confirm
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </Grid>
+  return (
+    <div className="admin-requests main" id="main">
+      <h1>Requests</h1>
+      {error && <p className="error">{error}</p>}
+      {loading ? (
+        <p>Loading requests...</p>
+      ) : (
+        <div className="requests-container">
+          {requests.length > 0 ? (
+            requests.map((request) => (
+              <div className="request-card" key={request.id}>
+                <h2>{request.name}</h2>
+                <p>
+                  <strong>Institution:</strong> {request.institution?.name || 'N/A'}
+                </p>
+                <p>
+                  <strong>Course:</strong> {request.course?.title || 'N/A'}
+                </p>
+                <p>
+                  <strong>Email:</strong> {request.email}
+                </p>
+                <p>
+                  <strong>Description:</strong> {request.reason}
+                </p>
+                <div className="actions">
+                  <button
+                    className="btn accept"
+                    onClick={() => handleAccept(request.id)}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="btn dismiss"
+                    onClick={() => handleDismiss(request.id)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No requests to show.</p>
+          )}
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default Notifications;

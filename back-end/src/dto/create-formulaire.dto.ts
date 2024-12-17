@@ -12,7 +12,7 @@ export class CreateFormulaireDto {
   readonly contact: string;
 
   @IsString()
-  readonly raison_de_la_demande: string;  // Ajout de raison_de_la_demande
+  readonly reason: string;  // Ajout de raison_de_la_demande
 
   @IsInt()
   readonly course_id: number;  // Ajout de course_id
