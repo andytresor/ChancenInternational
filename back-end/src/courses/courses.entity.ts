@@ -17,7 +17,7 @@ export class courses {
     amount:number; 
 
 
-    @OneToMany(() => Formulaire, Formulaire => Formulaire.courses)
+    @OneToMany(() => Formulaire, Formulaire => Formulaire.course)
     formulaire: Formulaire;
 
 

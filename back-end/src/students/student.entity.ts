@@ -21,7 +21,7 @@ export class Student {
     @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
     institution: Institution;
 
-    @OneToOne(() => User, (user) => user.student, { eager: true })
+    @ManyToOne(() => User, (user) => user.student, { eager: true })
     @JoinColumn() // Add this decorator
     user: User;
 

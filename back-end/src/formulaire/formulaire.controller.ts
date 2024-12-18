@@ -17,7 +17,7 @@ export class FormulaireController {
     return this.formulaireService.create(CreateFormulaireDto);
   }
 
-  @Get('')
+  @Get('all')
   async findAll(): Promise<Formulaire[]> {
     return this.formulaireService.findAll();
   }

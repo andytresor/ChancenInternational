@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { Student } from 'src/students/student.entity';
@@ -11,7 +11,7 @@ export class User {
     @Column()
     name: string;
 
-    @Column({ unique: true })
+    @Column()
     email: string;
 
     @Column()
@@ -25,7 +25,7 @@ export class User {
         this.password = await bcrypt.hash(this.password, 10); // Hash the password before saving
     }
 
-    @OneToOne(() => Student, (student) => student.user)
+    @OneToMany(() => Student, (student) => student.user)
     student: Student[];
     
      // Ajouter la propriété admin si elle n'existe pas 

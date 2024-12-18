@@ -16,7 +16,7 @@ export class Formulaire {
     @Column()
     contact: string;
 
-    @Column()
+    @Column({nullable:false , default: 'raison par défaut' })
     reason: string;
 
     @Column({ nullable: true })
@@ -25,9 +25,6 @@ export class Formulaire {
     @ManyToOne(() => courses, (course) => course.id, { eager: true })
     course: courses;
 
-    @ManyToOne(() => courses, (course) => course.formulaire)
-    courses: courses;
-
     @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
     institution: Institution;
-}
+} 
