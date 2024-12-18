@@ -21,7 +21,7 @@ import { ConfigModule } from '@nestjs/config';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'pamelajo25',
+      password: 'root',
       database: 'chancen_finances',
       migrations: ['src/migrations/*.ts'],
       entities:[courses,Formulaire,Student,Institution],
