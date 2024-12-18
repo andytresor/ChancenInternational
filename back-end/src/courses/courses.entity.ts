@@ -5,22 +5,19 @@ import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColum
 @Entity()
 export class courses {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
 
     @Column()
-    title:string;
+    title: string;
 
     @Column()
-    description:string;
+    description: string;
 
     @Column()
-    amount:number; 
+    amount: number;
 
-    @OneToMany(() => Formulaire, Formulaire => Formulaire.course) 
-    formulaire: Formulaire;
-
-    // @Column()
-    // formulaire_id: number;
+    @OneToMany(() => Formulaire, (formulaire) => formulaire.course)
+    formulaire: Formulaire[];
 
     @ManyToOne(() => Institution, (institution) => institution.courses)
     institutions: Institution;
