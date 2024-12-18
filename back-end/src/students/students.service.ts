@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Student } from './student.entity';
 import { Institution } from '../institutions/institution.entity';
 import { User } from 'src/auth/user.entity';
+import { Formulaire } from 'src/formulaire/formulaire.entity';
 
 @Injectable()
 export class StudentsService {
@@ -14,6 +15,8 @@ export class StudentsService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Institution)
     private readonly institutionRepository: Repository<Institution>,
+    @InjectRepository(Formulaire)
+    private readonly formulaireRepository: Repository<Formulaire>,
   ) {}
 
   async findAll(): Promise<Student[]> {
@@ -29,53 +32,78 @@ export class StudentsService {
   }
 
   async createStudent(data: any): Promise<Student> {
+    // Check for an existing student with the same userId
+    const existingStudent = await this.studentRepository.findOne({
+      where: { user: { id: data.userId } },
+      relations: ['user'], // Include user relation to check userId
+    });
+
+    if (existingStudent) {
+      throw new Error('A student with this user already exists.');
+    }
+
+    // Create a new student instance
     const student = new Student();
     student.name = data.name;
     student.email = data.email;
     student.salary = data.salary;
-    student.institution = await this.institutionRepository.findOne({ where: { id: data.institutionId } });
 
-    if (data.userId) {
-        student.user = await this.userRepository.findOne({ where: { id: data.userId } });
+    // Set the institution
+    student.institution = await this.institutionRepository.findOne({
+      where: { id: data.institutionId },
+    });
+
+    if (!student.institution) {
+      throw new Error('Institution not found.');
     }
 
-    return this.studentRepository.save(student);
-}
+    // Set the user if userId is provided
+    if (data.userId) {
+      const user = await this.userRepository.findOne({
+        where: { id: data.userId },
+      });
 
-async updateStudent(id: number, data: any): Promise<Student> {
-  const student = await this.studentRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new Error('User not found.');
+      }
 
-  if (!student) {
+      student.user = user;
+    }
+
+    // Save the new student
+    const savedStudent = await this.studentRepository.save(student);
+
+    return savedStudent;
+  }
+
+  async updateStudent(id: number, data: any): Promise<Student> {
+    const student = await this.studentRepository.findOne({ where: { id } });
+
+    if (!student) {
       throw new NotFoundException(`Student with ID ${id} not found`);
-  }
+    }
 
-  student.name = data.name || student.name;
-  student.email = data.email || student.email;
-  student.salary = data.salary !== undefined ? data.salary : student.salary;
+    student.name = data.name || student.name;
+    student.email = data.email || student.email;
+    student.salary = data.salary !== undefined ? data.salary : student.salary;
 
-  // Activate repayment if salary is set
-  if (data.salary !== undefined) {
+    // Activate repayment if salary is set
+    if (data.salary !== undefined) {
       student.isRepaymentActive = true;
-  }
+    }
 
-  student.institution = data.institutionId
+    student.institution = data.institutionId
       ? await this.institutionRepository.findOne({ where: { id: data.institutionId } })
       : student.institution;
 
-  return this.studentRepository.save(student);
-}
+    return this.studentRepository.save(student);
+  }
 
 
-  // async delete(id: number): Promise<void> {
-  //   const result = await this.studentRepository.delete(id);
-  //   if (result.affected === 0) {
-  //     throw new NotFoundException(`Student with ID ${id} not found`);
-  //   }
-  // }
-
-  // async findByInstitution(institutionId: number): Promise<Student[]> {
-  //   return this.studentRepository.find({
-  //     where: { institution: { id: institutionId } },
-  //   });
-  // }
+  async deleteStudent(id: number): Promise<void> {
+    const result = await this.studentRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Student with ID ${id} not found`);
+    }
+  }
 }

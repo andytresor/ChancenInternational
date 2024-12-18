@@ -28,6 +28,7 @@ const CreateRepaymentSchedule = () => {
     const [startDate, setStartDate] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Fetch funding data
     useEffect(() => {
@@ -61,27 +62,30 @@ const CreateRepaymentSchedule = () => {
         }
     };
 
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            const payload = {
-                fundingId: Number(selectedFunding),
-                salary: Number(salary),
-                startDate: startDate ? startDate.toISOString() : null,
-            };
-
-            await axios.post("http://localhost:3000/repayments/schedule", payload);
-            setSuccessMessage("Repayment schedule created successfully!");
-            setSelectedFunding("");
-            setSalary("");
-            setStartDate(null);
-        } catch (error) {
-            console.error("Error creating repayment schedule:", error);
-            setErrorMessage(
-                error.response?.data?.message || "Failed to create repayment schedule."
-            );
-        }
+      e.preventDefault();
+      setIsSubmitting(true);
+    
+      try {
+        const payload = {
+          fundingId: Number(selectedFunding),
+          salary: Number(salary),
+          startDate: startDate ? startDate.toISOString() : null,
+        };
+    
+        await axios.post("http://localhost:3000/repayments/schedule", payload);
+        setSuccessMessage("Repayment schedule created successfully!");
+        setSelectedFunding("");
+        setSalary("");
+        setStartDate(null);
+      } catch (error) {
+        setErrorMessage(
+          error.response?.data?.message || "Failed to create repayment schedule."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     };
 
     return (
@@ -109,12 +113,10 @@ const CreateRepaymentSchedule = () => {
                                                 </MenuItem>
                                                 {fundings.map((funding) => (
                                                     <MenuItem key={funding.id} value={funding.id}>
-                                                        {funding.id} -{" "}
-                                                        {funding.student && funding.student.name
-                                                            ? `${funding.student.name} (With Id: ${funding.student.id})`
-                                                            : "No student info"}
+                                                        {funding.id} - {funding.student?.name || "No student"} (ID: {funding.student?.id})
                                                     </MenuItem>
                                                 ))}
+
                                             </Select>
                                         ) : (
                                             <Typography>No fundings available</Typography>
@@ -129,9 +131,7 @@ const CreateRepaymentSchedule = () => {
                                             onChange={(e) => setSalary(e.target.value)}
                                             required
                                             type="number"
-                                            InputProps={{
-                                                readOnly: true, // Make salary field read-only
-                                            }}
+
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -148,9 +148,10 @@ const CreateRepaymentSchedule = () => {
                                             variant="contained"
                                             color="primary"
                                             fullWidth
+                                            disabled={isSubmitting}
                                         >
                                             Submit
-                                        </Button>
+                                        </Button>;
                                     </Grid>
                                 </Grid>
                             </form>

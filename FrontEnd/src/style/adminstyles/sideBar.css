@@ -196,8 +196,8 @@ button {
 }
 
 .sidebar__info h3 {
-  font-size: var(--normal-font-size);
-  color: var(--title-color);
+  font-size: var(--normal-font-size)!important;
+  color: var(--title-color)!important;
   transition: color .4s;
 }
 
