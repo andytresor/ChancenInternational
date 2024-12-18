@@ -53,6 +53,9 @@ export class FundingsController {
     return this.fundingsService.calculateRepaymentPercentage(+id);
   }
   
+  @Get('user/:userId') async getFundingByUserId(@Param('userId') userId: number) { 
+    return this.fundingsService.findByUserId(userId); 
+  }
 }
 
 export default FundingsController

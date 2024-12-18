@@ -16,22 +16,24 @@ import {
 } from "@mui/material";
 import axios from "axios";
 const Repayment = () => {
-  const [repayment, setRepayment] = useState([]);
-  const [fundings, setFunding] = useState([]);
-
+  const [repayments, setRepayment] = useState([]);
   useEffect(() => {
     const fetchRepayment = async () => {
       const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local
+      console.log('id is' , id)
       if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
       try {
-        const response = await axios.get(`http://localhost:3000/fundings?userId=${id}`);
-        setRepayment(response.data);
+        const response = await axios.get(`http://localhost:3000/repayments?fundingId=${id}`);
+        // const repaymentData = response.data;
+        // console.log('repayment are' , repaymentData)
+        // console.log('repayment are' , response.data)
+        const repaymentData = Array.isArray(response.data) ? response.data : [];
+        console.log(repaymentData);
+      // const filteredRepaymentData = repaymentData.filter(repayment => repayment.student.user.id ===  Number(id));
+      // console.log("Details for this", id ,"is",filteredRepaymentData);
+        
 
-        const responses = await axios.get("http://localhost:3000/fundings");
-        const fundingData = Array.isArray(responses.data) ? responses.data[0] : [];
-        setFunding(fundingData);
-        console.log("Fundings are", fundingData);
-
+        setRepayment(repaymentData);
       } catch (error) {
         console.log(error);
       }
@@ -100,7 +102,7 @@ const Repayment = () => {
             Repayments
           </Typography>
           <Typography variant="h5">
-            Summary Of Total Dept Of {fundings.totalDebt} XAF
+            Summary Of Total Dept Of 600,000 XAF
           </Typography>
         </Grid>
 
@@ -113,36 +115,34 @@ const Repayment = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell style={{ fontWeight: "bold" }}>
-                        Installment
+                        Installment Id
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
-                        {" "}
                         Amount
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
-                        Status
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
+                        {" "}
                         Due Date
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
-                        Paid On
+                        Is Paid
+                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Payment Date
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {payments.map((repayment, index) => (
+                    {repayments.map((repayment, index) => (
                       <TableRow key={index}>
                         <TableCell>{repayment.id}</TableCell>
-                        <TableCell>{repayment.tuitionFees}</TableCell>
-                        <TableCell
-                          style={{ color: getStatusColor(repayment.status) }}
+                        <TableCell>{repayment.amount}</TableCell>
+                        <TableCell // style={{ color: getStatusColor(repayment.status) }}
                         >
-                          {repayment.totalDebt}
+                          {repayment.dueDate}
                         </TableCell>
-                        <TableCell>{repayment.amountRepaid}</TableCell>
-                        <TableCell>{repayment.isActive}</TableCell>
-                        <TableCell>{repayment.studentId}</TableCell>
+                        <TableCell>{repayment.isPaid}</TableCell>
+                        <TableCell>{repayment.paymentDate}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -19,7 +19,7 @@ const Request = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const coursesResponse = await axios.get('http://localhost:3000/course/');
+        const coursesResponse = await axios.get('http://localhost:3000/course/all');
         const institutionsResponse = await axios.get('http://localhost:3000/institutions');
         setCourses(coursesResponse.data);
         setInstitutions(institutionsResponse.data);

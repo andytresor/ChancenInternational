@@ -18,61 +18,70 @@ const Dashboard = () => {
     { x: 3, y: 0 },
   ];
 
+  // async function DisplayUser(){
+  //   try {
+  //     const res = await fetch
+  //   } catch (error) {
+  //     console.log(error);
+
+  //   }
+  // }
+
   const [user, setUser] = useState("");
-  const [repayments, setRepayments] = useState([]);
-  const [fundings, setFunding] = useState([]);
+  const [repayment, setRepayment] = useState([]);
+  const [funding, setFunding] = useState([]);
   useEffect(() => {
+
+    // fetch user
+    const fetchUser = async () => {
+      const id = localStorage.getItem("userId"); // Récupérer l'ID utilisateur depuis le stockage local
+      if (!id) return; // Si l'ID n'est pas disponible, renvoyer immédiatement
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/auth/one/${id}`
+        );
+        setUser(response.data);
+        console.log('curent user ' , response.data);
+
+        // fetch students dept
+        const res = await axios.get(`http://localhost:3000/fundings/user/${id}`);
+        // const res = await axios.get("http://localhost:3000/fundings");
+        const fundingData = Array.isArray(res.data) ? res.data[0]: [];
+        setFunding(fundingData);
+        console.log('fundings are ' , fundingData);
+        fundingData.forEach(funding => { 
+          console.log('Détails du financement pour un utilisateur :', funding); 
+        });
+
+        // fetch students repayments
+
+        const responses = await axios.get(`http://localhost:3000/repayments?fundingId=${id}`);
+        const repaid = responses.data;
+        console.log('repaiments are ' , repaid);
+        const filterRepaymentData = repaid.filter((repayment) => repayment.fundingId === Number(id));
+        console.log('detail for this', id , "is" , filterRepaymentData);
+        setRepayment(filterRepaymentData)
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
     fetchUser();
-    fetchStudentRepayments();
   }, []);
-  //Student
-  const fetchUser = async () => {
-    const id = localStorage.getItem("userId"); // Récupérer l'ID utilisateur depuis le stockage local
-    if (!id) return; // Si l'ID n'est pas disponible, renvoyer immédiatement
-    try {
-      const response = await axios.get(`http://localhost:3000/auth/one/${id}`);
-      setUser(response.data);
-      console.log("current user", response.data);
-
-      //Student dept
-      const responses = await axios.get("http://localhost:3000/fundings");
-      const fundingData = Array.isArray(responses.data)
-        ? responses.data[0]
-        : [];
-      setFunding(fundingData);
-      console.log("Fundings are", fundingData);
-
-      //Student Repayments
-      const res = await axios.get(
-        `http://localhost:3000/repayments?fundingId=${id}`
-      );
-      const repaid = res.data;
-      console.log("Repayments are", repaid);
-      const filteredRepaymentData = repaid.filter(
-        (repayment) => repayment.fundingId === Number(id)
-      );
-      console.log("Details for this", id, "is", filteredRepaymentData);
-      console.log(repaid);
-
-      setRepayments(filteredRepaymentData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fetchStudentRepayments = async (id) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/repayments/${id}`
-      );
+    try{
+      const response = await axios.get(`http://localhost:3000/repayments/${id}`);
       const repaid = response.data;
-      console.log("Repayments are", repaid.id);
+      console.log('repayments are ' , repaid);
 
-      return repaid;
-    } catch (error) {
-      console.error("Error fetching remaining amount", error);
+    }catch(error){
+      console.log("error fetching remaining amount",error);
     }
   };
+  useEffect(() => {
+    fetchStudentRepayments();
+  } , []);
 
   return (
     <div className="main" id="main">
@@ -88,21 +97,21 @@ const Dashboard = () => {
               <CircularProgressbar value={25} text="25%" />
             </div>
             <div className="text">
-              <h2>Total Number Of Installments = 8</h2>
-              <h2>Number Of Installments Done = 2</h2>
-              <h2>Number Of Installments Left = 6</h2>
+              <h2>Total Number Of Installments = {repayment.length}</h2>
+              <h2>Number Of Installments Done = 0</h2>
+              <h2>Number Of Installments Left = {repayment.length} </h2>
             </div>
           </div>
         </CustomCard>
         <CustomCard className="one">
           <h1>TOTAL DEPT</h1>
           <p style={{ fontSize: "xx-large", fontWeight: "bolder" }}>
-            Total Amount = {fundings.totalDebt} XAF
+            Total Amount = {funding.totalDebt} XAF
           </p>
           <div className="break">
-            <p>Tuition Fees : {fundings.tuitionFees} XAF</p>
-            <p>Financial Aid : {fundings.financialAid} XAF</p>
-            <p>Interest = 20% Of (Tuition Fees + Financial Aid) </p> 52, 3
+            <p>Tuition Fees : {funding.tuitionFees} XAF</p>
+            <p>Financial Aid : {funding.financialAid} XAF</p>
+            <p>Interest = 20% Of (Tuition Fees + Financial Aid) </p>
           </div>
         </CustomCard>
       </div>

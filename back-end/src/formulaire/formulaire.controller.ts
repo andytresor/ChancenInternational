@@ -17,16 +17,7 @@ export class FormulaireController {
     return this.formulaireService.create(CreateFormulaireDto);
   }
 
-  @Get('tuition-fee-by-name')
-  async getTuitionFeeByName(@Query('name') name: string) {
-    const tuitionFee = await this.formulaireService.findTuitionFeeByName(name);
-    if (tuitionFee === null) {
-      throw new NotFoundException('Tuition fee not found for the given name.');
-    }
-    return { tuitionFee };
-  }
-
-  @Get('')
+  @Get('all')
   async findAll(): Promise<Formulaire[]> {
     return this.formulaireService.findAll();
   }

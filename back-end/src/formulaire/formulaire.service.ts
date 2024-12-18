@@ -29,31 +29,10 @@ export class FormulaireService {
 
   // Créer un nouveau formulaire
   async create(createFormulaireDto: CreateFormulaireDto): Promise<Formulaire> {
-    const { name, email, contact, reason, course_id, institution_id } = createFormulaireDto;
-
-    // Fetch the associated course and institution
-    const course = await this.courseRepository.findOne({ where: { id: course_id } });
-    const institution = await this.institutionRepository.findOne({ where: { id: institution_id } });
-
-    if (!course) {
-      throw new Error('Course not found.');
-    }
-
-    if (!institution) {
-      throw new Error('Institution not found.');
-    }
-
-    // Create the formulaire entity
-    const formulaire = this.formulaireRepository.create({
-      name,
-      email,
-      contact,
-      reason,
-      institution,
-      course,
-    });
-
-    // Save and return the new formulaire
+    const course = await this.courseRepository.findOne({ where: { id: createFormulaireDto.course_id } });
+    const institution = await this.institutionRepository.findOne({ where: { id: createFormulaireDto.institution_id } });
+    const {name,email,contact,reason}=createFormulaireDto
+    const formulaire = this.formulaireRepository.create({name,email,contact,reason, institution, course})
     return await this.formulaireRepository.save(formulaire);
   }
 

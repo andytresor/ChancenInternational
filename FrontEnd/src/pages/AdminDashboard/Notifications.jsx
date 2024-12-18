@@ -15,7 +15,7 @@ const Notifications = () => {
     const fetchRequests = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/request');
+        const response = await axios.get('http://localhost:3000/request/all');
         setRequests(response.data);
         setError('');
       } catch (err) {

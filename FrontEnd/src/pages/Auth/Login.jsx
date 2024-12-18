@@ -35,8 +35,11 @@ const Login = () => {
 
       // Navigate based on user role
       if (role === 'student') {
+        console.log(role);
         navigate('/student/student-dashboard'); // Navigate to student page
       } else if (role === 'admin') {
+        console.log(role);
+
         navigate('/admin/admin-dashboard'); // Navigate to admin page
       }else {
         setError('Invalid role.'); // Handle unknown roles

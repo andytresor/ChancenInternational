@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Repository } from 'typeorm';
 import { Repayment } from './repayment.entity';
 import { Funding } from '../funding/funding.entity';
+import { Student } from '../students/student.entity';
 
 @Injectable()
 export class RepaymentsService {
@@ -11,6 +12,8 @@ export class RepaymentsService {
     private readonly repaymentRepository: Repository<Repayment>,
     @InjectRepository(Funding)
     private readonly fundingRepository: Repository<Funding>,
+   @InjectRepository(Student)
+       private readonly studentRepository: Repository<Student>,
   ) {}
 
   async findAll(): Promise<Repayment[]> {
@@ -29,26 +32,17 @@ export class RepaymentsService {
     return repayment;
   }
 
-  async createRepaymentSchedule(fundingId: number, salary: number): Promise<Repayment[]> {
-    const funding = await this.fundingRepository.findOne({
-      where: { id: fundingId },
-      relations: ['student'],
-    });
-  
-    if (!funding || !funding.student) {
-      throw new NotFoundException(`Funding or related student not found`);
+  async createRepaymentSchedule(fundingId: number, salary: number , studentId:number): Promise<Repayment[]> {
+    const funding = await this.fundingRepository.findOne({ where: { id: fundingId } });
+    if (!funding) {
+      throw new NotFoundException(`Funding with ID ${fundingId} not found`);
     }
-  
-    // Check if the student already has a repayment schedule
-    const existingRepayment = await this.repaymentRepository.findOne({
-      where: { student: { id: funding.student.id } },
-    });
-  
-    if (existingRepayment) {
-      throw new Error(`Repayment schedule already exists for student ID ${funding.student.id}`);
+    const student = await this.studentRepository.findOne({ where: { id: studentId } });
+    if (!student) {
+      throw new NotFoundException(`Student with ID ${studentId} not found`);
     }
-  
-    const monthlyRepayment = salary * 0.15;
+
+    const monthlyRepayment = salary * 0.15; // 15% of monthly salary
     const totalDebt = funding.totalDebt - funding.amountRepaid;
     const numInstallments = Math.ceil(totalDebt / monthlyRepayment);
   
@@ -64,7 +58,7 @@ export class RepaymentsService {
         amount: monthlyRepayment,
         dueDate,
         isPaid: false,
-        student: funding.student, // Associate the student
+        student,
       });
   
       repayments.push(await this.repaymentRepository.save(repayment));
@@ -106,4 +100,11 @@ export class RepaymentsService {
     });
     return remainingRepayments;
   }
+
+  async findByUserId(userId: string): Promise<Repayment[]> { 
+    return this.repaymentRepository.find({ 
+      where: { student: { user: { id: Number(userId) } } }, 
+      relations: ['student', 'student.user'], // Assure-toi de charger les relations nécessaires 
+      }); 
+    }
 }

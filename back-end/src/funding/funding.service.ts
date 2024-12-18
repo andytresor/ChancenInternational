@@ -100,6 +100,12 @@ export class FundingsService {
     const funding = await this.findOne(id);
     return (funding.amountRepaid / funding.totalDebt) * 100;
   }
+
+  async findByUserId(userId: number): Promise<Funding[]> { 
+    return this.fundingRepository.find({ 
+      where: { student: { user: { id: userId } } }, 
+      relations: ['student', 'student.user', 'student.institution'] }); 
+    }
 }
 
 export default FundingsService

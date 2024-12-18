@@ -18,10 +18,10 @@ export class RepaymentsController {
 
   @Post('schedule')
   async createRepaymentSchedule(
-    @Body() createDto: { fundingId: number; salary: number },
+    @Body() createDto: { fundingId: number; salary: number , studentId:number},
   ): Promise<Repayment[]> {
-    const { fundingId, salary } = createDto;
-    return this.repaymentsService.createRepaymentSchedule(fundingId, salary);
+    const { fundingId, salary , studentId } = createDto;
+    return this.repaymentsService.createRepaymentSchedule(fundingId, salary , studentId);
   }
 
   @Patch(':id/pay')
@@ -37,5 +37,9 @@ export class RepaymentsController {
   @Get(':fundingId/remaining')
   async getRemainingRepayments(@Param('fundingId') fundingId: string): Promise<number> {
     return this.repaymentsService.getRemainingRepayments(+fundingId);
+  }
+
+  @Get('user/:userId') async getRepaymentByUserId(@Param('userId') userId: string) { 
+    return this.repaymentsService.findByUserId(userId); 
   }
 }

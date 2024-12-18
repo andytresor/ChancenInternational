@@ -4,11 +4,13 @@ import { RepaymentsController } from './repayments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Repayment } from './repayment.entity';
 import { FundingModule } from 'src/funding/funding.module';
+import { StudentsModule } from 'src/students/students.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Repayment]),
     FundingModule, // Link repayments to funding
+    StudentsModule // Link repayments to student
   ],
   providers: [RepaymentsService],
   exports: [TypeOrmModule],
