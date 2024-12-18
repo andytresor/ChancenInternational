@@ -29,7 +29,7 @@ export class FormulaireService {
 
   // Créer un nouveau formulaire
   async create(createFormulaireDto: CreateFormulaireDto): Promise<Formulaire> {
-    const { name, email, contact, reason, studentId, course_id, institution_id } = createFormulaireDto;
+    const { name, email, contact, reason, course_id, institution_id } = createFormulaireDto;
 
     // Fetch the associated course and institution
     const course = await this.courseRepository.findOne({ where: { id: course_id } });
@@ -43,12 +43,6 @@ export class FormulaireService {
       throw new Error('Institution not found.');
     }
 
-    // Handle temporary student ID if student does not exist yet
-    let temporaryStudentId: string | null = null;
-    if (!studentId) {
-      temporaryStudentId = uuid(); // Generate a unique temporary identifier
-    }
-
     // Create the formulaire entity
     const formulaire = this.formulaireRepository.create({
       name,
@@ -57,7 +51,6 @@ export class FormulaireService {
       reason,
       institution,
       course,
-      temporaryStudentId,
     });
 
     // Save and return the new formulaire
@@ -69,19 +62,23 @@ export class FormulaireService {
     return await this.formulaireRepository.find();
   }
 
+  async findTuitionFeeByName(name: string): Promise<number | null> {
+    const formulaire = await this.formulaireRepository.findOne({
+      where: { name },
+      relations: ['course'], // Load the associated course
+    });
+
+    if (!formulaire || !formulaire.course) {
+      return null;
+    }
+    return formulaire.course.amount;
+  }
+
   // Récupérer un formulaire par son ID
   async findOne(id: number): Promise<Formulaire> {
     return await this.formulaireRepository.findOne({ where: { id } });
   }
 
-  async findTuitionFeeByStudentId(studentId: number): Promise<number | null> {
-    const request = await this.formulaireRepository.findOne({
-      where: { student: { id: studentId } },
-      relations: ['student'],
-    });
-
-    return request ? request.course?.amount : null;
-  }
 
   // Mettre à jour un formulaire
   async update(id: number, updateFormulaireDto: UpdateFormulaireDto): Promise<Formulaire> {

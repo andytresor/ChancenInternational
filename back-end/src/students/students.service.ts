@@ -73,11 +73,6 @@ export class StudentsService {
     // Save the new student
     const savedStudent = await this.studentRepository.save(student);
 
-    // Link any Formulaires with the temporaryStudentId to this student
-    if (data.temporaryStudentId) {
-      await this.linkFormulairesToStudent(savedStudent.id, data.temporaryStudentId);
-    }
-
     return savedStudent;
   }
 
@@ -104,16 +99,6 @@ export class StudentsService {
     return this.studentRepository.save(student);
   }
 
-  async linkFormulairesToStudent(studentId: number, temporaryStudentId: string): Promise<void> {
-    const result = await this.formulaireRepository.update(
-      { temporaryStudentId }, // Find all Formulaires with the temporaryStudentId
-      { student: { id: studentId }, temporaryStudentId: null }, // Link to student and clear the temporary ID
-    );
-
-    if (result.affected === 0) {
-      throw new NotFoundException(`No Formulaires found with temporaryStudentId: ${temporaryStudentId}`);
-    }
-  }
 
   async deleteStudent(id: number): Promise<void> {
     const result = await this.studentRepository.delete(id);

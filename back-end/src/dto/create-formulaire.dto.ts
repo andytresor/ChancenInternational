@@ -11,10 +11,6 @@ export class CreateFormulaireDto {
   @IsString()
   readonly contact: string;
 
-  @IsOptional() // Make it optional if it can be null
-  @IsString()
-  studentId?: number; // Add this line
-
   @IsString()
   readonly reason: string;  // Ajout de raison_de_la_demande
 

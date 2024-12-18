@@ -1,17 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from "@mui/material";
 import { Bar, Pie } from "react-chartjs-2"; // Assuming Chart.js is used
-import useSideBar from "../../re-components/Admin/UseSidebar";
-import { Chart, registerables } from 'chart.js';
+import axios from "axios"; // Import axios for API calls
+import { Chart, registerables } from "chart.js"; // Register all chart components
+import { useNavigate } from "react-router-dom"; // For navigation
 
 const Home = () => {
-  // Register all necessary components
+  // Register all necessary components for charts
   Chart.register(...registerables);
 
-  useSideBar();
-  // Dummy data
+  const [fundings, setFundings] = useState([]); // State to store funding data
+  const navigate = useNavigate();
 
-  // Dummy data
+  // Fetch funding data from the backend
+  useEffect(() => {
+    const fetchFundingData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/fundings"); // Replace with your actual backend API URL
+        setFundings(response.data); // Store the data in state
+      } catch (error) {
+        console.error("Error fetching funding data", error);
+      }
+    };
+
+    fetchFundingData();
+  }, []); // Empty dependency array to run only once on component mount
+
+  // Limit the fundings to the first 2
+  const limitedFundings = fundings.slice(0, 2);
+
+  // Handle View All button click
+  const handleViewAll = () => {
+    navigate("/admin/funding"); 
+  };
+
+  // Dummy data for charts
   const barChartData = {
     labels: ["Institution A", "Institution B", "Institution C"],
     datasets: [
@@ -33,18 +56,6 @@ const Home = () => {
     ],
   };
 
-  const overduePayments = [
-    { name: "Jane Doe", institution: "Institution A", amount: "$900", lastPayment: "2024-10-15" },
-    { name: "Jane Smith", institution: "Institution B", amount: "$700", lastPayment: "2024-10-10" },
-  ];
-
-  const cardStyles = [
-    { color: '#4caf50', fontSize: '40px', fontWeight: "900" }, // Example color and size for the first card
-    { color: '#2196f3', fontSize: '40px', fontWeight: "900" }, // Example color and size for the second card
-    { color: 'red', fontSize: '40px', fontWeight: "900" }, // Example color and size for the third card
-    { color: '#f44336', fontSize: '40px', fontWeight: "900" }, // Example color and size for the fourth card
-  ];
-
   return (
     <div className="main" id="main">
       <Grid container spacing={4} style={{ padding: "20px" }}>
@@ -60,17 +71,18 @@ const Home = () => {
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card sx={{ boxShadow: 5 }}>
                   <CardContent>
-                    <Typography style={{color: "hsl(228, 12%, 61%)"}} variant="h6" color="textSecondary">
+                    <Typography style={{ color: "hsl(228, 12%, 61%)" }} variant="h6" color="textSecondary">
                       {card.title}
                     </Typography>
                     <Typography
                       variant="h4"
                       style={{
-                        color: cardStyles[index].color,
-                        fontSize: cardStyles[index].fontSize,
-                        fontWeight: cardStyles[index].fontWeight,
-                        fontFamily: 'Poppins, sans-serif' // Set the font family to Poppins
-                      }}>
+                        color: ["#4caf50", "#2196f3", "red", "#f44336"][index],
+                        fontSize: "40px",
+                        fontWeight: "900",
+                        fontFamily: "Poppins, sans-serif",
+                      }}
+                    >
                       {card.value}
                     </Typography>
                   </CardContent>
@@ -104,12 +116,12 @@ const Home = () => {
           </Grid>
         </div>
 
-        {/* Overdue Payments Table */}
+        {/* Limited Funding Table */}
         <Grid item xs={12}>
           <Card>
             <CardContent>
-              <Typography style={{color: "hsl(228, 85%, 63%)"}} variant="h6" gutterBottom>
-                Overdue Payments
+              <Typography variant="h6" gutterBottom>
+                Fundings Overview
               </Typography>
               <TableContainer>
                 <Table>
@@ -117,28 +129,32 @@ const Home = () => {
                     <TableRow>
                       <TableCell>Student Name</TableCell>
                       <TableCell>Institution</TableCell>
-                      <TableCell>Overdue Amount</TableCell>
-                      <TableCell>Last Payment Date</TableCell>
-                      <TableCell>Action</TableCell>
+                      <TableCell>Total Debt</TableCell>
+                      <TableCell>Status</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {overduePayments.map((payment, index) => (
+                    {limitedFundings.map((funding, index) => (
                       <TableRow key={index}>
-                        <TableCell>{payment.name}</TableCell>
-                        <TableCell>{payment.institution}</TableCell>
-                        <TableCell>{payment.amount}</TableCell>
-                        <TableCell>{payment.lastPayment}</TableCell>
-                        <TableCell>
-                          <Button variant="contained" color="primary">
-                            View Details
-                          </Button>
-                        </TableCell>
+                        <TableCell>{funding.student?.name}</TableCell> {/* Assuming 'student' contains 'name' */}
+                        <TableCell>{funding.student?.institution?.name}</TableCell> {/* Assuming 'institution' contains 'name' */}
+                        <TableCell>{funding.totalDebt}</TableCell>
+                        <TableCell>{funding.isActive ? "Active" : "Inactive"}</TableCell> {/* Display active/inactive status */}
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
+
+              {/* View All Button */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleViewAll}
+                style={{ marginTop: "20px" }}
+              >
+                View All
+              </Button>
             </CardContent>
           </Card>
         </Grid>

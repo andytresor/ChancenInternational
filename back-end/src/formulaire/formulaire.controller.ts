@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { FormulaireService } from './formulaire.service';
 import { CreateFormulaireDto } from 'src/dto/create-formulaire.dto';
 import { Formulaire } from './formulaire.entity';
@@ -12,19 +12,18 @@ export class FormulaireController {
     private readonly mailerService: MailerService
   ) { }
   
-  @Get('tuition-fee/:studentId')
-  async getTuitionFee(@Param('studentId') studentId: number) {
-    const tuitionFee = await this.formulaireService.findTuitionFeeByStudentId(studentId);
-    if (!tuitionFee) {
-      throw new NotFoundException('Tuition fee not found for the student.');
-    }
-    return { tuitionFees: tuitionFee };
-  }
-
-  
   @Post('create')
   async create(@Body() CreateFormulaireDto: CreateFormulaireDto): Promise<Formulaire> {
     return this.formulaireService.create(CreateFormulaireDto);
+  }
+
+  @Get('tuition-fee-by-name')
+  async getTuitionFeeByName(@Query('name') name: string) {
+    const tuitionFee = await this.formulaireService.findTuitionFeeByName(name);
+    if (tuitionFee === null) {
+      throw new NotFoundException('Tuition fee not found for the given name.');
+    }
+    return { tuitionFee };
   }
 
   @Get('')
