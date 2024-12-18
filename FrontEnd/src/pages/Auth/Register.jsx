@@ -117,9 +117,6 @@ const Request = () => {
           {error && <p className="error">** {error} **</p>}
           <button type="submit">Send Request</button>
         </form>
-        <div className="form-section">
-          <p>Have an account? <NavLink to="/auth/login">Log in</NavLink></p>
-        </div>
       </div>
     </div>
   );

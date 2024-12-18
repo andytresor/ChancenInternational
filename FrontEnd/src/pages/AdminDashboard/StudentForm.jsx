@@ -17,20 +17,21 @@ const StudentForm = ({ studentId, onSave }) => {
     });
     const [users, setUsers] = useState([]);
     const [institutions, setInstitutions] = useState([]);
+    const [formulaires, setFormulaires] = useState([]); // Formulaire data
     const [loading, setLoading] = useState(true);
 
+    // Fetch student details if updating an existing student
     const fetchStudentDetails = async () => {
         if (studentId) {
             try {
                 const response = await axios.get(`http://localhost:3000/students/${studentId}`);
-
                 const { user, email, salary, institution } = response.data;
                 setStudentData({
                     name: user?.name || '',
                     email: email || '',
                     salary: salary || '',
                     institutionId: institution?.id || '',
-                    userId: user?.id || null, // Ensure the userId is set
+                    userId: user?.id || null,
                 });
             } catch (error) {
                 console.error('Error fetching student details:', error);
@@ -38,15 +39,19 @@ const StudentForm = ({ studentId, onSave }) => {
         }
     };
 
+    // Fetch users data
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/auth/users');
+            const response = await axios.get('http://localhost:3000/request');
+            console.log("users are", response.data);
+            
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
         }
     };
 
+    // Fetch institutions data
     const fetchInstitutions = async () => {
         try {
             const response = await axios.get('http://localhost:3000/institutions');
@@ -58,21 +63,40 @@ const StudentForm = ({ studentId, onSave }) => {
         }
     };
 
+    // Fetch formulaire data
+    const fetchFormulaires = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/request');
+            setFormulaires(response.data);
+        } catch (error) {
+            console.error('Error fetching formulaires:', error);
+        }
+    };
+
     useEffect(() => {
         fetchUsers();
         fetchInstitutions();
+        fetchFormulaires();
         fetchStudentDetails();
     }, [studentId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
         if (name === 'name') {
             const selectedUser = users.find((user) => user.name === value);
+
+            // Match user's email with Formulaire data to get institution
+            const matchingFormulaire = formulaires.find(
+                (form) => form.email === selectedUser?.email
+            );
+
             setStudentData({
                 ...studentData,
                 name: value,
                 email: selectedUser?.email || '',
-                userId: selectedUser?.id || null, // Set the user ID
+                userId: selectedUser?.id || null,
+                institutionId: matchingFormulaire?.institution?.id || '',
             });
         } else {
             setStudentData({ ...studentData, [name]: value });
@@ -90,7 +114,6 @@ const StudentForm = ({ studentId, onSave }) => {
             if (studentId) {
                 await axios.patch(`http://localhost:3000/students/${studentId}`, payload);
             } else {
-
                 await axios.post('http://localhost:3000/students', payload);
             }
             alert('Student saved successfully!');
@@ -133,7 +156,7 @@ const StudentForm = ({ studentId, onSave }) => {
                         type="email"
                         name="email"
                         value={studentData.email}
-                        readOnly // Make it readonly since email is fetched automatically
+                        readOnly
                         className="form-control"
                     />
                 </div>

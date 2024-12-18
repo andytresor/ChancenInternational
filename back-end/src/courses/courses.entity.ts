@@ -5,16 +5,16 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 @Entity()
 export class courses {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
 
     @Column()
-    title:string;
+    title: string;
 
     @Column()
-    description:string;
+    description: string;
 
     @Column()
-    amount:number; 
+    amount: number;
 
 
     @OneToMany(() => Formulaire, Formulaire => Formulaire.course)

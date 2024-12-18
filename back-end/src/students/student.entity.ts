@@ -1,37 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Institution } from '../institutions/institution.entity'; // Adjust the path as necessary
 import { Funding } from '../funding/funding.entity'; // Adjust the path as necessary
 import { Repayment } from '../repayments/repayment.entity'; // Adjust the path as necessary
 import { User } from 'src/auth/user.entity';
+import { Formulaire } from 'src/formulaire/formulaire.entity';
 
 @Entity()
 export class Student {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ nullable: false })
-    name: string;
+  @Column({ nullable: false })
+  name: string;
 
-    @Column()
-    email: string;
+  @Column()
+  email: string;
 
-    @Column('decimal', { nullable: true })
-    salary: number;
+  @Column('decimal', { nullable: true })
+  salary: number;
 
-    @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
-    institution: Institution;
+  @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
+  institution: Institution;
 
-    @ManyToOne(() => User, (user) => user.student, { eager: true })
-    @JoinColumn() // Add this decorator
-    user: User;
+  @ManyToOne(() => User, (user) => user.student, { onDelete: 'CASCADE' })
+  user: User;
 
-    @Column({ default: false })
-    isRepaymentActive: boolean;
+  @Column({ default: false })
+  isRepaymentActive: boolean;
 
-    @OneToMany(() => Funding, (funding) => funding.student, { eager: true }) // Eagerly load funding
+  @OneToMany(() => Funding, (funding) => funding.student, { eager: true })
+  funding: Funding[]; // Corrected to an array
 
-    funding: Funding;
+  @OneToMany(() => Repayment, (repayment) => repayment.student)
+  repayments: Repayment[];
 
-    @OneToMany(() => Repayment, (repayment) => repayment.student)
-    repayments: Repayment[];
+  @OneToMany(() => Formulaire, (formulaire) => formulaire.student)
+  formulaire: Formulaire[]; // Corrected to an array
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { FormulaireService } from './formulaire.service';
 import { CreateFormulaireDto } from 'src/dto/create-formulaire.dto';
 import { Formulaire } from './formulaire.entity';
@@ -11,7 +11,7 @@ export class FormulaireController {
     private readonly formulaireService: FormulaireService,
     private readonly mailerService: MailerService
   ) { }
-
+  
   @Post('create')
   async create(@Body() CreateFormulaireDto: CreateFormulaireDto): Promise<Formulaire> {
     return this.formulaireService.create(CreateFormulaireDto);

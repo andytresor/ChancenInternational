@@ -9,6 +9,8 @@ import { Institution } from '../institutions/institution.entity';
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto'; // For generating a secure password
 import { User } from 'src/auth/user.entity';
+import { v4 as uuid } from 'uuid'; // Import UUID generator
+import { Student } from 'src/students/student.entity';
 
 @Injectable()
 export class FormulaireService {
@@ -21,6 +23,8 @@ export class FormulaireService {
     private readonly userRepository: Repository<User>, // Inject User repository
     @InjectRepository(Institution)
     private readonly institutionRepository: Repository<Institution>,
+    @InjectRepository(Institution)
+    private readonly studentRepository: Repository<Student>,
   ) {}
 
   // Créer un nouveau formulaire
@@ -37,10 +41,23 @@ export class FormulaireService {
     return await this.formulaireRepository.find();
   }
 
+  async findTuitionFeeByName(name: string): Promise<number | null> {
+    const formulaire = await this.formulaireRepository.findOne({
+      where: { name },
+      relations: ['course'], // Load the associated course
+    });
+
+    if (!formulaire || !formulaire.course) {
+      return null;
+    }
+    return formulaire.course.amount;
+  }
+
   // Récupérer un formulaire par son ID
   async findOne(id: number): Promise<Formulaire> {
     return await this.formulaireRepository.findOne({ where: { id } });
   }
+
 
   // Mettre à jour un formulaire
   async update(id: number, updateFormulaireDto: UpdateFormulaireDto): Promise<Formulaire> {
@@ -106,17 +123,34 @@ export class FormulaireService {
   }
 
   async dismissRequest(id: number): Promise<void> {
-    const request = await this.formulaireRepository.findOne({ where: { id } });
-    if (!request) throw new Error('Request not found');
-
-    // Send email
+    // Fetch the request
+    const request = await this.formulaireRepository.findOne({ where: { id }, relations: ['student'] });
+    if (!request) {
+      throw new NotFoundException('Request not found');
+    }
+  
+    const { email, name, student } = request;
+  
+    // Send dismissal email
     await this.sendEmail(
-      request.email,
+      email,
       'Your Request Has Been Dismissed',
-      `Hello ${request.name},\n\nWe regret to inform you that your request has not been granted. Your data has been deleted.\n\nThank you for your understanding.`
+      `Hello ${name},\n\nWe regret to inform you that your request has not been granted. Your data has been deleted.\n\nThank you for your understanding.`
     );
-
+  
+    // Remove the student entry if it exists
+    if (student) {
+      await this.studentRepository.delete(student.id); // Ensure no foreign key reference remains
+    }
+  
     // Delete the request
     await this.formulaireRepository.delete(id);
+  
+    // Remove the user entry (if applicable)
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (user) {
+      await this.userRepository.delete(user.id);
+    }
   }
+  
 }

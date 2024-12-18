@@ -45,14 +45,14 @@ export class RepaymentsService {
     const monthlyRepayment = salary * 0.15; // 15% of monthly salary
     const totalDebt = funding.totalDebt - funding.amountRepaid;
     const numInstallments = Math.ceil(totalDebt / monthlyRepayment);
-
+  
     const repayments: Repayment[] = [];
     const currentDate = new Date();
-
+  
     for (let i = 0; i < numInstallments; i++) {
       const dueDate = new Date(currentDate);
-      dueDate.setMonth(currentDate.getMonth() + i + 1); // Monthly intervals
-
+      dueDate.setMonth(currentDate.getMonth() + i + 1);
+  
       const repayment = this.repaymentRepository.create({
         funding,
         amount: monthlyRepayment,
@@ -60,13 +60,13 @@ export class RepaymentsService {
         isPaid: false,
         student,
       });
-
+  
       repayments.push(await this.repaymentRepository.save(repayment));
     }
-
+  
     return repayments;
   }
-
+  
   async markAsPaid(id: number): Promise<Repayment> {
     const repayment = await this.findOne(id);
     if (repayment.isPaid) {

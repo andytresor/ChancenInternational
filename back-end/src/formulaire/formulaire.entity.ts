@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { courses } from "src/courses/courses.entity";
-import { Institution } from "src/institutions/institution.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { courses } from 'src/courses/courses.entity';
+import { Institution } from 'src/institutions/institution.entity';
+import { Student } from 'src/students/student.entity';
 
 @Entity()
 export class Formulaire {
@@ -19,10 +20,14 @@ export class Formulaire {
     @Column({nullable:false , default: 'raison par défaut' })
     reason: string;
 
+
+    @ManyToOne(() => Student, (student) => student.formulaire, { nullable: true, onDelete: 'SET NULL' })
+    student: Student;
+
     @Column({ nullable: true })
     generatedPassword: string;
 
-    @ManyToOne(() => courses, (course) => course.id, { eager: true })
+    @ManyToOne(() => courses, (course) => course.formulaire, { eager: true })
     course: courses;
 
     @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })

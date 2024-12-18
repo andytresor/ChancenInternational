@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { InstitutionsModule } from 'src/institutions/institutions.module';
 import { Student } from './student.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { Formulaire } from 'src/formulaire/formulaire.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Student]), 
+    TypeOrmModule.forFeature([Student, Formulaire]), 
     AuthModule,
     InstitutionsModule, // Import InstitutionsModule for linking
   ],
