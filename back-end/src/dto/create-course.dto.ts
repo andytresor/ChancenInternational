@@ -14,6 +14,4 @@ export class CreateCourseDto {
   @IsInt()
   readonly institution: number;  // Ajout de l'ID de l'institution
 
-  @IsInt()
-  readonly course: number;
 }

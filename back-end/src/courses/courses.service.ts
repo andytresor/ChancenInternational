@@ -22,15 +22,15 @@ export class CourseService {
 
   console.log(createCourseDto);
   
-    const institutions = await this.institutionRepository.findOne({ where: { id: createCourseDto.institution } });
+    const institutions = await this.institutionRepository.findOne({ where: { id: createCourseDto.institution } });    
 
     console.log(institutions);
-    const{title , description,amount,institution, course} = createCourseDto
+    const{title , description,amount} = createCourseDto
     
     // const course = this.courseRepository.create(createCourseDto);
     // const course = this.courseRepository.create({ ...createCourseDto, institutions: [institution] });
     // console.log(course);
-    const courses = this.courseRepository.create({title , description, amount, institutions: [institution] });
+    const courses = this.courseRepository.create({title , description, amount, institutions: institutions });
 
     
     return await this.courseRepository.save(courses);

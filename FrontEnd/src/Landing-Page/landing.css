@@ -81,12 +81,28 @@
     padding: 1rem;
     font-size: larger;
     margin-top: 4rem;
+    background-color: #47c7c1;
+    transition: transform 0.2s ease-in-out;
+    animation: bounce 2s infinite;
 }
 
 .content .welcome .text button:hover{
     cursor: pointer;
-    background-color: #47c7c1;
+    background-color: transparent;
+    transform: scale(1.1);
 }
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px); /* Bounce up */
+    }
+    60% {
+      transform: translateY(-5px); /* Small bounce */
+    }
+  }
 
 .content .about-us{
     display: flex;

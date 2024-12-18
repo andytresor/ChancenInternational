@@ -42,7 +42,9 @@ const StudentForm = ({ studentId, onSave }) => {
     // Fetch users data
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/auth/users');
+            const response = await axios.get('http://localhost:3000/request');
+            console.log("users are", response.data);
+            
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);

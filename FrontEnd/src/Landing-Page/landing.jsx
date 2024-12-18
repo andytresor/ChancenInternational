@@ -33,8 +33,8 @@ const LandingPage = () => {
             About Us
               </li>
               <li onClick={() => handleScroll('work')}>How It Works</li>
-              <Link to="/auth/register">
-                <button>Register</button>
+              <Link to="/auth/login">
+                <button>Login</button>
               </Link>
             </ul>
           </div>
@@ -45,7 +45,9 @@ const LandingPage = () => {
             <p>
               We fund your education so you can pay it forward when you succeed.
             </p>
-            <button  onClick={() => handleScroll('about')}>Learn more</button>
+            <Link to="/auth/register">
+                <button>Make a Request</button>
+              </Link>
           </div>
         </div>
 
