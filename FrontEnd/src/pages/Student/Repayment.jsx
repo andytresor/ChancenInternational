@@ -15,53 +15,36 @@ import {
   TableRow,
 } from "@mui/material";
 import axios from "axios";
+
 const Repayment = () => {
-  const [repayments, setRepayment] = useState([]);
-  const [totalDebt, setTotalDebt] = useState(null); // To store total debt from funding
- 
+  const [repayments, setRepayments] = useState([]);
+
   useEffect(() => {
-    const fetchRepayment = async () => {
-      const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local
-      console.log('id is' , id)
-      if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
+    const fetchRepayments = async () => {
+      const studentId = localStorage.getItem("userId"); // Get `studentId` from local storage
+      if (!studentId) return;
+
       try {
-        const response = await axios.get(`http://localhost:3000/repayments/user/${id}`);
-
-        const repaymentData = Array.isArray(response.data) ? response.data : [];
-        console.log("Repayments are",repaymentData);
-
-        setRepayment(repaymentData);
-
-        if (repaymentData.length > 0) {
-          const fundingId = repaymentData[0].fundingId; // Get fundingId from the first repayment
-          const fundingResponse = await axios.get(
-            `http://localhost:3000/fundings/${fundingId}`
-          );
-          setTotalDebt(fundingResponse.data.totalDebt); // Extract totalDebt from funding
-        }
+        const response = await axios.get(`http://localhost:3000/repayments/user/${studentId}`);
+        setRepayments(response.data || []);
+        console.log("Fetched repayments:", response.data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching repayments:", error);
       }
     };
-    fetchRepayment();
+
+    fetchRepayments();
   }, []);
+
   useTopbar();
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case "Paid":
-        return "green"; // Color for paid status
-      case "Overdue":
-        return "red"; // Color for overdue status
-      default:
-        return "black"; // Default color for other statuses
-    }
+    return status === "Paid" ? "green" : status === "Overdue" ? "red" : "black";
   };
 
   return (
     <div className="main" id="main">
       <Grid container spacing={4} style={{ padding: "20px" }}>
-        {/* Page Title */}
         <Grid
           item
           xs={12}
@@ -76,12 +59,9 @@ const Repayment = () => {
           <Typography variant="h3" width="100%" gutterBottom>
             Repayments
           </Typography>
-          <Typography variant="h5">
-            Summary Of Total Dept Of {totalDebt} XAF
-          </Typography>
+          <Typography variant="h5">Summary Of Total Debt</Typography>
         </Grid>
 
-        {/* Students Table */}
         <Grid item xs={12}>
           <Card>
             <CardContent>
@@ -89,31 +69,23 @@ const Repayment = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        Installment Id
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        Amount
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        Due Date
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        Is Paid
-                      </TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>
-                        Payment Date
-                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Installment ID</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Amount</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Due Date</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Payment Date</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {repayments.map((repayment, index) => (
-                      <TableRow key={index}>
+                    {repayments.map((repayment) => (
+                      <TableRow key={repayment.id}>
                         <TableCell>{repayment.id}</TableCell>
-                        <TableCell>{repayment.amount}</TableCell>
-                        <TableCell> {repayment.dueDate} </TableCell>
-                        <TableCell>{repayment.isPaid ? "Paid" : "Pending"}</TableCell>
-                        <TableCell>{repayment.paymentDate || "Loading..."}</TableCell>
+                        <TableCell>{repayment.amount} XAF</TableCell>
+                        <TableCell>{repayment.dueDate}</TableCell>
+                        <TableCell style={{ color: getStatusColor(repayment.isPaid ? "Paid" : "Overdue") }}>
+                          {repayment.isPaid ? "Paid" : "Overdue"}
+                        </TableCell>
+                        <TableCell>{repayment.paymentDate || "N/A"}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -127,8 +99,8 @@ const Repayment = () => {
         <div className="upcoming">
           <h1>Upcoming Installments</h1>
           <p>- Fourth Installment</p>
-          <p> - Amount = 90,000 XAF</p>
-          <p> - Due Date = Dec 1, 2024</p>
+          <p>- Amount = 90,000 XAF</p>
+          <p>- Due Date = Dec 1, 2024</p>
         </div>
 
         <div className="pie">
@@ -137,7 +109,7 @@ const Repayment = () => {
             series={[
               {
                 data: [
-                  { id: 0, value: 25, label: " Paid", color: "green" },
+                  { id: 0, value: 25, label: "Paid", color: "green" },
                   { id: 1, value: 75, label: "Pending", color: "#880808" },
                 ],
               },

@@ -34,6 +34,4 @@ export class Student {
   @OneToMany(() => Repayment, (repayment) => repayment.student)
   repayments: Repayment[];
 
-  @OneToMany(() => Formulaire, (formulaire) => formulaire.student)
-  formulaire: Formulaire[]; // Corrected to an array
 }

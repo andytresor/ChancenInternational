@@ -18,70 +18,48 @@ const Dashboard = () => {
     { x: 3, y: 0 },
   ];
 
-  // async function DisplayUser(){
-  //   try {
-  //     const res = await fetch
-  //   } catch (error) {
-  //     console.log(error);
-
-  //   }
-  // }
-
   const [user, setUser] = useState("");
   const [repayment, setRepayment] = useState([]);
   const [funding, setFunding] = useState([]);
+
   useEffect(() => {
+    const fetchData = async () => {
+      const userId = localStorage.getItem("userId"); // Get user ID from local storage
+      console.log(userId);
+      
+      if (!userId) return;
 
-    // fetch user
-    const fetchUser = async () => {
-      const id = localStorage.getItem("userId"); // Récupérer l'ID utilisateur depuis le stockage local
-      if (!id) return; // Si l'ID n'est pas disponible, renvoyer immédiatement
       try {
-        const response = await axios.get(
-          `http://localhost:3000/auth/one/${id}`
-        );
-        setUser(response.data);
-        console.log('curent user ' , response.data);
+        // Fetch user data
+        const userResponse = await axios.get(`http://localhost:3000/auth/one/${userId}`);
+        setUser(userResponse.data);
+        console.log("Current user:", userResponse.data);
 
-        // fetch students dept
-        const res = await axios.get(`http://localhost:3000/fundings/user/${id}`);
-        // const res = await axios.get("http://localhost:3000/fundings");
-        const fundingData = Array.isArray(res.data) ? res.data: [];
+        // Fetch funding data
+        const fundingResponse = await axios.get(`http://localhost:3000/fundings/user/${userId}`);
+        const fundingData = Array.isArray(fundingResponse.data) ? fundingResponse.data : [];
         setFunding(fundingData);
-        console.log('fundings are ' , fundingData);
-        fundingData.forEach(funding => { 
-          console.log('Détails du financement pour un utilisateur :', funding); 
-        });
+        console.log("Fundings are:", fundingData);
 
-        // fetch students repayments
+        // Fetch repayments for each funding
+        const allRepayments = [];
+        for (const funding of fundingData) {
+          const repaymentResponse = await axios.get(
+            `http://localhost:3000/repayments?fundingId=${funding.id}`
+          );
+          const repaymentData = Array.isArray(repaymentResponse.data) ? repaymentResponse.data : [];
+          allRepayments.push(...repaymentData);
+        }
+        setRepayment(allRepayments);
+        console.log("Repayments are:", allRepayments);
 
-        const responses = await axios.get(`http://localhost:3000/repayments?fundingId=${id}`);
-        const repaid = responses.data;
-        console.log('repaiments are ' , repaid);
-        const filterRepaymentData = repaid.filter((repayment) => repayment.fundingId === Number(id));
-        console.log('detail for this', id , "is" , filterRepaymentData);
-        setRepayment(filterRepaymentData)
-
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-    fetchUser();
+
+    fetchData();
   }, []);
-
-  const fetchStudentRepayments = async (id) => {
-    try{
-      const response = await axios.get(`http://localhost:3000/repayments/${id}`);
-      const repaid = response.data;
-      console.log('repayments are ' , repaid);
-
-    }catch(error){
-      console.log("error fetching remaining amount",error);
-    }
-  };
-  useEffect(() => {
-    fetchStudentRepayments();
-  } , []);
 
   return (
     <div className="main" id="main">
@@ -89,30 +67,50 @@ const Dashboard = () => {
         <h1> Welcome {user.name} </h1>
         <p> Total Overview </p>
       </div>
+
       <div className="ally">
         <CustomCard className="two">
           <h1>REPAYMENT</h1>
           <div className="content">
             <div style={{ width: "10vw", height: "10vh" }}>
-              <CircularProgressbar value={25} text="25%" />
+              <CircularProgressbar
+                value={repayment.filter((r) => r.isPaid).length / repayment.length * 100 || 0}
+                text={`${Math.round(
+                  (repayment.filter((r) => r.isPaid).length / repayment.length) * 100 || 0
+                )}%`}
+              />
             </div>
             <div className="text">
               <h2>Total Number Of Installments = {repayment.length}</h2>
-              <h2>Number Of Installments Done = 0</h2>
-              <h2>Number Of Installments Left = {repayment.length} </h2>
+              <h2>Number Of Installments Done = {repayment.filter((r) => r.isPaid).length}</h2>
+              <h2>
+                Number Of Installments Left ={" "}
+                {repayment.length - repayment.filter((r) => r.isPaid).length}
+              </h2>
             </div>
           </div>
         </CustomCard>
+
         <CustomCard className="one">
-          <h1>TOTAL DEPT</h1>
-          <p style={{ fontSize: "xx-large", fontWeight: "bolder" }}>
-            Total Amount = {funding.totalDebt} XAF
-          </p>
-          <div className="break">
-            <p>Tuition Fees : {funding.tuitionFees} XAF</p>
-            <p>Financial Aid : {funding.financialAid} XAF</p>
-            <p>Interest = 20% Of (Tuition Fees + Financial Aid) </p>
-          </div>
+          <h1>TOTAL DEBT</h1>
+          {funding.length > 0 ? (
+            <>
+              <p style={{ fontSize: "xx-large", fontWeight: "bolder" }}>
+                Total Amount = {funding.reduce((sum, fund) => sum + Number(fund.totalDebt || 0), 0)} XAF
+              </p>
+              <div className="break">
+                {funding.map((fund, index) => (
+                  <div key={index}>
+                    <p>Tuition Fees: {fund.tuitionFees} XAF</p>
+                    <p>Financial Aid: {fund.financialAid} XAF</p>
+                    <p>Interest = 20% Of (Tuition Fees + Financial Aid)</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p>No funding data available.</p>
+          )}
         </CustomCard>
       </div>
 
