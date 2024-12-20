@@ -20,7 +20,7 @@ export class StudentsService {
   ) {}
 
   async findAll(): Promise<Student[]> {
-    return this.studentRepository.find();
+    return this.studentRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: number): Promise<Student> {

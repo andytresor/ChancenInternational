@@ -27,6 +27,9 @@ const Login = () => {
 
         localStorage.setItem('userId', user.id);
         console.log(user.id);
+        localStorage.setItem('userEmail', user.email);
+        console.log(user.email);
+        
         localStorage.setItem('students' , JSON.stringify(user.students));
       }
       else{throw new Error("User data is invalid");

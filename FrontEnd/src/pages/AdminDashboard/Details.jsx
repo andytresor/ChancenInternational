@@ -32,10 +32,14 @@ const Details = () => {
     try {
       const response = await axios.get(`http://localhost:3000/repayments?fundingId=${id}`);
       const repaymentData = Array.isArray(response.data) ? response.data : [];
+      console.log("Repayment data is",repaymentData);
+      
       const filteredFundingData = repaymentData.filter(repayment => repayment.fundingId === Number(id));
-
+      console.log("Repayment data for",id,"is",filteredFundingData);
       // Extract the student from the first repayment (assuming all repayments are for the same student)
       const studentData = filteredFundingData.length > 0 ? filteredFundingData[0]?.student : null;
+      console.log("Student at this index" ,studentData);
+      
 
       setDetails(filteredFundingData);
       setStudent(studentData);

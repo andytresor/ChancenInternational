@@ -42,7 +42,7 @@ const StudentForm = ({ studentId, onSave }) => {
     // Fetch users data
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/request');
+            const response = await axios.get('http://localhost:3000/auth/users');
             console.log("users are", response.data);
             
             setUsers(response.data);
@@ -66,7 +66,7 @@ const StudentForm = ({ studentId, onSave }) => {
     // Fetch formulaire data
     const fetchFormulaires = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/request');
+            const response = await axios.get('http://localhost:3000/auth/users');
             setFormulaires(response.data);
         } catch (error) {
             console.error('Error fetching formulaires:', error);

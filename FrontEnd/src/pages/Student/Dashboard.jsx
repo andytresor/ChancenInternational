@@ -46,7 +46,7 @@ const Dashboard = () => {
         // fetch students dept
         const res = await axios.get(`http://localhost:3000/fundings/user/${id}`);
         // const res = await axios.get("http://localhost:3000/fundings");
-        const fundingData = Array.isArray(res.data) ? res.data[0]: [];
+        const fundingData = Array.isArray(res.data) ? res.data: [];
         setFunding(fundingData);
         console.log('fundings are ' , fundingData);
         fundingData.forEach(funding => { 

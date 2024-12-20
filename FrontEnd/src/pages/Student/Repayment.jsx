@@ -17,23 +17,28 @@ import {
 import axios from "axios";
 const Repayment = () => {
   const [repayments, setRepayment] = useState([]);
+  const [totalDebt, setTotalDebt] = useState(null); // To store total debt from funding
+ 
   useEffect(() => {
     const fetchRepayment = async () => {
       const id = localStorage.getItem('userId'); // Récupérer l'ID utilisateur depuis le stockage local
       console.log('id is' , id)
       if (!id) return;  // Si l'ID n'est pas disponible, renvoyer immédiatement
       try {
-        const response = await axios.get(`http://localhost:3000/repayments?fundingId=${id}`);
-        // const repaymentData = response.data;
-        // console.log('repayment are' , repaymentData)
-        // console.log('repayment are' , response.data)
+        const response = await axios.get(`http://localhost:3000/repayments/user/${id}`);
+
         const repaymentData = Array.isArray(response.data) ? response.data : [];
-        console.log(repaymentData);
-      // const filteredRepaymentData = repaymentData.filter(repayment => repayment.student.user.id ===  Number(id));
-      // console.log("Details for this", id ,"is",filteredRepaymentData);
-        
+        console.log("Repayments are",repaymentData);
 
         setRepayment(repaymentData);
+
+        if (repaymentData.length > 0) {
+          const fundingId = repaymentData[0].fundingId; // Get fundingId from the first repayment
+          const fundingResponse = await axios.get(
+            `http://localhost:3000/fundings/${fundingId}`
+          );
+          setTotalDebt(fundingResponse.data.totalDebt); // Extract totalDebt from funding
+        }
       } catch (error) {
         console.log(error);
       }
@@ -41,30 +46,6 @@ const Repayment = () => {
     fetchRepayment();
   }, []);
   useTopbar();
-
-  const payments = [
-    {
-      installment: 1,
-      amount: "90,000 XAF",
-      status: "Paid",
-      dueDate: "Sept 1, 2024",
-      paidOn: "Sept 1, 2024",
-    },
-    {
-      installment: 2,
-      amount: "90,000 XAF",
-      status: "Paid",
-      dueDate: "Oct 1, 2024",
-      paidOn: "Oct 1, 2024",
-    },
-    {
-      installment: 3,
-      amount: "90,000 XAF",
-      status: "Overdue",
-      dueDate: "Nov 1, 2024",
-      paidOn: "...",
-    },
-  ];
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -75,12 +56,6 @@ const Repayment = () => {
       default:
         return "black"; // Default color for other statuses
     }
-  };
-
-  // Handlers for modals
-  const handleViewDetails = (payment) => {
-    setSelectedStudent(payment);
-    setDetailModalOpen(true);
   };
 
   return (
@@ -102,7 +77,7 @@ const Repayment = () => {
             Repayments
           </Typography>
           <Typography variant="h5">
-            Summary Of Total Dept Of 600,000 XAF
+            Summary Of Total Dept Of {totalDebt} XAF
           </Typography>
         </Grid>
 
@@ -121,7 +96,6 @@ const Repayment = () => {
                         Amount
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
-                        {" "}
                         Due Date
                       </TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>
@@ -137,12 +111,9 @@ const Repayment = () => {
                       <TableRow key={index}>
                         <TableCell>{repayment.id}</TableCell>
                         <TableCell>{repayment.amount}</TableCell>
-                        <TableCell // style={{ color: getStatusColor(repayment.status) }}
-                        >
-                          {repayment.dueDate}
-                        </TableCell>
-                        <TableCell>{repayment.isPaid}</TableCell>
-                        <TableCell>{repayment.paymentDate}</TableCell>
+                        <TableCell> {repayment.dueDate} </TableCell>
+                        <TableCell>{repayment.isPaid ? "Paid" : "Pending"}</TableCell>
+                        <TableCell>{repayment.paymentDate || "Loading..."}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
