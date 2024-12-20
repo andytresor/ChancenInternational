@@ -13,8 +13,7 @@ export class Institution {
   @Column()
   location: string;
 
-
   @OneToMany(() => courses, (courses) => courses.institutions)
-  courses: courses
+  courses: courses[]; // Change to an array of courses
 
 }
