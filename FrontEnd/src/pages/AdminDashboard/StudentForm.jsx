@@ -42,9 +42,8 @@ const StudentForm = ({ studentId, onSave }) => {
     // Fetch users data
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/request');
+            const response = await axios.get('http://localhost:3000/auth/users');
             console.log("users are", response.data);
-            
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -66,7 +65,8 @@ const StudentForm = ({ studentId, onSave }) => {
     // Fetch formulaire data
     const fetchFormulaires = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/request');
+            const response = await axios.get('http://localhost:3000/auth/users');
+            console.log('Formulaires:', response.data);
             setFormulaires(response.data);
         } catch (error) {
             console.error('Error fetching formulaires:', error);
@@ -91,12 +91,15 @@ const StudentForm = ({ studentId, onSave }) => {
                 (form) => form.email === selectedUser?.email
             );
 
+            console.log('Selected User:', selectedUser);
+            console.log('Matching Formulaire:', matchingFormulaire);
+
             setStudentData({
                 ...studentData,
                 name: value,
                 email: selectedUser?.email || '',
                 userId: selectedUser?.id || null,
-                institutionId: matchingFormulaire?.institution?.id || '',
+                institutionId: matchingFormulaire?.institution?.id || '', // Default to empty if no match
             });
         } else {
             setStudentData({ ...studentData, [name]: value });
@@ -125,7 +128,8 @@ const StudentForm = ({ studentId, onSave }) => {
         }
     };
 
-    if (loading) return <p>Loading...</p>;
+    // Show loading until all data is fetched
+    if (loading || users.length === 0 || formulaires.length === 0) return <p>Loading...</p>;
 
     return (
         <div className="student-form-container">
@@ -187,6 +191,8 @@ const StudentForm = ({ studentId, onSave }) => {
                                 {inst.name}
                             </option>
                         ))}
+                        {/* Display message if no institution is automatically matched */}
+                        {!studentData.institutionId && <option value="">No Matching Institution Found</option>}
                     </select>
                 </div>
                 <button type="submit" className="btn-submit">

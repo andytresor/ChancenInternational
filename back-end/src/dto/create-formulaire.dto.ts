@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty, IsInt, IsOptional } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, IsInt } from 'class-validator';
 
 export class CreateFormulaireDto {
   @IsString()
@@ -12,11 +12,11 @@ export class CreateFormulaireDto {
   readonly contact: string;
 
   @IsString()
-  readonly reason: string;  // Ajout de raison_de_la_demande
+  readonly reason: string;  // No change here, but could add additional validation if needed
 
   @IsInt()
-  readonly course_id: number;  // Ajout de course_id
+  readonly course_id: number;  // Links to Course entity (course ID)
 
   @IsInt()
-  readonly institution_id: number;  // Ajout de institution_id
+  readonly institution_id: number;  // Links to Institution entity (institution ID)
 }

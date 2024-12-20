@@ -22,7 +22,7 @@ export class Repayment {
   @ManyToOne(() => Funding, (funding) => funding.id, { eager: true })
   funding: Funding;
 
-  @ManyToOne(() => Student, (student) => student.id, { eager: true })
+  @ManyToOne(() => Student, (student) => student.repayments, { eager: true })
   student: Student;
 
 }

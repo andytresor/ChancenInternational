@@ -87,8 +87,8 @@ const Details = () => {
                       <TableCell>{detail.id}</TableCell>
                       <TableCell>{detail.amount}</TableCell>
                       <TableCell>{detail.dueDate}</TableCell>
-                      <TableCell>{detail.paymentDate || "Loading..."}</TableCell>
-                      <TableCell>{detail.isPaid ? "Paid" : "Pending"}</TableCell>
+                      <TableCell>{detail.paymentDate || "N/A"}</TableCell>
+                      <TableCell>{detail.isPaid ? "Paid" : "Not Paid"}</TableCell>
                       <TableCell>{detail.fundingId}</TableCell>
                     </TableRow>
                   ))}

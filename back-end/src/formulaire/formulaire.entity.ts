@@ -17,12 +17,8 @@ export class Formulaire {
     @Column()
     contact: string;
 
-    @Column({nullable:false , default: 'raison par défaut' })
+    @Column({ nullable: false, default: 'raison par défaut' })
     reason: string;
-
-
-    @ManyToOne(() => Student, (student) => student.formulaire, { nullable: true, onDelete: 'SET NULL' })
-    student: Student;
 
     @Column({ nullable: true })
     generatedPassword: string;
@@ -30,6 +26,7 @@ export class Formulaire {
     @ManyToOne(() => courses, (course) => course.formulaire, { eager: true })
     course: courses;
 
-    @ManyToOne(() => Institution, (institution) => institution.id, { eager: true })
+    @ManyToOne(() => Institution, (institution) => institution.courses, { eager: true })
     institution: Institution;
+
 } 

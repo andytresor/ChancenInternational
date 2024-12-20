@@ -124,12 +124,12 @@ export class FormulaireService {
 
   async dismissRequest(id: number): Promise<void> {
     // Fetch the request
-    const request = await this.formulaireRepository.findOne({ where: { id }, relations: ['student'] });
+    const request = await this.formulaireRepository.findOne({ where: { id }});
     if (!request) {
       throw new NotFoundException('Request not found');
     }
   
-    const { email, name, student } = request;
+    const { email, name } = request;
   
     // Send dismissal email
     await this.sendEmail(
@@ -139,9 +139,9 @@ export class FormulaireService {
     );
   
     // Remove the student entry if it exists
-    if (student) {
-      await this.studentRepository.delete(student.id); // Ensure no foreign key reference remains
-    }
+    // if (student) {
+    //   await this.studentRepository.delete(student.id); // Ensure no foreign key reference remains
+    // }
   
     // Delete the request
     await this.formulaireRepository.delete(id);
