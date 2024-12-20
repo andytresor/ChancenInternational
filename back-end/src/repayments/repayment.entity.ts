@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, OneToMany } from 'typeorm';
 import { Funding } from '../funding/funding.entity';
 import { Student } from 'src/students/student.entity';
+import { Transaction } from 'src/transaction/transaction.entity';
 
 @Entity()
 export class Repayment {
@@ -24,5 +25,9 @@ export class Repayment {
 
   @ManyToOne(() => Student, (student) => student.repayments, { eager: true })
   student: Student;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.repayment)
+  transactions: Transaction[];
+
 
 }

@@ -13,10 +13,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Button,
 } from "@mui/material";
 import axios from "axios";
 
 const Repayment = () => {
+  useTopbar();
   const [repayments, setRepayments] = useState([]);
 
   useEffect(() => {
@@ -26,8 +28,15 @@ const Repayment = () => {
 
       try {
         const response = await axios.get(`http://localhost:3000/repayments/user/${studentId}`);
-        setRepayments(response.data || []);
-        console.log("Fetched repayments:", response.data);
+        const repaymentsWithTransactions = await Promise.all(
+          response.data.map(async (repayment) => {
+            const transactionResponse = await axios.get(
+              `http://localhost:3000/transactions/${repayment.id}`
+            );
+            return { ...repayment, transactionStatus: transactionResponse.data.transaction_status };
+          })
+        );
+        setRepayments(repaymentsWithTransactions || []);
       } catch (error) {
         console.error("Error fetching repayments:", error);
       }
@@ -36,10 +45,46 @@ const Repayment = () => {
     fetchRepayments();
   }, []);
 
-  useTopbar();
+  function generateNumericTransactionId() {
+    const timestamp = Date.now();
+    const randomPart = Math.floor(Math.random() * 10000);
+    return timestamp.toString() + randomPart.toString().padStart(4, "0");
+  }
+
+  const baseURL = "https://gateway.payunit.net/api";
+
+  const makePayment = async (amount, repaymentId) => {
+    const transactionId = generateNumericTransactionId();
+    const payload = {
+      total_amount: amount,
+      currency: "XAF",
+      transaction_id: transactionId,
+      return_url: `https://example.com/payment/success/${repaymentId}`,
+      notify_url: `https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34`,
+    };
+  
+    try {
+      // Send the request to your backend, not directly to PayUnit API
+      const response = await axios.post("http://localhost:3000/transactions/initialize", payload);
+  
+      if (response?.data?.transaction_url) {
+        console.log(response.data);
+        
+        // Redirect to the payment URL
+        window.location.href = response.data.transaction_url;
+      }
+    } catch (error) {
+      console.error("Error initializing payment:", error);
+    }
+  };
+  
 
   const getStatusColor = (status) => {
-    return status === "Paid" ? "green" : status === "Overdue" ? "red" : "black";
+    return status === "Paid"
+      ? "green"
+      : status === "Overdue"
+        ? "red"
+        : "black";
   };
 
   return (
@@ -73,7 +118,9 @@ const Repayment = () => {
                       <TableCell style={{ fontWeight: "bold" }}>Amount</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Due Date</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Transaction Status</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Payment Date</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -82,10 +129,22 @@ const Repayment = () => {
                         <TableCell>{repayment.id}</TableCell>
                         <TableCell>{repayment.amount} XAF</TableCell>
                         <TableCell>{repayment.dueDate}</TableCell>
-                        <TableCell style={{ color: getStatusColor(repayment.isPaid ? "Paid" : "Overdue") }}>
+                        <TableCell
+                          style={{
+                            color: getStatusColor(repayment.isPaid ? "Paid" : "Overdue"),
+                          }}
+                        >
                           {repayment.isPaid ? "Paid" : "Overdue"}
                         </TableCell>
+                        <TableCell>{repayment.transactionStatus || "N/A"}</TableCell>
                         <TableCell>{repayment.paymentDate || "N/A"}</TableCell>
+                        <TableCell>
+                          <Button
+                            onClick={() => makePayment(repayment.amount, repayment.id)}
+                          >
+                            Make payment
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
