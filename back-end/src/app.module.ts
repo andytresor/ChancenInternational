@@ -12,6 +12,7 @@ import { Formulaire } from './formulaire/formulaire.entity';
 import { Student } from './students/student.entity';
 import { Institution } from './institutions/institution.entity';
 import { ConfigModule } from '@nestjs/config';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ConfigModule } from '@nestjs/config';
     RepaymentsModule,
     FormulaireModule,
     CoursesModule,
+    TransactionModule,
   ],
   
 })
