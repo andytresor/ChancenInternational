@@ -59,8 +59,8 @@ const Repayment = () => {
       total_amount: amount,
       currency: "XAF",
       transaction_id: transactionId,
-      return_url: `https://example.com/payment/success/${repaymentId}`,
-      notify_url: `https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34`,
+      return_url: `http://localhost:5173/student/payment/success/${repaymentId}`,
+      notify_url: ``,
     };
   
     try {
@@ -173,7 +173,7 @@ const Repayment = () => {
                 ],
               },
             ]}
-            width="300"
+            width={300}
             height={250}
           />
         </div>
