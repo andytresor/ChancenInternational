@@ -59,24 +59,33 @@ const Repayment = () => {
       total_amount: amount,
       currency: "XAF",
       transaction_id: transactionId,
-      return_url: `https://example.com/payment/success/${repaymentId}`,
-      notify_url: `https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34`,
+      payment_country: "CM",
+      return_url: `https://a543-2a0d-3344-129e-410-cd7f-8af6-c93f-4529.ngrok-free.app/student/payment/success/${repaymentId}`,
+      notify_url: "https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
+      repaymentId, // Include repayment ID in the request
     };
   
     try {
-      // Send the request to your backend, not directly to PayUnit API
+      // Send the request to your backend
       const response = await axios.post("http://localhost:3000/transactions/initialize", payload);
   
-      if (response?.data?.transaction_url) {
-        console.log(response.data);
-        
+      if (response?.data?.data?.transaction_url) {
+        console.log("Payment initialized:", response.data);
         // Redirect to the payment URL
-        window.location.href = response.data.transaction_url;
+        window.location.href = response.data.data.transaction_url;
       }
     } catch (error) {
       console.error("Error initializing payment:", error);
+  
+      // Handle duplicate payment attempt error
+      if (error.response && error.response.status === 400) {
+        alert(error.response.data.message || "A payment has already been initiated for this repayment.");
+      } else {
+        alert("Payment initialization failed. Please try again later.");
+      }
     }
   };
+  
   
 
   const getStatusColor = (status) => {
@@ -173,7 +182,7 @@ const Repayment = () => {
                 ],
               },
             ]}
-            width="300"
+            width={300}
             height={250}
           />
         </div>
