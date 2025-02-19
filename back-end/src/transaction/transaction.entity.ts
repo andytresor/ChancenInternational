@@ -9,11 +9,14 @@ export class Transaction {
   @Column()
   transactionId: string;
 
+  @Column()
+  currency: string;
+
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number;
+  transaction_amount: number;
 
   @Column({ default: 'PENDING' })
-  transactionStatus: 'PENDING' | 'FAILED' | 'CANCELLED' | 'SUCCESS';
+  transactionStatus: 'PENDING' | 'FAILED' | 'CANCELLED' | 'SUCCESS' | 'PROCESSING';
 
   @ManyToOne(() => Repayment, (repayment) => repayment.transactions, { onDelete: 'CASCADE' })
   repayment: Repayment;
