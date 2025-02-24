@@ -7,7 +7,7 @@ async function bootstrap() {
   // Allowed origins
   const allowedOrigins = [
     'http://localhost:5173',
-    'https://a543-2a0d-3344-129e-410-cd7f-8af6-c93f-4529.ngrok-free.app'
+    'https://6cf4-2a0d-3344-129e-410-4765-d28-eefe-d591.ngrok-free.app'
   ];
   
   const normalizeOrigin = (origin: string) => origin.replace(/\/$/, '');

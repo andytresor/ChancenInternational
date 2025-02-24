@@ -16,7 +16,7 @@ export class TransactionController {
 
     @Post('initialize')
     async initializePayment(@Body() payload: any) {
-        const baseURL = this.configService.get<string>('PAYUNIT_URL');
+        const baseURL = this.configService.get<string>('PAYUNIT_API_URL');
         const apiKey = this.configService.get<string>('PAYUNIT_API_KEY');
         const auth = this.configService.get<string>('PAYUNIT_AUTH');
 

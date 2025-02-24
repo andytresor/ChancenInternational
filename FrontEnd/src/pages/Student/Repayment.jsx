@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import useTopbar from "../../re-components/Student/useTopbar";
-import { PieChart } from "@mui/x-charts/PieChart";
 import "../../style/studentstyles/repayment.css";
 import {
   Grid,
@@ -21,28 +20,25 @@ const Repayment = () => {
   useTopbar();
   const [repayments, setRepayments] = useState([]);
 
+  const fetchRepayments = async () => {
+    const studentId = localStorage.getItem("userId"); // Get `studentId` from local storage
+    if (!studentId) return;
+    
+    try {
+      const response = await axios.get(`http://localhost:3000/repayments/user/${studentId}`);
+      setRepayments(response.data);
+    } catch (error) {
+      console.error("Error fetching repayments:", error);
+    }
+  };
   useEffect(() => {
-    const fetchRepayments = async () => {
-      const studentId = localStorage.getItem("userId"); // Get `studentId` from local storage
-      if (!studentId) return;
-
-      try {
-        const response = await axios.get(`http://localhost:3000/repayments/user/${studentId}`);
-        const repaymentsWithTransactions = await Promise.all(
-          response.data.map(async (repayment) => {
-            const transactionResponse = await axios.get(
-              `http://localhost:3000/transactions/${repayment.id}`
-            );
-            return { ...repayment, transactionStatus: transactionResponse.data.transaction_status };
-          })
-        );
-        setRepayments(repaymentsWithTransactions || []);
-      } catch (error) {
-        console.error("Error fetching repayments:", error);
-      }
-    };
 
     fetchRepayments();
+    // Set up an interval to fetch repayments every 10 seconds
+  const intervalId = setInterval(fetchRepayments, 10000);
+
+  // Clean up the interval when the component unmounts
+  return () => clearInterval(intervalId)
   }, []);
 
   function generateNumericTransactionId() {
@@ -60,7 +56,7 @@ const Repayment = () => {
       currency: "XAF",
       transaction_id: transactionId,
       payment_country: "CM",
-      return_url: `https://a543-2a0d-3344-129e-410-cd7f-8af6-c93f-4529.ngrok-free.app/student/payment/success/${repaymentId}`,
+      return_url: `https://6cf4-2a0d-3344-129e-410-54765-d28-eefe-d591.ngrok-free.app/student/payment/success/${repaymentId}`,
       notify_url: "https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
       repaymentId, // Include repayment ID in the request
     };
@@ -127,7 +123,6 @@ const Repayment = () => {
                       <TableCell style={{ fontWeight: "bold" }}>Amount</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Due Date</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
-                      <TableCell style={{ fontWeight: "bold" }}>Transaction Status</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Payment Date</TableCell>
                       <TableCell style={{ fontWeight: "bold" }}>Action</TableCell>
                     </TableRow>
@@ -137,22 +132,20 @@ const Repayment = () => {
                       <TableRow key={repayment.id}>
                         <TableCell>{repayment.id}</TableCell>
                         <TableCell>{repayment.amount} XAF</TableCell>
-                        <TableCell>{repayment.dueDate}</TableCell>
+                        <TableCell>{new Date(repayment.dueDate).toLocaleDateString()}</TableCell>
                         <TableCell
-                          style={{
-                            color: getStatusColor(repayment.isPaid ? "Paid" : "Overdue"),
-                          }}
-                        >
-                          {repayment.isPaid ? "Paid" : "Overdue"}
+                          style={{ color:repayment.isPaid ? "green" : "red" }}>
+                          {repayment.isPaid ? "Paid" : "Pending"}
                         </TableCell>
-                        <TableCell>{repayment.transactionStatus || "N/A"}</TableCell>
-                        <TableCell>{repayment.paymentDate || "N/A"}</TableCell>
+                        <TableCell>{repayment.paymentDate ? new Date(repayment.paymentDate).toLocaleDateString() : 'N/A'} </TableCell>
                         <TableCell>
-                          <Button
-                            onClick={() => makePayment(repayment.amount, repayment.id)}
-                          >
-                            Make payment
-                          </Button>
+                        <Button
+                        onClick={() => makePayment(repayment.amount, repayment.id)}
+                        disabled={repayment.isPaid}
+                        style={{ "backgroundColor":"blue","color":"white"}}
+                       >
+                       {repayment.isPaid ? 'Paid' : 'Pay Now'}
+                     </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -163,30 +156,6 @@ const Repayment = () => {
           </Card>
         </Grid>
       </Grid>
-      <div className="charts">
-        <div className="upcoming">
-          <h1>Upcoming Installments</h1>
-          <p>- Fourth Installment</p>
-          <p>- Amount = 90,000 XAF</p>
-          <p>- Due Date = Dec 1, 2024</p>
-        </div>
-
-        <div className="pie">
-          <h1>Amount Paid VS Amount Pending</h1>
-          <PieChart
-            series={[
-              {
-                data: [
-                  { id: 0, value: 25, label: "Paid", color: "green" },
-                  { id: 1, value: 75, label: "Pending", color: "#880808" },
-                ],
-              },
-            ]}
-            width={300}
-            height={250}
-          />
-        </div>
-      </div>
     </div>
   );
 };

@@ -55,6 +55,7 @@ export class TransactionService {
 
     const pendingTransactions = await this.transactionRepository.find({
       where: { transactionStatus: "PENDING" },
+      relations: ['repayment'], // Include the repayment relation
     });
 
     this.logger.log(`Found ${pendingTransactions.length} pending transactions.`);
@@ -77,10 +78,15 @@ export class TransactionService {
 
         const { transaction_status } = response.data.data;
 
-        if (transaction_status) {
+        if (transaction_status === "SUCCESS") {
           await this.updateTransactionStatus(transaction.transactionId, transaction_status);
+
+          const repayment = transaction.repayment;
+          repayment.isPaid = true;
+          repayment.paymentDate = new Date ()
+          await this.repaymentRepository.save(repayment)
           this.logger.log(
-            `Transaction ${transaction.transactionId} status updated to ${transaction_status}`
+            `Transaction ${transaction.transactionId} and Repayment ${repayment.id} status updated to ${transaction_status}`
           );
         }
       } catch (error) {

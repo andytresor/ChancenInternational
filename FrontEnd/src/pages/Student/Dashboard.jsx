@@ -72,14 +72,14 @@ const Dashboard = () => {
         <CustomCard className="two">
           <h1>REPAYMENT</h1>
           <div className="content">
-            <div style={{ width: "10vw", height: "10vh" }}>
+            {/* <div style={{ width: "10vw", height: "10vh" }}>
               <CircularProgressbar
                 value={repayment.filter((r) => r.isPaid).length / repayment.length * 100 || 0}
                 text={`${Math.round(
                   (repayment.filter((r) => r.isPaid).length / repayment.length) * 100 || 0
                 )}%`}
               />
-            </div>
+            </div> */}
             <div className="text">
               <h2>Total Number Of Installments = {repayment.length}</h2>
               <h2>Number Of Installments Done = {repayment.filter((r) => r.isPaid).length}</h2>
