@@ -151,7 +151,7 @@ const CreateRepaymentSchedule = () => {
                                             disabled={isSubmitting}
                                         >
                                             Submit
-                                        </Button>;
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </form>

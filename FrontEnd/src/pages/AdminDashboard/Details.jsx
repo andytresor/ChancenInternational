@@ -92,7 +92,10 @@ const Details = () => {
                       <TableCell>{detail.amount}</TableCell>
                       <TableCell>{detail.dueDate}</TableCell>
                       <TableCell>{detail.paymentDate || "N/A"}</TableCell>
-                      <TableCell>{detail.isPaid ? "Paid" : "Not Paid"}</TableCell>
+                     <TableCell
+                     style={{ color:detail.isPaid ? "green" : "red" }}>
+                      {detail.isPaid ? "Paid" : "Not Paid"}
+                      </TableCell>
                       <TableCell>{detail.fundingId}</TableCell>
                     </TableRow>
                   ))}

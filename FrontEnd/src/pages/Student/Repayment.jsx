@@ -56,9 +56,9 @@ const Repayment = () => {
       currency: "XAF",
       transaction_id: transactionId,
       payment_country: "CM",
-      return_url: `https://6cf4-2a0d-3344-129e-410-54765-d28-eefe-d591.ngrok-free.app/student/payment/success/${repaymentId}`,
+      return_url: `https://c9f5-2a0d-3344-1550-f510-265-f7a7-98ab-d355.ngrok-free.app/student/payment/success/${repaymentId}`,
       notify_url: "https://webhook.site/d457b2f3-dd71-4f04-9af5-e2fcf3be8f34",
-      repaymentId, // Include repayment ID in the request
+      repaymentId,
     };
   
     try {
@@ -142,7 +142,7 @@ const Repayment = () => {
                         <Button
                         onClick={() => makePayment(repayment.amount, repayment.id)}
                         disabled={repayment.isPaid}
-                        style={{ "backgroundColor":"blue","color":"white"}}
+                        style={{ "backgroundColor":"#1976d2","color":"white"}}
                        >
                        {repayment.isPaid ? 'Paid' : 'Pay Now'}
                      </Button>

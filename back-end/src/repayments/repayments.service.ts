@@ -68,7 +68,12 @@ export class RepaymentsService {
   }
   
   async markAsPaid(id: number): Promise<Repayment> {
-    const repayment = await this.findOne(id);
+    const repayment = await this.repaymentRepository.findOne({ where: { id }})
+
+    if (!repayment) {
+      throw new Error(`Repayment with ID ${id} not found`);
+    }
+
     if (repayment.isPaid) {
       throw new Error(`Repayment with ID ${id} is already marked as paid`);
     }

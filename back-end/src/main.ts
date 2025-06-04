@@ -1,5 +1,9 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -7,7 +11,7 @@ async function bootstrap() {
   // Allowed origins
   const allowedOrigins = [
     'http://localhost:5173',
-    'https://6cf4-2a0d-3344-129e-410-4765-d28-eefe-d591.ngrok-free.app'
+    'https://c9f5-2a0d-3344-1550-f510-265-f7a7-98ab-d355.ngrok-free.app'
   ];
   
   const normalizeOrigin = (origin: string) => origin.replace(/\/$/, '');

@@ -23,7 +23,7 @@ const PaymentConfirmation = () => {
         // Determine which transaction id to use for fetching (query or route)
         const actualTransactionId = queryTransactionId || transactionId;
         const response = await axios.get(
-          `https://6cf4-2a0d-3344-129e-410-4765-d28-eefe-d591.ngrok-free.app/transactions/status/${actualTransactionId}`
+          `https://c9f5-2a0d-3344-1550-f510-265-f7a7-98ab-d355.ngrok-free.app/transactions/status/${actualTransactionId}`
         );
         setTransactionStatus(response.data);
       } catch (error) {
